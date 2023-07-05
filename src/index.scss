@@ -1,5 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Alef&display=swap');
+
+@import './variables.scss';
+
 *, ::after, ::before {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+}
+
+body {
+    padding: 15px;
+    background-color: var(--color-background);
+    font-family: 'Alef', sans-serif;
+}
+
+.rounded-button {
+
+    color: var(--color-white);
+    transition: background-color 0.3s ease-in-out;
+
+    background-color: $color-primary;
+    padding: 10px;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+
+    &:hover {
+        background-color: darken($color-primary, 10%);
+    }
+
+    svg {
+        height: 20px;
+        width: 20px;
+    }
+
+    &.small {
+        svg {
+            height: 13px;
+            width: 13px;
+        }
+    }
+
+}
+
+.d-none {
+    display: none !important;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.g-10 {
+    gap: 10px;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.mb-30 {
+    margin-bottom: 30px !important;
 }

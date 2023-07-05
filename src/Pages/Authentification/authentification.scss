@@ -1,0 +1,126 @@
+section#login,
+section#register {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 100vh;
+    
+    .container {
+        background-color: #FFF;
+        padding: 10px 25px;
+        border-radius: 15px;
+        color: #000;
+        width: 40%;
+
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+
+            img {
+                margin: 20px 0;
+                border-radius: 50%;
+                height: 100px;
+            }
+
+            h1 {
+                padding: 30px 0;
+            }
+        }
+
+        main {
+
+            form {
+
+
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+
+                .form-group {
+                    position: relative;
+
+                    label {
+                        position: absolute;
+                        top: 50%; left: 10px;
+                        transform: translateY(-50%);
+                        padding: 5px;
+                        color: #949494;
+                        transition: all 0.3s ease;
+                        pointer-events: none;
+                        background-color: #fff;
+                    }
+
+                    input {
+                        width: 100%;
+                        padding: 10px;
+                        border: 1px solid #000;
+                        border-radius: 5px;
+                        outline: none;
+                        transition: all 0.3s ease;
+                        border-color: #949494;
+                        cursor: text;
+                    }
+
+                    input:not(:placeholder-shown) + label,
+                    input:focus + label {
+                        top: 0px;
+                        left: 5px;
+                        color: #2892D7;
+                        font-size: 12px;
+                    }
+
+                    input:not(:placeholder-shown),
+                    input:focus {
+                        border-color: #2892D7;
+                    }
+
+                    input:invalid + label {
+                        color: red;
+                    }
+
+                    input:invalid {
+                        border-color: red;
+                    }
+                }
+
+            }
+
+        }
+
+        footer {
+
+            display: flex;
+            flex-direction: column;
+            
+            padding: 20px 0;
+
+            input[type=submit] {
+                padding: 15px 0;
+                border: none;
+                outline: none;
+                border-radius: 5px;
+                background-color: #2892D7;
+                letter-spacing: 1px;
+                font-weight: bold;
+                transition: all 0.4s ease-in-out;
+                cursor: pointer;
+                color: #fff;
+                &:hover {
+                    background-color: #227cb9;
+                }
+            }
+
+            span {
+                text-align: center;
+                padding: 10px 0;
+            }
+
+        }
+    }
+
+}

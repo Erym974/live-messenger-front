@@ -1,0 +1,322 @@
+@import './../../../variables.scss';
+
+section#settings {
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+
+    .block {
+        border-radius: $border-radius;
+        transition: 0.4s ease-in-out;
+        background-color: var(--color-white);
+    }
+
+    header {
+        // height: 10vh;
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+
+        justify-content: space-between;
+
+        ul {
+            display: flex;
+            gap: 15px;
+            list-style: none;
+
+            li {
+                background-color: $color-primary;
+                color: var(--color-dark);
+                padding: 10px 20px;
+                border-radius: 20px;
+                cursor: pointer;
+                transition: 0.4s ease-in-out;
+
+                &:hover {
+                    background-color: darken($color-primary, 10%);
+                }
+            }
+        }
+
+        @media screen and (min-width: 768px) {
+            button {
+                display: none;
+            }
+        }
+    }
+
+    main {
+        flex: 1;
+        width: 100%;
+        padding: 20px 30px;
+        overflow-y: scroll;
+
+        h1 {
+            font-size: 22px;
+            color: var(--color-dark);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid $color-primary;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: calc(60px / 2);
+            height: calc(34px / 2);
+
+            input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            input:checked + .slider {
+                background-color: $color-primary;
+            }
+
+            input:focus + .slider {
+                box-shadow: 0 0 1px $color-primary;
+            }
+            
+            input:checked + .slider:before {
+                -webkit-transform: translateX(13px);
+                -ms-transform: translateX(13px);
+                transform: translateX(13px);
+            }
+
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                -webkit-transition: .4s;
+                transition: .4s;
+
+                &.round {
+                    border-radius: calc(34px / 2);
+                }
+                  
+                &.round:before {
+                    border-radius: 50%;
+                }
+
+                &:before {
+                    position: absolute;
+                    content: "";
+                    height: calc(26px / 2);
+                    width: calc(26px / 2);
+                    left: calc(4px / 2);
+                    bottom: calc(4px / 2);
+                    background-color: white;
+                    -webkit-transition: .4s;
+                    transition: .4s;
+                  }
+              }
+        }
+
+        .form-switch {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--color-dark);
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+        }
+
+        section#account {
+
+            .top {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                margin: 20px 0 30px 0;
+                
+
+                .background-cover {
+                    border-radius: 15px;
+                    width: 100%; height: 200px;
+                    z-index: 0;
+                    transition: 0.2s ease-in-out;
+
+                    img {
+                        width: 100%; height: 100%;
+                        object-fit: cover;
+                        border-radius: 15px;
+                    }
+
+
+                    &:after {
+                        content: "Modifier l'image de couverture";
+                        color: #fff;
+                        transition: 0.2s ease-in-out;
+                        position: absolute;
+                        left: 50%; top: 50%;
+                        transform: translate(-50%, -50%);
+                        opacity: 0;
+                    }
+
+                    &:hover {
+                        cursor: pointer;
+                        filter: brightness(0.8);
+
+                        &:after {
+                            opacity: 1;
+                        }
+                    }
+                }
+
+                .profile-picture {
+                    position: absolute;
+                    top: 60%;
+                    left: 5%;
+                    img {
+                        height: 100px;
+                        width: 100px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                        z-index: 1;
+                        background-color: var(--color-white);
+                        padding: 8px;
+                        transition: 0.2s ease-in-out;
+
+                        &:hover {
+                            cursor: pointer;
+                            filter: brightness(0.8);
+                        }
+                    }
+
+
+
+                    svg {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        pointer-events: none;
+                        transition: 0.2s ease-in-out;
+                        opacity: 0;
+                    }
+
+                    img:hover + svg {
+                        opacity: 1;
+                    }
+                }
+            }
+
+            .row {
+                display: flex;
+                width: 100%;
+                gap: 15px;
+
+                &.jcfe {
+                    justify-content: flex-end;
+                }
+
+                .form-group {
+                    width: 100%;
+                }
+            }
+
+            .form-group {
+                position: relative;
+                margin: 20px 0;
+
+                .charCount {
+                    position: absolute;
+                    bottom: -17.5px; right: 0;
+                    color: var(--color-dark);
+                }
+
+                label {
+                    position: absolute;
+                    top: 50%; left: 10px;
+                    transform: translateY(-50%);
+                    padding: 5px;
+                    color: var(--color-dark);
+                    transition: all 0.3s ease;
+                    pointer-events: none;
+                    background-color: var(--color-white);
+                }
+
+                textarea {
+                    resize: none;
+                    width: 100%;
+                }
+
+                textarea,
+                input {
+                    width: 100%;
+                    padding: 10px;
+                    border: 1px solid #000;
+                    color: var(--color-dark);
+                    background-color: var(--color-white);
+                    border-radius: 5px;
+                    outline: none;
+                    transition: all 0.3s ease;
+                    border-color: #949494;
+                    cursor: text;
+                }
+
+                textarea:focus + label,
+                textarea:not(:placeholder-shown) + label,
+                input:not(:placeholder-shown) + label,
+                input:focus + label {
+                    top: 0px;
+                    left: 5px;
+                    color: #2892D7;
+                    font-size: 12px;
+                }
+
+                textarea:focus,
+                textarea:not(:placeholder-shown),
+                input:not(:placeholder-shown),
+                input:focus {
+                    border-color: #2892D7;
+                }
+
+                input:invalid + label {
+                    color: red;
+                }
+
+                input:invalid {
+                    border-color: red;
+                }
+            }
+        }
+
+        .save-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            border-radius: 10px;
+            background-color: $color-primary;
+            padding: 10px 10px;
+            outline: none; border: none;
+            color: var(--color-dark);
+            cursor: pointer;
+            transition: 0.4s ease-in-out;
+
+            &:hover {
+                background-color: darken($color-primary, 10%);
+            }
+
+        }
+    }
+
+    footer {
+        display: none;
+    }
+
+}

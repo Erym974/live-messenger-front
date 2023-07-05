@@ -1,0 +1,52 @@
+@import '../../../variables.scss';
+
+section#friends {
+
+    .friends-container {
+        
+        display: grid;
+        grid-gap: 20px;
+        width: 100%;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        padding: 20px 0;
+
+        .friend {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 20px;
+            height: 150px;
+            color: var(--color-dark);
+            background-color: var(--color-background);
+            box-shadow: var(--box-shadow);
+            transition: background-color 0.2s ease-in-out;
+            border: 1px solid #0000001a;
+            gap: 10px;
+            
+            &:hover {
+                background-color: $color-primary;
+            }
+
+            .right {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .friend-avatar {
+                width: 75px;
+                height: 75px;
+                border-radius: 50%;
+                background-color: #ccc;
+                margin-right: 10px;
+            }
+
+            .friend-name {
+                font-size: 1.2rem;
+                font-weight: 500;
+            }
+        }
+
+    }
+
+}

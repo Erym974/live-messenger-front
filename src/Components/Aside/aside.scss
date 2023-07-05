@@ -1,0 +1,221 @@
+@import './../../variables.scss';
+
+aside {
+    border-radius: 20px;
+    height: 100%;
+    width: 20%;
+    background-color: var(--color-white);
+    padding: 25px;
+
+    display: flex;
+    flex-direction: column;
+
+    transition: all 0.4s ease-in-out;
+
+    box-shadow: var(--box-shadow);
+
+    white-space: nowrap;
+
+    .top {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--color-dark);
+
+        .right {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+    .settings {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+
+        margin: 30px 0;
+
+        padding-bottom: 25px;
+        border-bottom: $color-primary 1px solid;
+
+    }
+
+    .content {
+        flex: 1;
+        overflow-y: auto;
+
+        &::-webkit-scrollbar {
+            width: 0px;
+            background: transparent; /* make scrollbar transparent */
+        }
+
+        .conversations {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            color: var(--color-dark);
+
+            .conversation {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                border-radius: 10px;
+                padding: 5px 10px;
+                cursor: pointer;
+                transition: all 0.2s ease-in-out;
+
+                &:hover {
+                    background-color: $color-primary;
+                }
+
+                .right {
+                    display: flex;
+                    flex-direction: column;
+
+                    .name {
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+    }
+
+    .bottom {
+
+        margin: 30px 0;
+        padding-top: 25px;
+        border-top: $color-primary 1px solid;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        button {
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 75%;
+            height: 35px;
+            border-radius: $border-radius;
+            background: $color-primary;
+            border: none;
+            cursor: pointer;
+
+            color: var(--color-dark);
+            transition: background-color 0.3s ease-in-out;
+
+            &:hover {
+                background-color: darken($color-primary, 10%);
+            }
+        }
+    }
+
+    img {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+    }
+
+    @mixin minimizeAside() {
+        width: 100px;
+    
+        .top {
+            .right {
+                display: none;
+            }
+        }
+    
+        .content {
+            .conversations {
+                .conversation {
+                    padding: 0;
+                    &:hover {
+                        background-color: transparent;
+                    }
+                    .right {
+                        display: none;
+                    }
+                }
+            }
+        }
+        
+        .settings {
+            flex-direction: column;
+            gap: 15px;
+        }
+    
+        .bottom {
+            button {
+                transform: rotate(180deg);
+            }
+        }
+    }
+    
+    @media (max-width: 1000px) {
+        @include minimizeAside;
+
+        .bottom {
+            display: none;
+        }
+    }
+
+    &[data-toggle="false"] {
+        @include minimizeAside;
+    }
+
+    @media (max-width: 768px) {
+
+        display: none;
+
+        &[data-toggle-responsive="true"] {
+            display: flex;
+        }
+
+        &[data-toggle-responsive="false"] {
+            display: none;
+        }
+
+        z-index: 2;
+        position: fixed;
+        height: calc(100% - 30px);
+        width: calc(100% - 30px) !important;
+
+        .top {
+            .right {
+                display: flex !important;
+            }
+        }
+
+        .settings {
+            flex-direction: row !important;
+        }
+
+        .content {
+
+            height: 100%;
+
+            overflow-y: scroll !important;
+            .conversations {
+
+
+                .conversation {
+                    padding: 5px 10px;
+                    &:hover {
+                        background-color: $color-primary;
+                        color: var(--color-dark);
+                    }
+                    .right {
+                        display: flex !important;
+                    }
+                }
+            }
+        }
+
+        .bottom {
+            display: none;
+        }
+    }
+}
+

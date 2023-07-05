@@ -1,0 +1,10 @@
+@import './../../variables.scss';
+
+section#dashboard {
+
+    display: flex;
+    height: calc(100vh - 30px);
+    width: 100%;
+    gap: 15px;
+
+}
