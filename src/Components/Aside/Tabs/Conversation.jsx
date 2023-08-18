@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
 import { faker } from '@faker-js/faker';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 export default function Conversation() {
 
   const history = useSelector(state => state.messenger.history)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const handleClick = (id) => {
+    navigate(`/messenger/${id}`)
     dispatch({ type: "messenger/changeConversation", payload: id})
     dispatch({ type: "settings/toggleResponsiveAside", payload: false })
   }

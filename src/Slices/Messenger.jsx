@@ -5,7 +5,7 @@ import { fakeConversations, fakeHistory } from "../faker";
 const messengerSlice = createSlice({
     name: "messenger",
     initialState: {
-        conversation: null,
+        conversation: fakeConversations[0],
         history: fakeHistory
     },
     reducers: {

@@ -16,6 +16,13 @@ const fakeConversations = [
           {content: 'Je vais bien merci et toi ?', date: '12/12/2020', sender: 'participant', name: 'Alice Doe', status: "seen"},
           {content: 'Je vais aussi très bien. Quoi de neuf ?', date: '12/12/2020', sender: 'me', name: 'John Doe', status: "seen"},
           {content: 'Oh rien de spécial, je cuisine et toi ?', date: '12/12/2020', sender: 'participant', name: 'Alice Doe', status: "seen"},
+          {content: 'Oh rien de spécial, je cuisine et toi ?', date: '12/12/2020', sender: 'participant', name: 'Alice Doe', status: "seen"},
+          {content: 'Oh rien de spécial, je cuisine et toi ?', date: '12/12/2020', sender: 'participant', name: 'Alice Doe', status: "seen"},
+          {content: 'Oh rien de spécial, je cuisine et toi ?', date: '12/12/2020', sender: 'participant', name: 'Alice Doe', status: "seen"},
+          {content: 'Oh rien de spécial, je cuisine et toi ?', date: '12/12/2020', sender: 'participant', name: 'Alice Doe', status: "seen"},
+          {content: 'Oh rien de spécial, je cuisine et toi ?', date: '12/12/2020', sender: 'participant', name: 'Alice Doe', status: "seen"},
+          {content: 'Oh rien de spécial, je cuisine et toi ?', date: '12/12/2020', sender: 'participant', name: 'Alice Doe', status: "seen"},
+          {content: 'Oh rien de spécial, je cuisine et toi ?', date: '12/12/2020', sender: 'participant', name: 'Alice Doe', status: "seen"},
           {content: 'Rien non plus !', date: '12/12/2020', sender: 'me', name: 'John Doe', status: "seen"},
           {content: 'Miam. Ca me donne faim', date: '12/12/2020', sender: 'me', name: 'John Doe', status: "sended"},
         ]
@@ -35,6 +42,11 @@ const fakeConversations = [
           {content: 'Je vais bien merci et toi ?', date: '12/12/2020', sender: 'participant', name: 'Alice Doe', status: "seen"},
           {content: 'Je vais aussi très bien. Quoi de neuf ?', date: '12/12/2020', sender: 'me', name: 'John Doe', status: "seen"},
           {content: 'Oh rien de spécial, je cuisine et toi ?', date: '12/12/2020', sender: 'participant', name: 'Alice Doe', status: "seen"},
+          {content: 'Rien non plus !', date: '12/12/2020', sender: 'me', name: 'John Doe', status: "seen"},
+          {content: 'Rien non plus !', date: '12/12/2020', sender: 'me', name: 'John Doe', status: "seen"},
+          {content: 'Rien non plus !', date: '12/12/2020', sender: 'me', name: 'John Doe', status: "seen"},
+          {content: 'Rien non plus !', date: '12/12/2020', sender: 'me', name: 'John Doe', status: "seen"},
+          {content: 'Rien non plus !', date: '12/12/2020', sender: 'me', name: 'John Doe', status: "seen"},
           {content: 'Rien non plus !', date: '12/12/2020', sender: 'me', name: 'John Doe', status: "seen"},
           {content: 'Miam. Ca me donne faim', date: '12/12/2020', sender: 'me', name: 'John Doe', status: "sended"},
         ]
@@ -206,11 +218,12 @@ const fakeHistory = [
     {id: 10, name: "James Young", lastMessage: "Miam. Ca me donne faim", picture: faker.image.avatar()}
 ]
 
-const fakeFriends = fakeHistory.map((friend) => {
+const fakeFriends = fakeHistory.map((friend, index) => {
 
     const random = (max = 100) => Math.floor(Math.random() * max);
 
     return {
+        id: index + 1,
         profilePicture: "https://picsum.photos/200",
         coverPicture: "https://picsum.photos/960/540",
         firstname: friend.name.split(" ")[0],

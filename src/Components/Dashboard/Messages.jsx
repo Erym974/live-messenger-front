@@ -1,10 +1,23 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
 export default function Messages() {
 
     const conversation = useSelector(state => state.messenger.conversation)
 
+    useEffect(() => {
+
+
+
+        setTimeout(() => {
+            const messages = document.querySelector('.messages')
+            if(!messages) return
+            messages.scrollTop = messages?.scrollHeight
+        }, 1000);
+      
+    }, [conversation])
+
+    
     return (
         <div className="messages">
             <div className="loading">

@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { FaPaperPlane, FaXmark } from 'react-icons/fa6'
 import { useDispatch, useSelector } from 'react-redux'
-import ButtonRounded from '../../../Components/ButtonRounded'
-import Messages from '../../../Components/Dashboard/Messages'
+import ButtonRounded from '../../Components/ButtonRounded'
+import Messages from '../../Components/Dashboard/Messages'
 
 import './chat.scss'
 
-export default function Chat() {
+export default function Chat({ id }) {
 
     const [text, setText] = useState('')
     const dispatch = useDispatch()
@@ -29,9 +29,7 @@ export default function Chat() {
     }
 
     const toggleDropDown = (evt) => {
-        // find in evt.target the dropdown-menu
         const dropdownMenu = evt.target.closest('.dropdown-button').querySelector('.dropdown-menu')
-        // toggle the dropdown-menu
         if(dropdownMenu.getAttribute('dropdown-menu') === 'true') dropdownMenu.setAttribute('dropdown-menu', 'false')
         else dropdownMenu.setAttribute('dropdown-menu', 'true')
     }
@@ -41,17 +39,17 @@ export default function Chat() {
     }
 
     const showProfile = () => {
-        dispatch({ type: 'profile/showProfile', payload: conversation.group ? conversation : conversation.members[0] })
+        dispatch({ type: 'profile/showProfile', payload: conversation?.group ? conversation : conversation?.members[0] })
     }
 
     return (
         <section id="chat">
             <header>
             <div className="left">
-                <img src={conversation.group ? `${ conversation.picture }` : `${ conversation.members[0].picture }`} alt={conversation.name} />
+                <img src={conversation?.group ? `${ conversation.picture }` : `${ conversation?.members[0].picture }`} alt={conversation?.name} />
                 <div className="right">
-                <span className="name">{conversation.group ? `${ conversation.name }` : `${ conversation.members[0].name }`}</span>
-                <span className="status">{conversation.group ? `${ conversation.members.length } participant${conversation.members.length > 1 ? "s" : ""}` : `${ conversation.members[0].status }`}</span>
+                <span className="name">{conversation?.group ? `${ conversation?.name }` : `${ conversation?.members[0].name }`}</span>
+                <span className="status">{conversation?.group ? `${ conversation?.members.length } participant${conversation?.members.length > 1 ? "s" : ""}` : `${ conversation?.members[0].status }`}</span>
                 </div>
             </div>
             <div className="actions">
@@ -61,12 +59,6 @@ export default function Chat() {
                         <div className="dropdown-item">
                             <span onClick={showProfile}>Voir le profil</span>
                         </div>
-                        <div className="dropdown-item">
-                            <span>Voir le profil</span>
-                        </div>
-                        <div className="dropdown-item">
-                            <span>Voir le profil</span>
-                        </div>
                     </div>
                 </ButtonRounded>
                 <ButtonRounded size="small" attributes={{ "data-open-aside": "true" }} onClick={handleResponsiveAside}>
@@ -75,7 +67,7 @@ export default function Chat() {
             </div>
             </header>
             <main>
-            <Messages />
+                <Messages />
             </main>
             <footer>
                 <textarea placeholder="Ecrivez votre message" onChange={e => setText(e.target.value)} value={text} onKeyDown={handleKeyDown}></textarea>

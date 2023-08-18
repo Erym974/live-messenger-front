@@ -2,16 +2,25 @@ import React from 'react'
 
 import './profile.scss';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 export default function Profile({ profile }) {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const closeProfile = (evt) => {
         if(evt.target.id === 'profile') {
             evt.target.classList.add('d-none');
             dispatch({ type: 'profile/showProfile', payload: null })
         }
+    }
+
+    const sendMessage = (id) => {
+        dispatch({ type: 'messenger/changeConversation', payload: id })
+        dispatch({ type: "profile/showProfile", payload: null })
+        dispatch({ type: 'settings/toggleResponsiveAside', payload: false })
+        navigate(`/messenger/${id}`)
     }
 
     return (
@@ -34,7 +43,7 @@ export default function Profile({ profile }) {
                     <span className="description">{profile.description}</span>
                 </main>
                 <footer>
-                    {profile.friend && <button>Envoyer un message</button>}
+                    {profile.friend && <button onClick={() => { sendMessage(profile.id) }}>Envoyer un message</button>}
                     {profile.friend && <button>Bloquer</button>}
                     {profile.friend ? <button>Retirer l'ami</button> : <button>Ajouter en ami</button>}
                 </footer>

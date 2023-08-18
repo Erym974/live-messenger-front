@@ -1,4 +1,4 @@
-@import './../../../variables.scss';
+@import './../../variables.scss';
 
 section#settings {
     
@@ -12,6 +12,22 @@ section#settings {
         border-radius: $border-radius;
         transition: 0.4s ease-in-out;
         background-color: var(--color-white);
+    }
+
+    .loader-svg {
+        svg {
+            animation: infinite 1.5s linear spin;
+        }
+
+        // spin animation
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     }
 
     header {
@@ -130,6 +146,20 @@ section#settings {
             color: var(--color-dark);
             padding: 10px 0;
             border-bottom: 1px solid #ccc;
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--color-dark);
+            border-bottom: 1px solid #ccc;
+            padding: 15px 0 10px 0;
+
+            .MuiSelect-select {
+                padding: 10px 30px;
+                color: var(--color-dark);
+            }
         }
 
         section#account {
