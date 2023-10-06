@@ -10,6 +10,7 @@ section#friends {
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
         padding: 20px 0;
 
+
         .friend {
             display: flex;
             align-items: center;
@@ -48,5 +49,25 @@ section#friends {
         }
 
     }
+
+    ul {
+        display: flex;
+        gap: 15px;
+        list-style: none;
+
+        li {
+            background-color: $color-primary;
+            color: var(--color-dark);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.4s ease-in-out;
+
+            &:hover {
+                background-color: darken($color-primary, 10%);
+            }
+        }
+    }
+
 
 }

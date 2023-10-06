@@ -1,51 +1,99 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import './profile.scss';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-export default function Profile({ profile }) {
+import {  useAuth, useProfile, useFriends, useTranslation } from '../Hooks/CustomHooks';
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+export default function Profile() {
 
-    const closeProfile = (evt) => {
-        if(evt.target.id === 'profile') {
-            evt.target.classList.add('d-none');
-            dispatch({ type: 'profile/showProfile', payload: null })
+    const { profile, closeProfile, updateProfile } = useProfile()
+    const { sendInvite, acceptInvite, deleteFriend, deleteInvitation } = useFriends()
+    const { t, language } = useTranslation()
+
+    const { user } = useAuth()
+
+    const handleButton = async (type = "") => {
+        const id = profile?.relationship?.id ?? profile?.invitation?.id ?? null;
+        switch(type) {
+            case "send":
+                await sendInvite(profile?.user?.friendCode)
+                break;
+            case "delete":
+                if(!id) return;
+                await deleteFriend(id)
+                break;
+            case "decline":
+            case "cancel":
+                if(!id) return;
+                await deleteInvitation(id)
+                break;
+            case "accept":
+                if(!id) return;
+                await acceptInvite(id)
+                break;
+            default:
+                break;
+        }
+
+        updateProfile()
+
+    }
+
+    const convertDate = () => {
+        const date = new Date(profile?.relationship?.since)
+        switch(language){
+          case "fr":
+            return date.toLocaleDateString("fr-FR")
+          case "en":
+            return date.toLocaleDateString("en-US")
+          default:
+            return date.toLocaleDateString("en-US")
         }
     }
 
-    const sendMessage = (id) => {
-        dispatch({ type: 'messenger/changeConversation', payload: id })
-        dispatch({ type: "profile/showProfile", payload: null })
-        dispatch({ type: 'settings/toggleResponsiveAside', payload: false })
-        navigate(`/messenger/${id}`)
-    }
-
     return (
-        <div id="profile" className='modal' onClick={closeProfile}>
+        <div id="profile" className='modal' >
+            <div className="modal-background" onClick={closeProfile}></div>
             <div className="modal-content">
                 <header>
                     <div className="background-cover">
-                        <img src={profile.coverPicture} alt="" />
+                        <img src={profile.user.coverPicture} alt="" />
                     </div>
                     <div className="profile-picture">
-                        <img src={profile.profilePicture} alt="" />
+                        <img src={profile.user.profilePicture} alt="" />
                     </div>
                 </header>
                 <main>
                     <div className="d-flex g-10">
-                        <h2>{profile.firstname}</h2>
-                        <h2>{profile.lastname}</h2>
+                        <h3>{profile.user.fullname}</h3>
                     </div>
-                    <span>{profile.email}</span>
-                    <span className="description">{profile.description}</span>
+                    {profile.user.biography && <>
+                        <h4 className="pt-2">{t('profile.aboutme')}</h4>
+                        <span className="description pb-2">{profile.user.biography}</span>
+                    </>}
+                    <hr className="my-2" />
+                    <div className="d-flex f-c">
+                        <span className="">{t(`friends.friends_since`, { since: convertDate() })}</span>
+                        <span className="text-muted">{t(`friends.mutual_friend${profile?.relationship?.mutualCount > 0 ? "s" : ""}`, { count: profile?.relationship?.mutualCount})}</span>
+                    </div>
                 </main>
                 <footer>
-                    {profile.friend && <button onClick={() => { sendMessage(profile.id) }}>Envoyer un message</button>}
-                    {profile.friend && <button>Bloquer</button>}
-                    {profile.friend ? <button>Retirer l'ami</button> : <button>Ajouter en ami</button>}
+                    {profile?.relationship && <button onClick={() => {  }}>{t('profile.sendMessage')}</button>}
+                    {profile?.relationship && <button onClick={() => { handleButton('delete') }}>{t('profile.deleteFriend')}</button>}
+                    {(!profile.relationship && !profile?.invitation) && <button onClick={() => { handleButton('send') }}>{t('profile.addToFriend')}</button>}
+                    {(!profile?.relationship && profile?.invitation) && 
+                        <>
+                            {profile?.invitation?.emitter.id === user.id ?
+                                <button onClick={() => { handleButton('cancel') }}>{t('profile.cancelFriendRequest')}</button>
+                            :
+                            <>
+                                <button onClick={() => { handleButton('accept') }}>{t('profile.AcceptFriendRequest')}</button>
+                                <button onClick={() => { handleButton("decline") }}>{t('profile.DeclineFriendRequest')}</button>
+                            </>}
+                        </>
+                    }
                 </footer>
             </div>
         </div>

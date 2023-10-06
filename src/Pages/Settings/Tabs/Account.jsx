@@ -1,38 +1,47 @@
 import React, { useEffect, useState } from 'react'
-import ButtonRounded from '../../../Components/ButtonRounded';
 import { FaFloppyDisk, FaPen } from 'react-icons/fa6';
 import { useTranslation } from 'react-i18next';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import useAuth from '../../../Hooks/useAuth';
-import axios from '../../../Api/axios';
-import { toast } from 'react-toastify';
+import { useAuth } from '../../../Hooks/CustomHooks';
+import toast from 'react-hot-toast';
 
 export function Account() {
 
     const { t } = useTranslation()
 
-    const { auth } = useAuth();
-
-    const [saving, setSaving] = useState(false)
+    const { user, updateUser, updatePicture } = useAuth();
 
     const [datas, setDatas] = useState({ 
-        firstname: auth?.user?.firstname, 
-        lastname: auth?.user?.lastname, 
-        email: auth?.user?.email, 
-        description: auth?.user?.description, 
-        coverPicture: auth?.user?.coverPicture, 
-        profilePicture: auth?.user?.profilePicture 
+        firstname: user?.firstname, 
+        lastname: user?.lastname, 
+        email: user?.email, 
+        biography: user?.biography, 
+        coverPicture: user?.coverPicture, 
+        profilePicture: user?.profilePicture 
     });
 
     const maxDescChar = 50;
 
     useEffect(() => {
-        const length = document.getElementById('description').value.length;
+        if(!user) return
+
+        setDatas({ 
+            firstname: user?.firstname, 
+            lastname: user?.lastname, 
+            email: user?.email, 
+            biography: user?.biography, 
+            coverPicture: user?.coverPicture, 
+            profilePicture: user?.profilePicture 
+        });
+    }, [user])
+
+    useEffect(() => {
+        const length = document.getElementById('biography').value.length;
         document.querySelector('.charCount').innerHTML = `${length}/${maxDescChar}`;
     }, [datas])
 
     const handleChange = (evt, key) => {
-        if(key === 'description') {
+        if(key === 'biography') {
             const length = evt.target.value.length;
             if(length > maxDescChar) return;
             document.querySelector('.charCount').innerHTML = `${length}/${maxDescChar}`;
@@ -40,60 +49,31 @@ export function Account() {
         setDatas({ ...datas, [key]: evt.target.value });
     }
 
-    const handleCover = (evt) => {
-        const coverInput = document.getElementById('cover-picture');
-        coverInput.click();
+    const handlePicture = ({ target: img }, type) => {
+        const siblings =[...img.parentElement.children].filter(c=>c!==img)
+        const inputFile = siblings.find(c=>c.tagName==='INPUT')
+        if(!inputFile) return
+        inputFile.click();
 
-        coverInput.addEventListener('change', (evt) => {
+        inputFile.addEventListener('change', (evt) => {
             const file = evt.target.files[0];
             if(!file) return;
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-                const img = document.getElementById('cover-picture-render');
-                img.src = reader.result;
-            }
+            updatePicture(file, type);
         })
     }
 
-    const handleProfilePicture = (evt) => {
-        const profileInput = document.getElementById('profile-picture');
-        profileInput.click();
-
-        profileInput.addEventListener('change', (evt) => {
-            const file = evt.target.files[0];
-            if(!file) return;
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-                const img = document.getElementById('profile-picture-render');
-                img.src = reader.result;
-            }
-        })
-    }
-
-    const handleSave = () => {
-        setSaving(true);
-        
+    const handleSave = async () => {
         let body = {}
 
-        if(datas.firstname !== auth?.user?.firstname) body.firstname = datas.firstname;
-        if(datas.lastname !== auth?.user?.lastname) body.lastname = datas.lastname;
-        if(datas.email !== auth?.user?.email) body.email = datas.email;
-        if(datas.description !== auth?.user?.description) body.description = datas.description;
+        if(datas.firstname !== user?.firstname) body.firstname = datas.firstname;
+        if(datas.lastname !== user?.lastname) body.lastname = datas.lastname;
+        if(datas.email !== user?.email) body.email = datas.email;
+        if(datas.biography !== user?.biography) body.biography = datas.biography;
 
-        axios.patch(`/users/${auth?.user?.id}`, body, { headers: { Authorization: `Bearer ${auth.accessToken}`, "Content-Type": "application/merge-patch+json" } })
-        .then((response) => {
-            toast.success(t('general.edit-success'))
-            setSaving(false);
-        })
-        .catch((err) => {
-            toast.error(t('general.edit-failed'));
-        })
+        if(Object.keys(body).length === 0) return toast.error(t('settings.no_change'))
 
-        setTimeout(() => {
-            setSaving(false);
-        }, 2000);
+        updateUser(body)
+
     }
 
     return (
@@ -101,11 +81,11 @@ export function Account() {
             <h1>{t('settings.my_account')}</h1>
             <form action="">
                 <div className="top">
-                    <div className="background-cover" onClick={handleCover}>
+                    <div className="background-cover" onClick={(e) => { handlePicture(e, 'cover') }}>
                         <img src={datas?.coverPicture} alt="" id="cover-picture-render" />
                         <input type="file" id="cover-picture" className='d-none' />
                     </div>
-                    <div className="profile-picture" onClick={handleProfilePicture}>
+                    <div className="profile-picture" onClick={(e) => { handlePicture(e, 'profile') }}>
                         <img src={datas?.profilePicture} alt="" id="profile-picture-render" />
                         <FaPen />
                         <input type="file" id="profile-picture" className='d-none' />
@@ -122,8 +102,8 @@ export function Account() {
                     </div>
                 </div>
                 <div className="form-group mb-30">
-                    <textarea type="text" name="description" id="description" value={datas?.description} onChange={(evt) => { handleChange(evt, 'description') }} placeholder=' ' />
-                    <label htmlFor="description">{t('general.description')}</label>
+                    <textarea type="text" name="biography" id="biography" value={datas?.biography} onChange={(evt) => { handleChange(evt, 'biography') }} placeholder=' ' />
+                    <label htmlFor="biography">{t('general.biography')}</label>
                     <span className="charCount">0/40</span>
                 </div>
                 <div className="form-group">
@@ -132,9 +112,8 @@ export function Account() {
                 </div>
             </form>
             <div className="row jcfe">
-                <button className={`save-button ${saving && 'loader-svg'}`} onClick={handleSave}>
-                    {saving ? t('general.saving') : t('general.save')}
-                    {saving ? <AiOutlineLoading3Quarters /> : <FaFloppyDisk />}
+                <button className={`save-button`} onClick={handleSave}>
+                    {t('general.save')}
                 </button>
             </div>
         </section>

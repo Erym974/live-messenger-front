@@ -2,21 +2,68 @@ import React, { useEffect, useState } from 'react'
 
 import './friends.scss'
 import Friend from '../../../Components/Friend/Friend'
-import { fakeFriends } from '../../../faker'
-import { useTranslation } from 'react-i18next'
+import { useAuth, useFriends, useTranslation } from '../../../Hooks/CustomHooks';
+
+import { InviteFriend } from '../../../Components/Friends/InviteFriend';
+import { InvitationList } from '../../../Components/Friends/InvitationList';
 
 export function Friends() {
 
   const { t } = useTranslation()
-  const [friends, setFriends] = useState(fakeFriends)
+ 
+  const { filteredFriends, searchFriends, setSearchFriends, loading, invitations, sendInvite, updateFriends } = useFriends()
+  const { user } = useAuth()
+
+  const [tab, setTab] = useState("friends") 
+
+  useEffect(() => {
+    updateFriends()
+  }, [])
+
+  const FriendTab = () => {
+    return (
+      <>
+        <div className="search-friends mt-3">
+          <input type="search" id="search" value={searchFriends} onChange={(e) => { setSearchFriends(e.target.value) }} placeholder='Chercher dans mes Amis' />
+        </div>
+          <div className="friends-container">
+            {filteredFriends?.length > 0 ?
+              filteredFriends?.map(friend => <Friend key={friend.id} friend={friend} />)
+              :
+                loading ?
+                  <span>Chargement...</span>
+                  : 
+                  <span>Aucun ami n'a été trouvé</span>
+            }
+          </div>
+        </>
+    )
+  }
+
+  const InviteTab = () => {
+    return (
+      <>
+        <InviteFriend />
+        <InvitationList />
+      </>
+    )
+  }
 
   return (
     <section id="friends">
         <h1>{t('settings.my_friends')}</h1>
 
-        <div className="friends-container">
-          {friends.map((friend, index) => <Friend key={index} friend={friend} />)}
-        </div>
+        <ul>
+            <li onClick={() => setTab("friends")}>{t('settings.friends')}</li>
+            <li onClick={() => setTab("invite")}>{t('settings.friendsInvite')}</li>
+        </ul>
+
+        {/*  */}
+
+        
+        {tab === "friends" && FriendTab()}
+        {tab === "invite" && InviteTab()}
+
     </section>
   )
 }

@@ -1,43 +1,36 @@
-import React, { useEffect, useState } from 'react'
 import FormSwitch from '../../../Components/FormSwitch'
 import { MenuItem, Select } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
 import Language from '../../../Constant/Language';
-import { useTranslation } from 'react-i18next';
 import { SelectLanguageItem } from '../../../Components/SelectLanguageItem/SelectLanguageItem';
+import { useAuth, useSettings, useTranslation } from '../../../Hooks/CustomHooks';
 
 export function General() {
 
-  const dispatch = useDispatch()
-  const settings = useSelector(state => state.settings)
-
-  const { t, i18n } = useTranslation()
+  const { language, t } = useTranslation()
+  const { toggleSetting, setSettings } = useSettings()
+  const { user } = useAuth()
 
   const handleLanguageChange = ({ target: { value } }) => {
-    i18n.changeLanguage(value)
-    dispatch({ type: "settings/setLanguage", payload: { language: value } })
+    setSettings('language', value)
   }
-
-  const [allowFriends, setAllowFriends] = useState(false);
 
   return (
     <section id="general">
         <h1>{t('settings.general')}</h1>
-        <FormSwitch setData={setAllowFriends} data={allowFriends} >{t('settings.allow_friends')}</FormSwitch>
+        <FormSwitch setData={() => { toggleSetting("allow-friend-request") }} data={user.settings.find(setting => setting.meta === "allow-friend-request").value} >{t('settings.allow_friends')}</FormSwitch>
 
         <div className="language-selector">
           <span>{t('settings.language_selector')}</span>
           <Select
-            value={settings.language}
+            value={language}
             label="Language"
             onChange={handleLanguageChange}
           >
-            <MenuItem value={Language.FRENCH.code}>
-              <SelectLanguageItem language={Language.FRENCH} />
-            </MenuItem>
-            <MenuItem value={Language.ENGLISH.code}>
-              <SelectLanguageItem language={Language.ENGLISH} />
-            </MenuItem>
+            {Language.LIST.map(lang => (
+                <MenuItem value={lang.code} key={lang.code}>
+                    <SelectLanguageItem language={lang} />
+                </MenuItem>
+            ))}
           </Select>
         </div>
     </section>

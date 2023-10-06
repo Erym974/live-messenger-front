@@ -8,9 +8,16 @@ div.modal#profile {
     justify-content: center;
 
     height: 100%; width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
     top: 0; left: 0;
-    z-index: 99;
+    z-index: 9999;
+
+    .modal-background {
+        position: absolute;
+        height: 100%; width: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        top: 0; left: 0;
+        z-index: -1;
+    }
 
     .modal-content {
         display: flex;
@@ -20,6 +27,10 @@ div.modal#profile {
         border-radius: 20px;
         box-shadow: var(--box-shadow);
         padding:10px;
+
+        @media screen and (max-width: 900px) {
+            width: 90%;
+        }
 
         header {
             position: relative;
@@ -55,11 +66,7 @@ div.modal#profile {
             display: flex;
             flex-direction: column;
             color: var(--color-dark);
-            padding: 30px;
-
-            .description {
-                padding: 10px 0;
-            }
+            padding: 15px 30px;
         }
 
         footer {
@@ -76,7 +83,7 @@ div.modal#profile {
                 cursor: pointer;
                 transition: background-color 0.3s ease-in-out;
                 background-color: $color-primary;
-                color: var(--color-dark);
+                color: #fff;
                 &:hover {
                     background-color: darken($color-primary, 10%);
                 }

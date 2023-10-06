@@ -1,4 +1,7 @@
 export default {
+    global: {
+        error: "Une erreur est survenue",
+    },
     settings: {
         general: "Général",
         allow_friends: "Autoriser les demandes d'amis",
@@ -6,25 +9,45 @@ export default {
         my_account: "Mon compte",
         my_friends: "Mes amis",
         language_selector: "Langues",
+        friends: "Mes amis",
+        friendsInvite: "Mes invitations",
+        sendInvite: "Envoyer une invitation",
+        receive: "Invitations reçues",
+        sended: "Invitations envoyées",
+        no_change: "Pas de changement",
     },
     chat: {
         online: "En ligne",
         offline: "Hors ligne",
+        notyet: "Aucun message"
     },
     friends: {
       mutual_friend: "{{ count }} ami en commun",
       mutual_friends: "{{ count }} amis en commun",
       friends_since: "Amis depuis le {{ since }}",
+      invite_sended: "Invitation envoyée",
+      invalid_code: "Code ami invalide",
+      yourself: "Vous ne pouvez pas vous ajouter en ami",
+      disallowed: "Cet utilisateur n'autorise pas les demandes d'amis",
+      already_sent: "Vous avez déjà envoyé une demande d'ami à cet utilisateur",
+      already_friend: "Vous êtes déjà ami avec cet utilisateur",
+      friendCodeNotFound: "Ce code ami ne correspond à aucun utilisateur",
+      friendCode: "Votre code ami : {{ code }}",
+      friendCodeCopied: "Code ami copié !"
     },
     general: {
         firstname: "Prénom",
         lastname: "Nom",
-        description: "Description",
+        biography: "Biographie",
+        password: "Mot de passe",
+        newPassword: "Nouveau mot de passe",
+        confirmNewPassword: "Confirmer votre mot de passe",
         email: "Email",
         save: "Enregistrer",
         saving: "Enregistrement",
     },
-    register: {
+    auth: {
+        loggingin: "Connexion en cours",
         login: "Se connecter",
         register: "S'inscrire",
         password: "Mot de passe",
@@ -32,7 +55,31 @@ export default {
         already_registered: "Déjà inscrit ?",
         not_registered: "Pas encore inscrit ?",
         login_failed: "Identifiants invalides",
+        registration_failed: "Inscription échouée",
         remember: "Se souvenir de moi",
+        expired: "Votre session a expirée",
+    },
+    account: {
+        edited: "Votre compte a bien été modifié",
+        my_account: "Mon compte",
+    },
+    message: {
+        deleted: "Ce message a été supprimé",
+        edited: "Ce message a été modifié",
+        delete: "Supprimer",
+        edit: "Modifier",
+        react: "Réagir"
+    },
+    profile: {
+        see: "Voir le profil",
+        members: "Membres",
+        sendMessage: "Envoyer un message",
+        deleteFriend: "Supprimer de sa liste d'ami",
+        addToFriend: "Ajouter en ami",
+        cancelFriendRequest: "Annuler la demande d'ami",
+        AcceptFriendRequest: "Accepter la demande d'ami",
+        DeclineFriendRequest: "Refuser la demande d'ami",
+        aboutme: "À propos de moi",
     }
 }
 
