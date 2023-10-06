@@ -6,6 +6,7 @@ import { authSlice } from "./Slices/authSlice";
 import { friendsSlice } from "./Slices/friendsSlice";
 import { modalSlice } from "./Slices/modalSlice";
 import { realtimeSlice } from "./Slices/realtimeSlice";
+import { imagesSlice } from "./Slices/imagesSlices";
 
 const store = configureStore({
     reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
         friends: friendsSlice.reducer,
         modal: modalSlice.reducer,
         realtime: realtimeSlice.reducer,
+        images: imagesSlice.reducer
     }
 })
 

@@ -40,17 +40,6 @@ export default function App() {
     updateFriends()
   }, [auth])
 
-  useEffect(() => {
-    if(!auth) return
-    // let onNewFriendRequestSource = Subscribe(`/friends`, (datas) => {
-        
-    // })
-
-    // return () => {
-    //     if(onNewFriendRequestSource) onNewFriendRequestSource.close()
-    // }
-}, [auth])
-
   return (
         <>
           <Toaster

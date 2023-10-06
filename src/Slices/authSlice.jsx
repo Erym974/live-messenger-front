@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 
 export const authSlice = createSlice({
     name: "auth",
@@ -29,7 +30,9 @@ export const authSlice = createSlice({
             state.user = user
         },
         setMercure: (state, action) => {
-            state.mercure = action.payload
+            const jwt = action.payload
+            Cookies.set('mercureAuthorization', jwt, { expires: 1 })
+            state.mercure = jwt
         }
     }
 })

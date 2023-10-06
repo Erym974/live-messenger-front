@@ -47,7 +47,8 @@ export default function useMessenger() {
         dispatch(setMessages(response.datas))
     }
 
-    const sendMessage = async (id, content) => {
+    const sendMessage = async (id, content, pictures = null) => {
+        
         const response = await sendMessagesApi({group: id, message: content})
         if(!response?.status) return
     }

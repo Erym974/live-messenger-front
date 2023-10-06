@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 
 import './profile.scss';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { openImages as openSliceImages } from './../Slices/imagesSlices'
 
 import {  useAuth, useProfile, useFriends, useTranslation } from '../Hooks/CustomHooks';
+import { useDispatch } from 'react-redux';
 
 export default function Profile() {
 
@@ -13,6 +13,7 @@ export default function Profile() {
     const { t, language } = useTranslation()
 
     const { user } = useAuth()
+    const dispatch = useDispatch()
 
     const handleButton = async (type = "") => {
         const id = profile?.relationship?.id ?? profile?.invitation?.id ?? null;
@@ -53,16 +54,21 @@ export default function Profile() {
         }
     }
 
+    const openImages = (images) => {
+        if(typeof images === 'string') images = [images]
+        dispatch(openSliceImages([...images]))
+    }
+
     return (
         <div id="profile" className='modal' >
             <div className="modal-background" onClick={closeProfile}></div>
             <div className="modal-content">
                 <header>
                     <div className="background-cover">
-                        <img src={profile.user.coverPicture} alt="" />
+                        <img onClick={() => { openImages(profile.user.coverPicture) }} className="clickable" src={profile.user.coverPicture} alt="" />
                     </div>
                     <div className="profile-picture">
-                        <img src={profile.user.profilePicture} alt="" />
+                        <img onClick={() => { openImages(profile.user.profilePicture) }} className="clickable" src={profile.user.profilePicture} alt="" />
                     </div>
                 </header>
                 <main>

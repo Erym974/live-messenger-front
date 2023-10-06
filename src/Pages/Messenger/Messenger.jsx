@@ -7,12 +7,15 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMessenger, useProfile } from '../../Hooks/CustomHooks';
 import { useDocumentTitle } from '@uidotdev/usehooks';
+import { useSelector } from 'react-redux';
+import { ModalImage } from '../../Components/ModalImage';
 
 export default function Messenger() {
 
   const { profile } = useProfile();
   const navigate = useNavigate();
   const { id } = useParams()
+  const { open: openImage } = useSelector(state => state.images)
   const { fetchGroups, fetchGroup, groups, group, loadingGroups } = useMessenger()
 
 
@@ -37,6 +40,7 @@ export default function Messenger() {
     <section id="dashboard">
 
       {profile && <Profile />}
+      {openImage && <ModalImage />}
 
       <Aside />
 

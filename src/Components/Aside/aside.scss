@@ -196,6 +196,7 @@ aside {
         position: fixed;
         height: calc(100% - 30px);
         width: calc(100% - 30px) !important;
+        max-width: 100% !important;
 
         .top {
             .right {

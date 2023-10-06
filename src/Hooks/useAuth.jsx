@@ -33,7 +33,7 @@ export default function useAuth() {
             dispatch(setUser(null))
             dispatch(setLoading(false))
         } else {
-            setMercure(setMercure(response.datas.mercure))
+            dispatch(setMercure(response.datas.mercure))
             dispatch(setUser(response?.datas.user))
             dispatch(setLoading(false))
         }
@@ -46,7 +46,7 @@ export default function useAuth() {
             dispatch(setLoading(false))
             return false
         }
-        console.log(response);
+        dispatch(setMercure(response.datas.mercure))
         dispatch(setAuth(response.datas.token))
         dispatch(setUser(response.datas.user))
         dispatch(setLoading(false))

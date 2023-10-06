@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { FaEllipsisH } from 'react-icons/fa'
+import { FaEllipsisH, FaTimes } from 'react-icons/fa'
 import { FaPaperPlane, FaXmark } from 'react-icons/fa6'
 import { useDispatch } from 'react-redux'
 import ButtonRounded from '../../Components/ButtonRounded'
 import Messages from '../../Components/Messenger/Messages'
 import { toggleResponsiveAside } from '../../Slices/settingsSlice'
-// import { showProfile as showProfileOfSlice } from '../../Slices/profileSlice'
+import { openImages as openSliceImages } from '../../Slices/imagesSlices'
+import { AiFillFileAdd, AiOutlinePicture } from 'react-icons/ai'
 
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
@@ -24,6 +25,7 @@ export default function Chat() {
     const dispatch = useDispatch()
     const { t } = useTranslation()
     const easterIdle = useIdle(15 * 1000);
+    const [pictures, setPictures] = useState([])
 
     const [emoji, toggleEmoji] = useState()
     const { Subscribe } = useRealtime()
@@ -81,9 +83,9 @@ export default function Chat() {
             editMessage()
         } else {
             if(!sendEmoji) {
-                if((content.trim().length < 1 || content.length > 300)) return
+                if((content.trim().length < 1 || content.length > 300) && pictures.length === 0) return
                 if(content.startsWith('/')) executeCommand(content, true)
-                else sendMessage(group.id, content)
+                else sendMessage(group.id, content, pictures)
             } else {
                 sendMessage(group.id, ":emoji:") 
             }
@@ -145,6 +147,42 @@ export default function Chat() {
         else setContent(value)
     }
 
+    const openImages = (images) => {
+        if(typeof images === 'string') images = [images]
+        dispatch(openSliceImages([...images]))
+    }
+
+    const addNewPicture = () => {
+        const input = document.createElement('input')
+        input.type = "file"
+        input.accept = "image/png, image/jpeg, image/jpg"
+        input.multiple = true
+        input.onchange = (e) => {
+            const files = e.target.files
+            if(files.length < 1) return
+            for(let i = 0; i < files.length; i++) {
+                const file = files[i]
+                const reader = new FileReader()
+                reader.readAsDataURL(file)
+                reader.onload = (e) => {
+                    const result = e.target.result
+                    console.log(pictures.length, result, [...pictures, result].length);
+                }
+            }
+        }
+        input.click()
+    }
+
+    const removeImage = (image) => {
+        console.log(image);
+        const imgs = pictures.filter(picture => picture != image)
+        setPictures(imgs)
+    }
+
+    const addNewFile = () => {
+        
+    }
+
     return (
         <>
         {!loadingGroups && groups?.length === 0 ?
@@ -189,31 +227,49 @@ export default function Chat() {
                 <Messages />
             </main>
             <footer>
-                <div className="textarea-container">
-                    <textarea placeholder="Ecrivez votre message" onChange={handleEdit} value={edition.active ? edition.content : content} onKeyDown={handleKeyDown}></textarea>
-                    <div className="absolute">
-                        {limit > 200 && <span><span className={
-                            limit >= 275 && limit < 300 ? 'warning' :
-                            limit >= 300 ? 'danger' : ''
-                        }>{limit}</span>/300</span>}
-                        <div className="emoji">
-                            <em-emoji shortcodes=":smile:" size="1.5rem" onClick={() => { toggleEmoji(!emoji) }}></em-emoji>
-                            {emoji && <div className="writter-emoji">
-                                <Picker data={data} onEmojiSelect={insertEmoji} />
-                            </div> }
+                {pictures.length > 0 &&
+                <div className="file">
+                    {pictures.map((picture, index) => 
+                        <div key={index} className="input-file">
+                            <img src={picture} alt="" onClick={() => openImages(pictures) } />
+                            <FaTimes className="close" onClick={ () => removeImage(pictures) } />
                         </div>
-                    </div>
-                </div>
-
-                {content.trim().length > 0 || edition?.content?.trim().length > 0 ?
-                <ButtonRounded size="small" onClick={handleSendMessage}>
-                    <FaPaperPlane />
-                </ButtonRounded>
-                :
-                <div className="clickable">
-                    <em-emoji onClick={(e) => { handleSendMessage(e, true) }}  native={group?.emoji ?? "👍"} size="1.5rem"></em-emoji>
+                    )}
                 </div>
                 }
+                <div className="writter">
+                    {false && <ButtonRounded size="small" onClick={addNewFile}>
+                        <AiFillFileAdd />
+                    </ButtonRounded>}
+                    <ButtonRounded size="small" onClick={addNewPicture}>
+                        <AiOutlinePicture />
+                    </ButtonRounded>
+                    <div className="textarea-container">
+                        <textarea placeholder="Ecrivez votre message" onChange={handleEdit} value={edition.active ? edition.content : content} onKeyDown={handleKeyDown}></textarea>
+                        <div className="absolute">
+                            {limit > 200 && <span><span className={
+                                limit >= 275 && limit < 300 ? 'warning' :
+                                limit >= 300 ? 'danger' : ''
+                            }>{limit}</span>/300</span>}
+                            <div className="emoji">
+                                <em-emoji shortcodes=":smile:" size="1.5rem" onClick={() => { toggleEmoji(!emoji) }}></em-emoji>
+                                {emoji && <div className="writter-emoji">
+                                    <Picker data={data} onEmojiSelect={insertEmoji} />
+                                </div> }
+                            </div>
+                        </div>
+                    </div>
+
+                    {content.trim().length > 0 || edition?.content?.trim().length > 0 || pictures.length > 0 ?
+                        <ButtonRounded size="small" onClick={handleSendMessage}>
+                            <FaPaperPlane />
+                        </ButtonRounded>
+                    :
+                        <div className="clickable">
+                            <em-emoji onClick={(e) => { handleSendMessage(e, true) }}  native={group?.emoji ?? "👍"} size="1.5rem"></em-emoji>
+                        </div>
+                    }
+                </div>
             </footer>
         </section>
         }
