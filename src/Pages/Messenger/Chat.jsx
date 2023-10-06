@@ -166,7 +166,7 @@ export default function Chat() {
                 reader.readAsDataURL(file)
                 reader.onload = (e) => {
                     const result = e.target.result
-                    console.log(pictures.length, result, [...pictures, result].length);
+                    
                 }
             }
         }
