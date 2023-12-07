@@ -1,4 +1,3 @@
-import { MenuItem } from '@mui/material'
 import React from 'react'
 import './selectLanguageItem.scss'
 

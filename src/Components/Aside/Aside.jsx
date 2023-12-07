@@ -1,9 +1,9 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import { FaBell, FaBellSlash, FaGear, FaArrowLeftLong } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 
-import Conversation from "./Tabs/Conversation";
+import Conversation from "./Conversation";
 
 import './aside.scss';
 import ButtonRounded from '../ButtonRounded';
@@ -11,36 +11,42 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import {  useAuth, useTheme } from '../../Hooks/CustomHooks';
 import { useNavigate } from 'react-router-dom';
+import { FaSearch } from 'react-icons/fa';
+import { openSearchModal, toggleAside } from '../../Slices/settingsSlice';
 
 export default function Aside() {
 
     const { logoutUser, user } = useAuth();
     const navigate = useNavigate()
-
-    const [aside, setAside] = useState(true)
+    const { asideState } = useSelector(state => state.settings)
 
     const { t } = useTranslation()
 
     const { toggleTheme, themeIcon } = useTheme()
 
-    const notifications = useSelector(state => state.settings.notifications)
-    const responsiveAside = useSelector(state => state.settings.responsiveAside)
-
     const dispatch = useDispatch()
-
-    const toggleNotifications = () => dispatch({ type: "settings/toggleNotifications" })
     
     const goToSettings = () => {
-        dispatch({ type: "settings/toggleResponsiveAside", payload: false })
+        dispatch(toggleAside(false));
         navigate("/settings/general")
     }
 
-    const search = () => {
-        
+    useEffect(() => {
+        window.addEventListener('keydown', onCtrlF, true)
+        return () => {
+            window.removeEventListener('keydown', onCtrlF, true)
+        }
+    }, [])
+
+    const onCtrlF = (e) => {
+        if (e.ctrlKey && e.key === 'f') {
+            e.preventDefault()
+            dispatch(openSearchModal())
+        }
     }
 
     return (
-        <aside data-toggle={aside} data-toggle-responsive={responsiveAside} >
+        <aside data-toggle={asideState} >
 
             <div className="top">
             <img src={user?.profilePicture} alt={user?.firstname + " " + user?.lastname} />
@@ -51,11 +57,8 @@ export default function Aside() {
             </div>
 
             <div className="settings">
-            {/* <ButtonRounded onClick={search}>
-                <AiOutlineSearch /> 
-            </ButtonRounded>  */}
-            <ButtonRounded onClick={toggleNotifications}>
-                {notifications ? <FaBell /> : <FaBellSlash /> }
+            <ButtonRounded onClick={() => { dispatch(openSearchModal()) }}>
+                <FaSearch />
             </ButtonRounded>
             <ButtonRounded onClick={toggleTheme}>
                 {themeIcon}
@@ -73,7 +76,7 @@ export default function Aside() {
             </div>
 
             <div className="bottom">
-            <button onClick={() => { setAside(!aside) }}><FaArrowLeftLong /></button>
+            <button onClick={() => { dispatch(toggleAside(!asideState)) }}><FaArrowLeftLong /></button>
             </div>
 
         </aside>

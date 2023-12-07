@@ -7,7 +7,7 @@ export default function useNotification() {
     const notificationTitle = () => {
     }
     
-    const notificationMessage = (title = "Notification", content, actions = <></>, options) => {
+    const notificationMessage = (title = "Notification", content, actions, options) => {
 
         // get timestamp
 

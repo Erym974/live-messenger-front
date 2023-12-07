@@ -8,14 +8,19 @@ import { useDispatch } from 'react-redux';
 
 export default function Profile() {
 
-    const { profile, closeProfile, updateProfile } = useProfile()
+    const { profile, closeProfile, showProfile } = useProfile()
     const { sendInvite, acceptInvite, deleteFriend, deleteInvitation } = useFriends()
     const { t, language } = useTranslation()
 
     const { user } = useAuth()
     const dispatch = useDispatch()
 
+    useEffect(() => {
+        console.log(profile);
+    }, [])
+
     const handleButton = async (type = "") => {
+
         const id = profile?.relationship?.id ?? profile?.invitation?.id ?? null;
         switch(type) {
             case "send":
@@ -38,7 +43,7 @@ export default function Profile() {
                 break;
         }
 
-        updateProfile()
+        showProfile(profile?.user.id)
 
     }
 
@@ -82,11 +87,11 @@ export default function Profile() {
                     <hr className="my-2" />
                     <div className="d-flex f-c">
                         <span className="">{t(`friends.friends_since`, { since: convertDate() })}</span>
-                        <span className="text-muted">{t(`friends.mutual_friend${profile?.relationship?.mutualCount > 0 ? "s" : ""}`, { count: profile?.relationship?.mutualCount})}</span>
+                        <span className="text-muted">{t(`friends.mutual_friend${profile?.relationship?.mutual?.length > 1 ? "s" : ""}`, { count: profile?.relationship?.mutual?.length})}</span>
                     </div>
                 </main>
                 <footer>
-                    {profile?.relationship && <button onClick={() => {  }}>{t('profile.sendMessage')}</button>}
+                    {profile?.relationship && <button onClick={() => { console.log("test"); }}>{t('profile.sendMessage')}</button>}
                     {profile?.relationship && <button onClick={() => { handleButton('delete') }}>{t('profile.deleteFriend')}</button>}
                     {(!profile.relationship && !profile?.invitation) && <button onClick={() => { handleButton('send') }}>{t('profile.addToFriend')}</button>}
                     {(!profile?.relationship && profile?.invitation) && 

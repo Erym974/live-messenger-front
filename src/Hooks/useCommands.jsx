@@ -1,13 +1,10 @@
-import { useEffect, useState } from "react"
 import useMessenger from "./useMessenger"
-import useApi from "./useApi"
 import toast from "react-hot-toast"
-import Notifications from "../Components/Notifications/Notifications"
+import axios from "../Api/axios"
 
 export default function useCommands() {
 
     const { group } = useMessenger()
-    const { post: sendPokeApi } = useApi("api/realtime/pokes")
 
     const easters = [
         {active: true, name: "mango", chat: true, audio: "mango", alias: ["mangue"], image: "https://media0.giphy.com/media/S8HRMhG0ecGOTuVnVP/giphy.gif?cid=ecf05e47t1x6bltn2pnjgvbduc5f9na0kwu0uc07egykwrfe&ep=v1_gifs_search&rid=giphy.gif&ct=g"}, 
@@ -16,7 +13,7 @@ export default function useCommands() {
     ]
 
     const commands= [
-        {command: "poke", alias: ["pokes"], callback: execPoke},
+        
     ]
 
     const executeCommand = (cmd, chat) => {
@@ -25,7 +22,7 @@ export default function useCommands() {
 
         const easter = easters.find(easter => easter.name === cmd || easter.alias.includes(cmd));
 
-        if(easter && easter.active && (easter.chat === null || easter.chat === chat)) return execEaster(easter)
+        if(easter && easter.active && (easter.chat === null || easter.chat === chat)) return sendEaster(easter)
         if(easter && !easter.active) return
         
         const command = commands.find(command => command.name === cmd || command.alias.includes(cmd))
@@ -35,7 +32,15 @@ export default function useCommands() {
 
     }
 
+    const sendEaster = async (easter) => {
+        const response = await axios.post('/api/realtime/easter', { group: group.id, easter: easter.name })
+    }
+
     const execEaster = (easter) => {
+
+        if(typeof easter === "string")easter = easters.find(e => e.name === easter)
+        if(!easter) return
+
         document.body.classList.add("easter")
         document.body.classList.add(easter.name)
         if(easter.image) document.body.style.cssText = `--easter-image: url("${easter.image}")`
@@ -70,27 +75,6 @@ export default function useCommands() {
 
     }
 
-    async function execPoke() {
-        if(!group) return
-
-        Notifications.Promise(async () => {
-            const response = await sendPokeApi({ group: group.id })
-            if(!response?.status) return false
-            return true
-        }, 'Envoi en cours...', 'Poke envoyé', 'Une erreur est survenue')
-
-        // toast.promise(new Promise(async (resolve, reject) => {
-        //     const response = await sendPokeApi({ group: group.id })
-        //     if(!response?.status) return reject()
-        //     resolve()
-        // }),
-        // {
-        //     loading: 'Envoi en cours...',
-        //     success: 'Poke envoyé',
-        //     error: 'Une erreur est survenue',
-        // })
-    }
-
-    return { executeCommand }
+    return { executeCommand, execEaster }
 
 }

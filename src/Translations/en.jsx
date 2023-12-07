@@ -20,6 +20,8 @@ export default {
         online: "Online",
         offline: "Offline",
         notyet: "No message yet",
+        sentfile: "Sent {{ count }} file",
+        sentfiles: "Sent {{ count }} files",
     },
     friends: {
         mutual_friend: "{{ count }} mutual friend",
@@ -58,6 +60,7 @@ export default {
         registration_failed: "Registration failed",
         remember: "Remember me",
         expired: "You're session has expired",
+        wrong_credentials: "Invalid credentials",
     },
     account: {
         edited: "You're account was edited successfully",

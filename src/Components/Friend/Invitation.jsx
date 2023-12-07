@@ -28,7 +28,6 @@ export const Invitation = ({ invitation }) => {
         <div className="right">
             <span className="friend-name">{friend?.fullname}</span>
             <span className="friend-since">{t(`invitations.invitation_sent`, { createdAt: convertDate() })}</span>
-            {/* <span className="text-muted friend-mutual">{t(`friends.mutual_friend${relationship.mutualCount > 0 ? "s" : ""}`, { count: relationship.mutualCount})}</span> */}
         </div>
     </div>
   )

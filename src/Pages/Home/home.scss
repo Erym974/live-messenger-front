@@ -1,0 +1,34 @@
+@import './../../variables.scss';
+
+.homepage {
+
+    display: flex;
+    flex-direction: column;
+
+    nav {
+        background-color: $color-primary;
+        height: 10vh;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+
+        .links {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            align-items: center;
+        }
+    }
+
+    main {
+        min-height: 80vh;
+        flex-grow: 1;
+    }
+
+    footer {
+        background-color: $color-primary;
+        height: 10vh;
+    }
+
+}

@@ -1,8 +1,8 @@
 import './index.scss';
 import "./i18n";
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     BrowserRouter as Router,
     Routes,
@@ -11,22 +11,24 @@ import {
 
 
 import { Login, Register, Error, Messenger, General, Account, Security, Friends, Home } from './Pages/pages'
-
 import ProtectedRoute from './Custom/ProtectedRoute';
-
-import { useTheme, useAuth, useMessenger, useFriends, useModal, useRealtime } from './Hooks/CustomHooks';
-
+import { useTheme, useAuth, useModal } from './Hooks/CustomHooks';
 import PublicRoute from './Custom/PublicRoute';
 import { Modal } from './Components/Modal';
+import { socket } from './socket';
 
 
 export default function App() {
-
-  const { fetchAuth, auth, user } = useAuth()
-  const { fetchGroups } = useMessenger()
-  const { updateFriends } = useFriends()
-  const { isModalOpen } = useModal()
-  const { Subscribe } = useRealtime()
+  
+  const { fetchAuth, auth } = useAuth()
+  const { isModalOpen, searchModal } = useModal()
+  
+  useEffect(() => {
+    socket.connect()
+    return () => {
+      socket.disconnect()
+    };
+  }, [])
 
   useTheme()
 
@@ -36,8 +38,15 @@ export default function App() {
 
   useEffect(() => {
     if(!auth) return
-    fetchGroups()
-    updateFriends()
+    
+    socket.emit('authenticateUser', {
+      token: auth,
+    })
+
+    socket.on('authenticateUser', (result) => {
+        if(result.status === false) toast.error("Une erreure est survenue lors de la connexion au serveur.")
+    })
+
   }, [auth])
 
   return (

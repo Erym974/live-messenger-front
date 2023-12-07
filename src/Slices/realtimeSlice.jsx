@@ -3,13 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 export const realtimeSlice = createSlice({
     name: "realtime",
     initialState: {
-        subscribions: []
+        socketInitied: false
     },
     reducers: {
-        addSubscribtion: (state, action) => {
-            state.subscribions.push(action.payload)
-        },
+        setInitiedSocket: (state, action) => {
+            state.socketInitied = action.payload
+        }
     }
 })
 
-export const { addSubscribtion } = realtimeSlice.actions;
+export const { addSubscribtion, removeSubscribtion, setInitiedSocket } = realtimeSlice.actions;

@@ -5,11 +5,12 @@ import { closeModal as closeSliceModal, openModal as openSliceMode } from "../Sl
 export default function useModal() {
 
     const { modal, isModalOpen } = useSelector(state => state.modal)
+    const { searchModal } = useSelector(state => state.settings)
     const dispatch = useDispatch()
 
     const openModal = (Element) => dispatch(openSliceMode(Element))
     const closeModal = () => dispatch(closeSliceModal())
 
-    return { openModal, closeModal, modal, isModalOpen }
+    return { openModal, closeModal, modal, isModalOpen, searchModal }
 
 }

@@ -1,57 +1,62 @@
 @import './../../variables.scss';
 
-aside {
-    border-radius: 20px;
-    height: 100%;
-    width: 30%;
-    max-width: 450px !important;
-    background-color: var(--color-white);
-    padding: 25px;
+section#dashboard {
 
-    display: flex;
-    flex-direction: column;
+    // Mobile devices
+    &>aside {
 
-    transition: all 0.4s ease-in-out;
+        &[data-toggle="true"] {
+            position: fixed;
+        }
 
-    box-shadow: var(--box-shadow);
+        &[data-toggle="false"] {
+            display: none;
+        }
 
-    white-space: nowrap;
-
-    .top {
+        z-index: 2;
+        width: calc(100% - 30px) !important;
+        max-width: 100% !important;
+        border-radius: 20px;
+        background-color: var(--color-white);
         display: flex;
-        align-items: center;
-        gap: 10px;
-        color: var(--color-dark);
+        flex-direction: column;
+        padding: 25px;
+        transition: all 0.4s ease-in-out;
+        box-shadow: var(--box-shadow);
+        white-space: nowrap;
+        height: calc(100% - 30px);
 
-        .right {
+
+        .top {
             display: flex;
-            flex-direction: column;
-        }
-    }
+            align-items: center;
+            gap: 10px;
+            color: var(--color-dark);
 
-    .settings {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
+            img {
+                height: 50px;
+                width: 50px;
+                border-radius: 50%;
+            }
 
-        margin: 30px 0;
-
-        padding-bottom: 25px;
-        border-bottom: $color-primary 1px solid;
-
-    }
-
-    .content {
-        flex: 1;
-        overflow-y: auto;
-        width: 100%;
-
-        &::-webkit-scrollbar {
-            width: 0px;
-            background: transparent; /* make scrollbar transparent */
+            .right {
+                display: flex;
+                flex-direction: column;
+            }
         }
 
-        .conversations {
+        .settings {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+
+            padding-bottom: 25px;
+            border-bottom: $color-primary 1px solid;
+        }
+
+        .content {
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -70,167 +75,122 @@ aside {
                     background-color: $color-primary;
                 }
 
+                img {
+                    height: 50px;
+                    width: 50px;
+                    border-radius: 50%;
+                }
+
                 .right {
                     display: flex;
                     flex-direction: column;
                     flex-grow: 1;
+                    max-width: calc(100% - 50px);
 
                     .name {
                         font-weight: bold;
                     }
+
                     .message {
-                        text-decoration: none; 
-                        text-overflow: ellipsis; 
-                        display: block; 
-                        overflow: hidden; 
+                        text-decoration: none;
+                        text-overflow: ellipsis;
+                        display: block;
+                        overflow: hidden;
                         white-space: nowrap;
                     }
                 }
             }
         }
-    }
 
-    .bottom {
+        .bottom {
 
-        margin: 30px 0;
-        padding-top: 25px;
-        border-top: $color-primary 1px solid;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        button {
+            margin: 30px 0;
+            padding-top: 25px;
+            border-top: $color-primary 1px solid;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
-            width: 75%;
-            height: 35px;
-            border-radius: $border-radius;
-            background: $color-primary;
-            border: none;
-            cursor: pointer;
-
-            color: var(--color-dark);
-            transition: background-color 0.3s ease-in-out;
-
-            &:hover {
-                background-color: darken($color-primary, 10%);
-            }
-        }
-    }
-
-    img {
-        height: 50px;
-        width: 50px;
-        border-radius: 50%;
-    }
-
-    @mixin minimizeAside() {
-        width: 100px;
-    
-        .top {
-            .right {
-                display: none;
-            }
-        }
-    
-        .content {
-            .conversations {
-
-                span {
-                    display: none;
-                }
-
-                .conversation {
-                    padding: 0;
-                    &:hover {
-                        background-color: transparent;
-                    }
-                    .right {
-                        display: none;
-                    }
-                }
-            }
-        }
-        
-        .settings {
-            flex-direction: column;
-            gap: 15px;
-        }
-    
-        .bottom {
             button {
-                transform: rotate(180deg);
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                width: 75%;
+                height: 35px;
+                border-radius: $border-radius;
+                background: $color-primary;
+                border: none;
+                cursor: pointer;
+
+                color: var(--color-dark);
+                transition: background-color 0.3s ease-in-out;
+
+                &:hover {
+                    background-color: darken($color-primary, 10%);
+                }
             }
         }
     }
-    
-    @media (max-width: 1000px) {
-        @include minimizeAside;
 
-        .bottom {
-            display: none;
-        }
-    }
+    // Desktop devices
+    &>aside {
 
-    &[data-toggle="false"] {
-        @include minimizeAside;
-    }
-
-    @media (max-width: 768px) {
-
-        display: none;
-
-        &[data-toggle-responsive="true"] {
-            display: flex;
-        }
-
-        &[data-toggle-responsive="false"] {
-            display: none;
-        }
-
-        z-index: 2;
-        position: fixed;
-        height: calc(100% - 30px);
-        width: calc(100% - 30px) !important;
-        max-width: 100% !important;
-
-        .top {
-            .right {
-                display: flex !important;
-            }
-        }
-
-        .settings {
-            flex-direction: row !important;
-        }
-
-        .content {
-
+        @media screen and (min-width: 769px) {
+            position: relative !important;
             height: 100%;
 
-            overflow-y: scroll !important;
-            .conversations {
+            &[data-toggle="true"] {
+                width: 30% !important;
+                max-width: 300px;
+            }
 
-                .conversation {
-                    padding: 5px 10px;
-                    &:hover {
-                        background-color: $color-primary;
-                        color: var(--color-dark);
-                    }
+            &[data-toggle="false"] {
+                display: flex;
+                width: 100px !important;
+
+                .top {
                     .right {
-                        display: flex !important;
+                        display: none !important;
+                    }
+                }
+
+                .settings {
+                    flex-direction: column !important;
+                    gap: 5px;
+                }
+
+                .conversations {
+                    align-items: center;
+                    justify-content: center;
+
+                    .conversation {
+                        padding: 0 !important;
+                        gap: 0 !important;
+
+                        .right {
+                            span {
+                                display: none !important;
+                            }
+                        }
+                    }
+                }
+
+                .bottom {
+                    padding: 25px 0 0 0 !important;
+
+                    button {
+                        padding: 0;
+
+                        svg {
+                            rotate: 180deg !important;
+                        }
                     }
                 }
             }
         }
 
-        .bottom {
-            display: none;
-        }
     }
 }
-

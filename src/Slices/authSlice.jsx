@@ -37,4 +37,4 @@ export const authSlice = createSlice({
     }
 })
 
-export const { setLoading, setAuth, setUser, setMercure } = authSlice.actions;
+export const { setLoading, setAuth, setUser, setMercure, setNewConnection } = authSlice.actions;

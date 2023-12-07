@@ -1,14 +1,16 @@
 import './../dashboard.scss';
 import Aside from "../../Components/Aside/Aside";
 
-import Chat from "./Chat";
+import Chat from "../../Components/Messenger/Chat";
 import Profile from "../../Components/Profile";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useMessenger, useProfile } from '../../Hooks/CustomHooks';
+import { useMessenger, useModal, useProfile } from '../../Hooks/CustomHooks';
 import { useDocumentTitle } from '@uidotdev/usehooks';
 import { useSelector } from 'react-redux';
 import { ModalImage } from '../../Components/ModalImage';
+import { NoGroupYet } from '../../Components/Messenger/NoGroupYet';
+import { SearchModal } from '../../Components/Search/SearchModal';
 
 export default function Messenger() {
 
@@ -16,35 +18,35 @@ export default function Messenger() {
   const navigate = useNavigate();
   const { id } = useParams()
   const { open: openImage } = useSelector(state => state.images)
-  const { fetchGroups, fetchGroup, groups, group, loadingGroups } = useMessenger()
-
+  const { groups, groupsIsLoading } = useMessenger()
+  const [hasNoGroups, setHasNoGroups] = useState(false);
+  const { searchModal } = useModal();
 
   useEffect(() => {
-    try {
-      fetchGroups()
-    } catch(e) {
-
-    }
   }, [useDocumentTitle("Messenger")])
 
   useEffect(() => {
-    if(group && group.id === parseInt(id)) return
-    if(groups.length === 0) return navigate(`/messenger`)
-    if(groups?.length === 0 && id) return navigate(`/messenger`)
-    if(!id && groups?.length > 0) return navigate(`/messenger/${groups[0]?.id}`)
-    if(groups && !groups?.find(g => g.id === parseInt(id))) return navigate(`/messenger/${groups[0]?.id}`)
-    fetchGroup(id)
-  }, [id, groups])
+    if(groups?.length === 0) setHasNoGroups(true)
+    else setHasNoGroups(false)
+  }, [groups])
+
+    useEffect(() => {
+      if(groupsIsLoading) return
+      if(!id && groups?.length > 0) return navigate(`/messenger/${groups[0]?.id}`)
+      if(id && !groups.find(group => group.id === parseInt(id))) return navigate(`/messenger/${groups[0]?.id}`)
+    }, [id, groupsIsLoading, groups])
 
   return (
     <section id="dashboard">
 
       {profile && <Profile />}
       {openImage && <ModalImage />}
+      {searchModal && <SearchModal />}
 
       <Aside />
 
-      <Chat />
+      {(!groupsIsLoading && !hasNoGroups) && <Chat conversation={groups.find(group => group.id === parseInt(id))} />}
+      {(!groupsIsLoading && hasNoGroups) && <NoGroupYet />}
 
     </section>
   )

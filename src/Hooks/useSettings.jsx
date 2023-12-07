@@ -1,15 +1,28 @@
 import { useDispatch, useSelector } from "react-redux";
-import  { useApi } from "./CustomHooks"
 import { setUser } from "../Slices/authSlice";
+import Notifications from "../Components/Notifications/Notifications"
+import axios from "../Api/axios";
+import { useEffect, useState } from "react";
 
 export default function useSettings() {
 
     const SETTINGS = ["allow-friend-request", "allow-notification", "language"]
 
-    const { post: postSettings } = useApi("api/settings")
     const { user } = useSelector(state => state.auth)
+    const [isMobileView, setMobileView] = useState(false)
     const dispatch = useDispatch()
 
+    /** Set the mobile view */
+    useEffect(() => {
+        if(window.innerWidth <= 768) setMobileView(true)
+        else setMobileView(false)
+    }, [])
+
+    /**
+     * 
+     * Fast function to edit a toggle setting
+     * 
+     */
     const toggleSetting = async (meta = null) => {
 
         if(meta === null) return console.error(`You must provide a meta to setSettings`)
@@ -24,13 +37,21 @@ export default function useSettings() {
             console.error(`The meta ${meta} is not a boolean`)
             return
         }
-        
-        const response = await postSettings({ meta, value: !setting.value })
-        if(!response?.status) return
-        return dispatch(setUser(response.datas))
+
+        Notifications.Promise(async () => {
+            const response = await axios.post('/api/settings', { meta, value: !setting.value })
+            if(!response?.status) return false
+            dispatch(setUser(response.datas))
+            return true
+        }, "Enregistrement en cours", "Enregistré", "Une erreur est survenue")
 
     } 
 
+    /**
+     * 
+     * Functions to edit a setting from the user's settings.
+     * 
+     */
     const setSettings = async (meta = null, value = null) => {
 
         if(meta === null || value === null) {
@@ -41,12 +62,16 @@ export default function useSettings() {
             console.error(`The meta ${meta} is not allowed`)
             return
         }
-        const response = await postSettings({ meta, value })
-        if(!response?.status) return
-        return dispatch(setUser(response.datas))
+
+        Notifications.Promise(async () => {
+            const response = await axios.post('/api/settings', { meta, value })
+            if(!response?.status) return false
+            dispatch(setUser(response.datas))
+            return true
+        }, "Enregistrement en cours", "Enregistré", "Une erreur est survenue")
 
     } 
 
-    return { setSettings, toggleSetting }
+    return { isMobileView, setSettings, toggleSetting }
 
 }

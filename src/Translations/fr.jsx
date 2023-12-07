@@ -19,7 +19,9 @@ export default {
     chat: {
         online: "En ligne",
         offline: "Hors ligne",
-        notyet: "Aucun message"
+        notyet: "Aucun message",
+        sentfile: "{{ count }} fichier envoyé",
+        sentfiles: "{{ count }} fichier envoyés",
     },
     friends: {
       mutual_friend: "{{ count }} ami en commun",
@@ -58,6 +60,7 @@ export default {
         registration_failed: "Inscription échouée",
         remember: "Se souvenir de moi",
         expired: "Votre session a expirée",
+        wrong_credentials: "Identifiants invalides",
     },
     account: {
         edited: "Votre compte a bien été modifié",

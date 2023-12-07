@@ -1,10 +1,10 @@
 import { useCopyToClipboard } from '@uidotdev/usehooks';
 import Cleave from 'cleave.js/react'
 import React, { useEffect, useState } from 'react'
-import useTranslation from '../../Hooks/useTranslation';
+import useTranslation from '../../../Hooks/useTranslation';
 import toast from 'react-hot-toast';
-import useFriends from '../../Hooks/useFriends';
-import useAuth from '../../Hooks/useAuth';
+import useFriends from '../../../Hooks/useFriends';
+import useAuth from '../../../Hooks/useAuth';
 
 export const InviteFriend = () => {
 

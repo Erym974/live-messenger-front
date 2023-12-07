@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import useFriends from '../../Hooks/useFriends'
-import useAuth from '../../Hooks/useAuth'
-import useTranslation from '../../Hooks/useTranslation'
-import Friend from '../Friend/Friend'
-import Invitation from '../Friend/Invitation'
+import useFriends from '../../../Hooks/useFriends'
+import useAuth from '../../../Hooks/useAuth'
+import useTranslation from '../../../Hooks/useTranslation'
+import Invitation from '../../Friend/Invitation'
 
 export const InvitationList = () => {
 
@@ -16,8 +15,6 @@ export const InvitationList = () => {
 
     useEffect(() => {
         if(!invitations) return
-
-        console.log(invitations);
 
         setSent(invitations?.filter(invitation => invitation?.emitter?.id === user.id))
         setReceived(invitations?.filter(invitation => invitation?.emitter?.id !== user.id))

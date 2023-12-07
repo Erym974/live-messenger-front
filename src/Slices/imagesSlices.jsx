@@ -17,7 +17,6 @@ export const imagesSlice = createSlice({
             state.open = false;
         },
         openImages: (state, action) => {
-            console.log(action.payload);
             state.images = action.payload;
             state.open = true;
         }

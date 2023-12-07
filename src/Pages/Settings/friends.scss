@@ -1,4 +1,4 @@
-@import '../../../variables.scss';
+@import '../../variables.scss';
 
 section#friends {
 
@@ -50,12 +50,12 @@ section#friends {
 
     }
 
-    ul {
+    & > ul {
         display: flex;
         gap: 15px;
         list-style: none;
 
-        li {
+        & > li {
             background-color: $color-primary;
             color: var(--color-dark);
             padding: 10px 20px;

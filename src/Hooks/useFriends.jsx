@@ -1,91 +1,173 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import  { useApi, useAuth } from "./CustomHooks"
-import { setFriends, setInvites } from "../Slices/friendsSlice";
+import {
+  addListened,
+  pushNewFriend,
+  pushNewInvite,
+  removeFriend,
+  removeInvite,
+  removeListened,
+  setFriends,
+  setInvites,
+} from "../Slices/friendsSlice";
+import axios from "../Api/axios";
+import { useQuery } from "@tanstack/react-query";
 
-export default function useFriends(path = "api") {
+export default function useFriends(opts) {
+  const {
+    friends,
+    invites: invitations,
+    listened,
+  } = useSelector((state) => state.friends);
+  const dispatch = useDispatch();
 
-    const [loading, setLoading] = useState(true)
-
-    const { friends, invites: invitations } = useSelector(state => state.friends)
-    const { user } = useAuth()
-    const dispatch = useDispatch()
-
-    const [filteredFriends, setFilteredFriends] = useState([])
-    const [searchFriends, setSearchFriends] = useState("")
-
-    const { get: getFriends, delet: deleteFriendApi } = useApi("api/friends")
-    const {  get: getInvites, post: sendInviteApi, patch: acceptInvitationApi, delet: deleteInvitationApi } = useApi("api/invitations")
-    const { get: getGroupApi } = useApi("api/friends/group")
-
-    useEffect(() => {
-        if(!searchFriends) return setFilteredFriends(friends)
-        const filtered = friends.filter(f => 
-            (f.friend.id !== user.id && f.friend.fullname?.toLowerCase().includes(searchFriends?.toLowerCase())) ||
-            (f.user.id !== user.id && f.user.fullname?.toLowerCase().includes(searchFriends?.toLowerCase()))
-          );
-        setFilteredFriends(filtered)
-    }, [searchFriends, friends])
-
-    const fetchFriends = async () => {
-        const response = await getFriends()
-        if(!response?.status) return
-        dispatch(setFriends(response?.datas))
-        setLoading(false)
-    }
-    const fetchInvites = async () => {
-        const response = await getInvites()
-        if(!response?.status) return
-        dispatch(setInvites(response?.datas))
-    }
-
-    const sendMessage = async (id) => {
-        const response = await getGroupApi({ id })
-        if(!response?.status) return
-    }
-
-    const sendInvite = async (code) => {
-        const regex = new RegExp(/^\d{5}-\d{5}-\d{5}$/);
-        if(!regex.test(code)) return "Invalid"
-        if(code.length < 16 || code.length > 17) return "Invalid"
-
-        const response = await sendInviteApi({code})
-        if(!response?.status ||Number.isInteger(response?.status)) {
-            if(response.message === "This user doesn't allow friend request") return "disallowed"
-            if(response.message === "Already sent invitation") return "already_sent"
-            if(response.message === "Already your friend") return "already_friend"
-            if(response.message === "User not found") return "NotFound"
-            if(response.message === "Yourself") return "Yourself"
-            return "error"
+  const {
+    isFetching: friendsIsLoading,
+    data: friendsResponse,
+    refetch: fetchFriends,
+  } = useQuery({
+    queryKey: ["friends"],
+    enabled: opts?.fetchFriends !== false,
+    queryFn: async (id) => {
+      try {
+        const response = await axios.get("/api/friends");
+        if (!response.status || response.status === false) {
+          return [];
         }
-        updateFriends()
-        return "sended"
+        dispatch(setFriends(response.datas || []));
+        return response.datas || [];
+      } catch (error) {
+        return [];
+      }
+    },
+  });
 
+  const {
+    isFetching: invitationsIsLoading,
+    data: invitationsResponse,
+    refetch: fetchInvites,
+  } = useQuery({
+    queryKey: ["invitations"],
+    enabled: opts?.fetchInvites !== false,
+    queryFn: async (id) => {
+      try {
+        const response = await axios.get("/api/invitations");
+        if (!response.status || response.status === false) {
+          return [];
+        }
+        dispatch(setInvites(response.datas || []));
+        return response.datas || [];
+      } catch (error) {
+        return [];
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (!listened.includes("acceptInvitation")) {
+      window.addEventListener("acceptInvitation", addInviteFromEventListener, true);
+      dispatch(addListened("acceptInvitation"));
     }
-
-    const deleteInvitation = async (invitation) => {
-        const response = await deleteInvitationApi({ invitation })
-        if(!response?.status) return
-        updateFriends()
+    if (!listened.includes("declineInvitation")) {
+      window.addEventListener("declineInvitation", removeInviteFromEventListener,true);
+      dispatch(addListened("declineInvitation"));
     }
+  }, []);
 
-    const acceptInvite = async (invitation) => {
-        const response = await acceptInvitationApi({ invitation })
-        if(!response?.status) return
-        updateFriends()
+  const addInviteFromEventListener = (e) => acceptInvite(e.detail);
+  const removeInviteFromEventListener = (e) => deleteInvitation(e.detail);
+
+  /**
+   *
+   * Add a new invitation to the list
+   *
+   */
+  const newInvite = async (invitation) => {
+    dispatch(pushNewInvite(invitation));
+  };
+
+  /**
+   *
+   * Add a new friend to the list
+   *
+   */
+  const newFriend = async (friend) => {
+    dispatch(pushNewFriend(friend));
+  };
+
+  /**
+   *
+   * Send a invitation to a user with his friend id
+   *
+   */
+  const sendInvite = async (code) => {
+    const regex = new RegExp(/^\d{5}-\d{5}-\d{5}$/);
+    if (!regex.test(code)) return "Invalid";
+    if (code.length < 16 || code.length > 17) return "Invalid";
+    const response = await axios.post("/api/invitations", { code });
+    if (!response?.status || Number.isInteger(response?.status)) {
+      if (response.message === "This user doesn't allow friend request")
+        return "disallowed";
+      if (response.message === "Already sent invitation") return "already_sent";
+      if (response.message === "Already your friend") return "already_friend";
+      if (response.message === "User not found") return "NotFound";
+      if (response.message === "Yourself") return "Yourself";
+      return "error";
     }
+    dispatch(pushNewInvite(response.datas));
+    return "sended";
+  };
 
-    const deleteFriend = async (friends) => {
-        const response = await deleteFriendApi({ friends })
-        if(!response?.status) return
-        updateFriends()
-    }
+  /**
+   *
+   * Delete an invitation from the list
+   *
+   */
+  const deleteInvitation = async (invitation) => {
+    const response = await axios.delete("api/invitations", {
+      data: { invitation },
+    });
+    if (!response?.status) return;
+    fetchInvites()
+  };
 
-    const updateFriends = async (id) => {
-        await fetchFriends()
-        await fetchInvites()
-    }
+  /**
+   *
+   * Accept an invitation from the list
+   *
+   */
+  const acceptInvite = async (invitation) => {
+    const response = await axios.patch("/api/invitations", { invitation });
+    if (!response?.status) return;
+    fetchFriends()
+    fetchInvites()
+  };
 
-    return { friends, filteredFriends, searchFriends, setSearchFriends, loading, invitations, sendInvite, deleteInvitation, acceptInvite, deleteFriend, updateFriends}
+  /**
+   *
+   * Delete a friend from the list
+   *
+   */
+  const deleteFriend = async (friend) => {
+    const response = await axios.delete("/api/friends", {
+      data: { friend: friend },
+    });
+    if (!response?.status) return;
+    fetchFriends()
+  };
 
+  return {
+    friends,
+    friendsIsLoading,
+    invitations,
+    invitationsIsLoading,
+    fetchInvites,
+    fetchFriends,
+    newFriend,
+    newInvite,
+    sendInvite,
+    deleteInvitation,
+    acceptInvite,
+    deleteFriend,
+  };
 }

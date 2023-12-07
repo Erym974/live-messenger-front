@@ -20,7 +20,7 @@ export const NoMessageYet = () => {
     return (
         group ?
         <>
-            {group?.members.length === 2 ?
+            {group?.members?.length === 2 ?
             <div className='d-flex aic jcc f-c mt-5'>
                 <h1 className='mb-2'>Commencez la discussion avec {friend?.current?.fullname}</h1>
                 {friend?.current?.friend && <span className="text-muted">Vous êtes amis depuis le : </span>}

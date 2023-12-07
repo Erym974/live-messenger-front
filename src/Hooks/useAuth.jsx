@@ -1,73 +1,91 @@
-import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import  { useApi } from "./CustomHooks"
-import { setAuth, setLoading, setMercure, setUser } from "../Slices/authSlice"
+import { setAuth, setLoading, setMercure, setNewConnection, setUser } from "../Slices/authSlice"
 import { useTranslation } from "react-i18next"
 import Notifications from "../Components/Notifications/Notifications"
 import toast from "react-hot-toast"
+import axios from "../Api/axios"
+import { FaBullseye } from "react-icons/fa"
 
 export default function useAuth() {
 
     const { loading, auth, user, mercure } = useSelector(state => state.auth)
-    const { post: loginApi } = useApi("auth/login")
-    const { post: registerApi } = useApi("auth/register")
-    const { get: mePathApi } = useApi("api/users/me")
-    const { patch: updateUserApi } = useApi("api/users/me")
-    const { post: updatePictureApi } = useApi("api/users/me")
+
     const { t } = useTranslation()
     const dispatch = useDispatch()
 
-    const fetchAuth = () => {
-        if(auth && auth != "null") refreshUser()
+    /**
+     * 
+     * Check if the user is authenticated or not
+     * 
+     */
+    const fetchAuth = async () => {
+        if(auth) {
+            const response = await axios.get('api/users/me')
+            if(!response?.status) {
+                if(response?.message === "Access denied") toast.error(t('auth.expired'))
+                dispatch(setAuth(null))
+                dispatch(setUser(null))
+                dispatch(setLoading(false))
+            } else {
+                dispatch(setMercure(response.datas.mercure))
+                dispatch(setUser(response?.datas.user))
+                dispatch(setLoading(false))
+            }
+        }
         else dispatch(setLoading(false))
     }
 
-    const refreshUser = async () => {
-        const response = await mePathApi()
-
-        console.log(response);
-
+    /**
+     * 
+     * Try to connect User with his email and password.
+     * 
+     * @param {Object} user // { string: email, string: password, boolean: remember }
+     * @returns bool
+     */
+    const connectUser = async (user) => {
+        const response = await axios.post("/auth/login", user)
+        
         if(!response?.status) {
-            if(response?.message === "Access denied") toast.error(t('auth.expired'))
-            dispatch(setAuth(null))
-            dispatch(setUser(null))
-            dispatch(setLoading(false))
-        } else {
-            dispatch(setMercure(response.datas.mercure))
-            dispatch(setUser(response?.datas.user))
-            dispatch(setLoading(false))
-        }
-    }
-
-    const logUser = async (user) => {
-        dispatch(setLoading(true))
-        const response = await loginApi(user)
-        if(!response?.status) {
-            dispatch(setLoading(false))
+            toast.error(t('auth.wrong_credentials'))
             return false
         }
         dispatch(setMercure(response.datas.mercure))
         dispatch(setAuth(response.datas.token))
         dispatch(setUser(response.datas.user))
-        dispatch(setLoading(false))
         return true
     }
 
+    /**
+     * 
+     * Try to register User.
+     * 
+     * @param {Object} user // { string: email, string: firstname, string: lastname, string: password, string: password2 }
+     * @returns bool
+     */
     const registerUser = async (user) => {
-        const response = await registerApi(user)
+        const response = await axios.post("/auth/register", user)
         return response.status
     }
 
+    /**
+     * 
+     * Disconnect user
+     * 
+     */
     const logoutUser = () => {
         dispatch(setAuth(null))
         dispatch(setUser(null))
     }
 
+    /** 
+     * Update user informations 
+     */
     const updateUser = async(datas) => {
         Notifications.Promise(async () => {
-            const response = await updateUserApi(datas)
-            if(!response?.status) return false
-            dispatch(setUser(response.datas))
+            const response = await axios.patch('api/users/me', datas)
+            console.log(response);
+            if(!response?.status) return FaBullseye
+            dispatch(setUser(response.datas?.user))
             return true
         }, "Enregistrement en cours", "Enregistré", "Une erreur est survenue")
     }
@@ -79,14 +97,14 @@ export default function useAuth() {
             formData.append('file', file)
             formData.append('picture', type)
     
-            const response = await updatePictureApi(formData)
+            const response = await axios.post('api/users/me', formData)
             if(!response?.status) return false
-            dispatch(setUser(response.datas))
+            dispatch(setUser(response.datas?.user))
             return true
         }, "Enregistrement en cours", "Enregistré", "Une erreur est survenue")
 
     }
 
-    return { loading, auth, user, mercure, logUser, registerUser, logoutUser, fetchAuth, updateUser, updatePicture }
+    return { loading, auth, user, mercure, connectUser, registerUser, logoutUser, fetchAuth, updateUser, updatePicture }
 
 }

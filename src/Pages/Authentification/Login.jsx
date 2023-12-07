@@ -1,23 +1,20 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../Hooks/CustomHooks'
-import toast from 'react-hot-toast';
 
 export default function Login() {
 
   const [datas, setDatas] = useState({ email: "", password: "", remember: false });
-  const { logUser, loading } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const { connectUser } = useAuth();
   const { t } = useTranslation()
-  const navigate = useNavigate()
-  const location = useLocation();
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
-
-    const logged = await logUser(datas)
-    if(!logged) return toast.error(t('auth.login_failed'))
-    return navigate(location.state?.from?.pathname || "/messenger")
+    setLoading(true)
+    const logged = await connectUser(datas)
+    setLoading(false)
   }
 
   const handleChange = (value, key) => setDatas({ ...datas, [key]: value });
@@ -46,7 +43,7 @@ export default function Login() {
           </form>
         </main>
         <footer>
-          <input type="submit" form="login-form" value={loading ? t('auth.loggingin') : t('auth.login')} />
+          <input type="submit" form="login-form" disabled={loading} value={loading ? t('auth.loggingin') : t('auth.login')} />
           <span>{t('auth.not_registered')} <Link to="/auth/register">{t('auth.register')}</Link></span>
         </footer>
       </div>

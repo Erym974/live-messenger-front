@@ -9,13 +9,12 @@ export const settingsSlice = createSlice({
     initialState: () => {
         
         const language = localStorage.getItem('language') || Language.DEFAULT;
-        const notifications = (localStorage.getItem('notifications') === "false") ? false : true;
-        const responsiveAside = (localStorage.getItem('responsiveAside') === "false") ? false : true;
+        const asideState = (localStorage.getItem('asideState') === "false") ? false : true;
 
         return {
-            notifications,
-            responsiveAside,
+            asideState,
             language,
+            searchModal: false,
         }
     },
     reducers: {
@@ -23,15 +22,17 @@ export const settingsSlice = createSlice({
             localStorage.setItem('language', payload.language);
             state.language = payload.language;
         },
-        toggleNotifications: (state) => {
-            state.notifications = !state.notifications;
-            localStorage.setItem('notifications', state.notifications);
+        toggleAside: (state, { payload }) => {
+            state.asideState = payload;
+            localStorage.setItem('asideState', state.asideState);
         },
-        toggleResponsiveAside: (state, { payload }) => {
-            state.responsiveAside = payload;
-            localStorage.setItem('responsiveAside', state.responsiveAside);
+        openSearchModal: (state) => {
+            state.searchModal = true;
+        },
+        closeSearchModal: (state) => {
+            state.searchModal = false;
         }
     }
 })
 
-export const { setLanguage, toggleTheme, toggleNotifications, toggleResponsiveAside } = settingsSlice.actions;
+export const { setLanguage, toggleTheme, toggleAside, openSearchModal, closeSearchModal } = settingsSlice.actions;

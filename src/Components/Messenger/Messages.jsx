@@ -11,13 +11,38 @@ import { Options } from './Options';
 import Message from './Message';
 import { Loader } from '../Loader';
 import { NoMessageYet } from './NoMessageYet';
- 
-export default function Messages() {
+import { useDispatch, useSelector } from 'react-redux';
+import { openImages as openSliceImages } from '../../Slices/imagesSlices'
 
-    const { group, messages, fetchMessages, activeMessage: setActiveMessage, reactToMessage, loadingMessages } = useMessenger()
+export default function Messages({ conversation, messages }) {
+    
+    const { messageHasNextPage, messageIsFetching, setConversation, activeMessage: setActiveMessage, reactToMessage, messageFetchNextPage } = useMessenger()
     const { t } = useTranslation()
-    const { user } = useAuth()
+    const dispatch = useDispatch()
+    
     const [dropdown, setDropdown] = useState(null)
+
+    useEffect(() => {
+        if(!conversation) return
+        setConversation(conversation?.id)
+        initMessages()
+    }, [conversation])
+
+    useEffect(() => {
+        if(messages.length === 0) return
+        setTimeout(() => {
+            const scrollTarget = document.getElementById("scroll-target");
+            if(scrollTarget && scrollTarget.dataset.init === "false") {
+                scrollTarget.scrollIntoView({ behavior: 'auto' })
+                scrollTarget.dataset.init = "true"
+            }
+        }, 750);
+    }, [messages])
+
+    useEffect(() => {
+        window.addEventListener("messageReceived", onMessageReceived, true)
+        return () => window.removeEventListener("messageReceived", onMessageReceived, true)
+    }, [])
 
     useEffect(() => {
         if(!dropdown) return 
@@ -25,19 +50,32 @@ export default function Messages() {
         return () => document.removeEventListener('click', checkDropDownClick, true)
     }, [dropdown])
 
+    const onMessageReceived = () => {
+        scrollToBottom()
+    }
+
+    const scrollToBottom = () => {
+        const scrollTarget = document.getElementById("scroll-target");
+        if(scrollTarget) scrollTarget.scrollIntoView({ behavior: 'auto' })
+    }
+
     const checkDropDownClick = (e) => {
         if(e.target.closest('.dropdown-more') === null) setDropdown(null)
     }
 
-    useEffect(() => {
-        if(!group) return
-        fetchMessages(group?.id)
-    }, [group])
+    const initMessages = async () => {
+        
+    }
 
-    useEffect(() => {
-        const target = document.getElementById("scroll-target");
-        target.scrollIntoView({ behavior: 'smooth'});
-    }, [])
+    const scrollToMessage = (id) => {
+        document.getElementById(`message-${id}`)?.scrollIntoView({ behavior: 'smooth' })
+
+        document.getElementById(`message-${id}`)?.classList.add("highlight")
+
+        setTimeout(() => {
+            document.getElementById(`message-${id}`)?.classList.remove("highlight")
+        }, 4000);
+    }
 
     const isLastMessageOfUser = (id) => {
         const message = messages.find(message => message.id === id)
@@ -53,42 +91,32 @@ export default function Messages() {
         return emojiFound !== null && emojiFound.join('') === message.content;
     }
 
+    const containsOnlyFiles = (message) => {
+        return message.content.trim().length === 0 && message.files.length > 0
+    }
+
+    const openImages = (message) => {
+        dispatch(openSliceImages(message.files.map(file => file.path)))
+    }
+
+    const isGif = (message) => {
+        if(message.split(' ').length > 1) return false
+        if(message.toLowerCase().startsWith('gif:') && message.toLowerCase().includes('http') && message.toLowerCase().endsWith('.gif')) return true
+        return false
+    }
+
     return (
-        <div className="messages">
+        <>
+            {(!messageIsFetching && messageHasNextPage) && <div id="load-more">
+                <button onClick={messageFetchNextPage}>{t('message.loadMore')}</button>
+            </div>}
+            {messageIsFetching && <Loader />}
+            <div className="messages">
             <Tooltip id="tooltip" data-tooltip-offset="55" data-tooltip-place="top" />
-            {loadingMessages && <Loader />}
-            {(!loadingMessages && messages?.length == 0) && <NoMessageYet />}
-            {messages?.map(message => 
-                <div key={message.id} className={`message ${(message.sender.id === user.id) ? "me" : "participant"} ${isLastMessageOfUser(message.id)}`}>
-                    <div className="message-inner">
-                        {message.sender.id !== user.id && <img src={message.sender.profilePicture} height="50" width="50" alt="" />}
-                        <div className="message-body">
-                            <div className="d-flex g-10 aic jcc">
-                                {message.status !== "deleted" && <Options message={message} />}
-                                {!containsOnlyEmoji(message) ? 
-                                <div className="message-content px-4 py-3 rounded" onClick={() => { setActiveMessage(message.id) }} >
-                                    <span className="message-text">{message.status !== "deleted" ? <>{message.edited ? <FaPen className="icon" title={t('message.edited')} /> : <></>} {message.content}</> : <><FaRegTrashAlt className="icon" /> <i>{t('message.deleted')}</i></>}</span>
-                                </div>
-                                :
-                                <div className="emojis-container">
-                                    <div className="emojis">
-                                        {message.content.split('').map((emoji, index) => <span className="emoji" key={index}>{emoji}</span>)}
-                                    </div>
-                                </div>
-                                }
-                            </div>
-                            
-                            <div className="reactions">
-                                {message?.reactions?.map((reaction, index) => <span key={index} className={reaction.reacted ? "reacted" : undefined} onClick={() => { reactToMessage(message.id, reaction.content) }}>{reaction.count > 1 && reaction.count}{reaction.content}</span>)}
-                            </div>
-                            <div className="message-footer">
-                                <Message.Footer message={message} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-            <div id="scroll-target"></div>
+            {(!messageIsFetching && messages?.length == 0) && <NoMessageYet />}
+            {messages?.map(message => <Message key={message.id} message={message} /> )}
+            <div id="scroll-target" data-init="false"></div> 
         </div>
+        </>
     )
 }

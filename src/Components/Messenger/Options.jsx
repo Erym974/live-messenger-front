@@ -1,12 +1,12 @@
-import { FaRegTrashAlt, FaPen } from 'react-icons/fa'
+import { FaRegTrashAlt, FaPen, FaEllipsisH } from 'react-icons/fa'
 import { BsFillEmojiSmileFill } from 'react-icons/bs'
 
-import { FiMoreHorizontal } from 'react-icons/fi'
 import { useTranslation } from 'react-i18next'
 import { useEffect, useRef, useState } from 'react'
 import { useAuth, useMessenger } from '../../Hooks/CustomHooks'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
+import { FaReply } from 'react-icons/fa6'
 
 export const Options = ({ message }) => {
 
@@ -14,7 +14,7 @@ export const Options = ({ message }) => {
     const [emoji, toggleEmoji] = useState(null)
     const [dropdown, setDropdown] = useState(null)
     const emojiEvent = useRef() 
-    const { deleteMessage, setEdition, edition, reactToMessage } = useMessenger()
+    const { deleteMessage, setEdition, edition, reactToMessage, setReply } = useMessenger()
     const { user } = useAuth()
 
     useEffect(() => {
@@ -49,7 +49,6 @@ export const Options = ({ message }) => {
         const y = rect.top + window.scrollY
 
         const distance = e.clientY - y
-        console.log(distance);
         if(distance > 500 || distance < -200) return toggleEmoji(null)
 
     }
@@ -74,32 +73,29 @@ export const Options = ({ message }) => {
         toggleEmoji(message.id)
     }
 
+    const handleReply = (message) => {
+       setReply(message) 
+    }
+
     return (
         <>
-            <div className={`message-actions-container d-flex aic jce ${emoji && 'active'}`} data-message={message.id}>
-                <div className="message-actions d-flex aic jce gap-5">
-                    <div className="emoji-container">
-                        <BsFillEmojiSmileFill className="react-icon" onClick={handleClickEmoji} />
-                        {emoji && <div className="emoji" data-message={message.id} >
-                            <Picker data={{...data, theme: "light" }} onEmojiSelect={handleEmoji} />
-                        </div>}
-                    </div>
-                    {message.sender.id == user.id &&
-                        <>
-                            <FaPen data-tooltip-id="tooltip" data-tooltip-content={t('message.edit')} title={t('message.edit')} className={`${edition?.id === message.id && "selected"}`} onClick={() => { edition.active ? setEdition({active: false, id: null, content: null}) : setEdition({active: true, id: message.id, content: message.content}) }} />
-                            <FaRegTrashAlt data-tooltip-id="tooltip" data-tooltip-content={t('message.delete')} title={t('message.delete')} onClick={() => { deleteMessage(message.id) }} />
-                        </>
-                    }
-                    <div className="more-container">
-                        <FiMoreHorizontal data-tooltip-id="tooltip" data-tooltip-content={t('message.more')} title={t('message.more')} />
-                        {dropdown && <div className="dropdown" data-message={message.id} >
-                            <Picker data={data} onEmojiSelect={handleEmoji} />
-                        </div>}
-                    </div>
-                    
-                </div>
+            { !message.deleted && 
+            <div className="message-actions d-flex aic jce gap-5" data-message={message.id}>
+                { !["emoji"].includes(message.type) &&<div className="emoji-container">
+                    <BsFillEmojiSmileFill className="react-icon" onClick={handleClickEmoji} />
+                    {emoji && <div className="emoji" data-message={message.id} >
+                        <Picker data={{...data, theme: "light" }} perLine={9} onEmojiSelect={handleEmoji} />
+                    </div>}
+                </div>}
+                <FaReply data-tooltip-id="tooltip" data-tooltip-content={t('message.reply')} title={t('message.reply')} onClick={() => { handleReply(message) }} />
+                {message.sender.id == user.id &&
+                    <>
+                        { !["gif", "emoji", "file"].includes(message.type) && <FaPen data-tooltip-id="tooltip" data-tooltip-content={t('message.edit')} title={t('message.edit')} className={`${edition?.id === message.id && "selected"}`} onClick={() => { edition.active ? setEdition({active: false, id: null, content: null}) : setEdition({active: true, id: message.id, content: message.content}) }} /> }
+                        <FaRegTrashAlt data-tooltip-id="tooltip" data-tooltip-content={t('message.delete')} title={t('message.delete')} onClick={() => { deleteMessage(message.id) }} />
+                    </>
+                }
             </div>
-
+            }
         </>
     )
 }
