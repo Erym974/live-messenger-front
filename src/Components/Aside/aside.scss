@@ -72,13 +72,17 @@ section#dashboard {
                 transition: all 0.2s ease-in-out;
 
                 &:hover {
-                    background-color: $color-primary;
+                    // background-color: $color-primary;
+                    img {
+                        border-radius: 15px;
+                    }
                 }
 
                 img {
                     height: 50px;
                     width: 50px;
                     border-radius: 50%;
+                    transition: all 0.2s ease-in-out;
                 }
 
                 .right {

@@ -34,7 +34,7 @@ export default function Chat({ conversation }) {
   const [limit, setLimit] = useState(0);
   const dispatch = useDispatch();
   const { t, language } = useTranslation();
-  const easterIdle = useIdle(15 * 1000);
+  const easterIdle = useIdle((60 * 30) * 1000);
   const [files, setFiles] = useState([]);
   const { theme } = useTheme();
 
@@ -43,7 +43,6 @@ export default function Chat({ conversation }) {
   const [gif, toggleGif] = useState();
 
   const { user } = useAuth();
-  const { execEaster } = useCommands();
   const {
     sendMessage,
     messages,
@@ -52,8 +51,6 @@ export default function Chat({ conversation }) {
     setReply,
     setEdition,
     editMessage,
-    messageReceived,
-    onEditMessage,
   } = useMessenger();
 
   /**
@@ -66,6 +63,11 @@ export default function Chat({ conversation }) {
     document.getElementById("textarea-writter")?.focus();
   }, []);
 
+  /**
+   * 
+   * When user is inactif since too much
+   * 
+   */
   useEffect(() => {
     if (easterIdle) executeCommand("/idle", false);
   }, [easterIdle, executeCommand]);
@@ -116,40 +118,48 @@ export default function Chat({ conversation }) {
    * Check if the user click outside the Gif button
    *
    */
-    const checkGifClick = (e) => {
-      if (
-        e.target.closest(".writter-gif") === null &&
-        e.target.closest(".gif") === null
-      )
-        toggleGif(false);
-    };
-
-    const onGifClick = (gif) => {
+  const checkGifClick = (e) => {
+    if (
+      e.target.closest(".writter-gif") === null &&
+      e.target.closest(".gif") === null
+    )
       toggleGif(false);
-      sendMessage(conversation?.id, `gif:${gif?.url}`);
-      setReply(null);
-    }
+  };
+
+/**
+ * 
+ * When a user click on a Gif 
+ */
+
+  const onGifClick = (gif) => {
+    toggleGif(false);
+    sendMessage(conversation?.id, `gif:${gif?.url}`);
+    setReply(null);
+  }
 
   /**
    *
    * Send new message
    *
    */
-  const handleSendMessage = (event = null, sendEmoji = false) => {
-    if (!conversation) return;
+  const handleSendMessage = async (event = null, sendEmoji = false) => {
+    if (!conversation) return
 
     if (edition.active) {
       if (edition.content.trim() < 1 || edition.content.length > 300) return;
       editMessage();
     } else {
+
+
       if (!sendEmoji) {
-        if (
-          (content.trim().length < 1 || content.length > 300) &&
-          files.length === 0
-        )
-          return;
-        if (content.startsWith("/")) executeCommand(content, true);
-        else sendMessage(conversation?.id, content, files);
+        if ((content.trim().length < 1 || content.length > 300) && files.length === 0) return;
+
+        if (content.startsWith("/")) {
+          const command = await executeCommand(content, true)
+          if(!command) sendMessage(conversation?.id, content, []);
+        } else {
+          sendMessage(conversation?.id, content, files);
+        }
       } else {
         sendMessage(conversation?.id, ":emoji:");
       }

@@ -12,15 +12,16 @@ import {
 } from "../Slices/friendsSlice";
 import axios from "../Api/axios";
 import { useQuery } from "@tanstack/react-query";
+import useAuth from "./useAuth";
+import { socket } from "../socket"
+import Notifications from "../Components/Notifications/Notifications";
 
 export default function useFriends(opts) {
-  const {
-    friends,
-    invites: invitations,
-    listened,
-  } = useSelector((state) => state.friends);
+  const { friends, invites: invitations, listened } = useSelector((state) => state.friends);
+  const { user } = useAuth()
   const dispatch = useDispatch();
 
+  /** Fetch friends */
   const {
     isFetching: friendsIsLoading,
     data: friendsResponse,
@@ -29,6 +30,7 @@ export default function useFriends(opts) {
     queryKey: ["friends"],
     enabled: opts?.fetchFriends !== false,
     queryFn: async (id) => {
+      if(!user) return null
       try {
         const response = await axios.get("/api/friends");
         if (!response.status || response.status === false) {
@@ -42,6 +44,7 @@ export default function useFriends(opts) {
     },
   });
 
+  /** Fetch invitations */
   const {
     isFetching: invitationsIsLoading,
     data: invitationsResponse,
@@ -50,6 +53,7 @@ export default function useFriends(opts) {
     queryKey: ["invitations"],
     enabled: opts?.fetchInvites !== false,
     queryFn: async (id) => {
+      if(!user) return null
       try {
         const response = await axios.get("/api/invitations");
         if (!response.status || response.status === false) {
@@ -84,6 +88,7 @@ export default function useFriends(opts) {
    */
   const newInvite = async (invitation) => {
     dispatch(pushNewInvite(invitation));
+    Notifications.FriendRequest(invitation)
   };
 
   /**
@@ -105,6 +110,7 @@ export default function useFriends(opts) {
     if (!regex.test(code)) return "Invalid";
     if (code.length < 16 || code.length > 17) return "Invalid";
     const response = await axios.post("/api/invitations", { code });
+
     if (!response?.status || Number.isInteger(response?.status)) {
       if (response.message === "This user doesn't allow friend request")
         return "disallowed";
@@ -115,6 +121,7 @@ export default function useFriends(opts) {
       return "error";
     }
     dispatch(pushNewInvite(response.datas));
+    socket.emit("invitation-sended", response.datas)
     return "sended";
   };
 

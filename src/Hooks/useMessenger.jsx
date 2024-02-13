@@ -3,16 +3,16 @@ import { useDispatch, useSelector } from "react-redux"
 import { setGroup, setGroups, setReply as setReplySlice, setMessages, setMessage, newMessage, replaceMessage, setEdition as setSliceEdition, setLoadingGroup, setLoadingGroups, setToggleScroll, setTotalMessages, addMoreMessages } from "../Slices/messengerSlice"
 import axios from "../Api/axios"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
-import useRealtime from "./useRealtime"
 import { socket } from "../socket"
 
 export default function useMessenger() {
 
     const dispatch = useDispatch()
     const { group, groups, messages, message, edition, reply, messages_showed } = useSelector(state => state.messenger)
+    const { auth } = useSelector(state => state.auth)
 
     const [conversation, setConversation] = useState(null)
-    const { current: messageLimit } = useRef(10)
+    const { current: messageLimit } = useRef(30)
 
     const { isLoading: groupsIsLoading, data: groupsResponse, refetch: fetchGroups } = useQuery({
         queryKey: ['groups'],
@@ -81,17 +81,28 @@ export default function useMessenger() {
 
     useEffect(() => {
         if(!groupResponse) return
-        socket.emit('join', groupResponse.id)
-        socket.on('message', messageReceived)
+
+        socket.emit('join', {id: groupResponse.id, token: auth})
+
+        socket.on('join-response', (response) => {
+
+            socket.on('new-message', onMessageReceived)
+            socket.on('message-updated', onMessageUpdated)
+
+        })
+
         return () => {
             socket.emit('leave', groupResponse.id)
-            socket.on('message', messageReceived)
+            socket.on('join-response', () => {})
+            socket.on('new-message', () => {})
+            socket.on('message-updated', () => {})
         }
     }, [groupResponse])
 
+    /** When we send a message */
     const sendMessage = async (id, content, files = []) => {
 
-        let datasToSend = {group: id, message: content}
+        let datasToSend = {message: content}
 
         if(reply != null) datasToSend = {...datasToSend, reply: reply.id}
 
@@ -102,17 +113,29 @@ export default function useMessenger() {
             Array.from(files.map(file => file.file)).forEach(file => {
                 datasToSend.append('files[]', file);
             });
+
+            // TODO : Send a message with file
+            // socket.emit('send-message', {group: id, message: JSON.stringify(datasToSend), token: auth})
+        } else {
+            socket.emit('send-message', {group: id, message: datasToSend, token: auth})
         }
 
-        socket.emit('message', datasToSend)
         
-        // const response = await axios.post('/api/messages', datasToSend)
-        // if(!response?.status) return
-        // if(!response.datas) return
     }
 
-    const messageReceived = async (message) => {
+    /** When we receive new message */
+    const onMessageReceived = async (message) => {
         dispatch(newMessage(message))
+    }
+
+    /** When we delete a message */
+    const deleteMessage = async (id) => {
+        socket.emit('delete-message', {id, status: "deleted", token: auth})
+    }
+
+    /** When we receive an deleted message */
+    const onMessageUpdated = async (message) => {
+        dispatch(replaceMessage(message))
     }
 
     const activeMessage = async (id) => {
@@ -121,38 +144,27 @@ export default function useMessenger() {
         setEdition({active: false, id: null, content: null})
     }
 
-    const onEditMessage = async (id, message) => {
-        dispatch(replaceMessage(message))
-    }
-
-    const deleteMessage = async (id) => {
-        const response = await axios.patch('api/message', { id, status: "deleted" })
-        if(!response?.status) return
-        // dispatch(replaceMessage({id, message: response.datas}))
-    }
-
     const setEdition = async (value) => {
         dispatch(setSliceEdition(value))
     }
 
     const editMessage = async () => {
         if(edition?.content?.trim()?.length > 0) {
-            const response = await axios.patch('api/message', { id: edition.id, content: edition.content })
-            if(!response?.status) return
+            socket.emit('edit-message', {id: edition.id, content: edition.content, token: auth})
+            // const response = await axios.patch('api/message', { id: edition.id, content: edition.content })
+            // if(!response?.status) return
         }
         setEdition({active: false, id: null, content: null})
     }
 
     const reactToMessage = async (id, reaction) => {
-        const response = await axios.patch('api/message', { id: id, reaction: reaction })
-        if(!response?.status) return
-        // dispatch(replaceMessage({id: id, message: response.datas})) 
+        socket.emit('react-message', {id: id, reaction: reaction, token: auth})
     }
 
     const setReply = async (message) => {
         dispatch(setReplySlice(message))
     }
 
-    return { setConversation, fetchGroups, messageIsFetching, messageHasNextPage, groupResponse, groups, group, messages, message, messages_showed, edition, groupsIsLoading, reply, messageFetchNextPage, setReply, onEditMessage, messageReceived, setEdition, fetchGroup, sendMessage, activeMessage,  deleteMessage, editMessage, reactToMessage }
+    return { setConversation, fetchGroups, messageIsFetching, messageHasNextPage, groupResponse, groups, group, messages, message, messages_showed, edition, groupsIsLoading, reply, messageFetchNextPage, setReply, onMessageReceived, setEdition, fetchGroup, sendMessage, activeMessage,  deleteMessage, editMessage, reactToMessage }
 
 }

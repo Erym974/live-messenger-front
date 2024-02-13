@@ -71,6 +71,7 @@ export default {
         edited: "This message has been edited",
         delete: "Delete",
         edit: "Edit",
+        reply: "Reply",
         react: "React"
     },
     profile: {

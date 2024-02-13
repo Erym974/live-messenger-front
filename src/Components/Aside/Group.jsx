@@ -21,7 +21,6 @@ export const Group = ({ group }) => {
     }, [group])
 
     const handleClick = async (id) => {
-        console.log("test");
         dispatch(toggleAside(false));
         navigate(`/messenger/${id}`)
     }

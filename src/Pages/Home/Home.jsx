@@ -46,7 +46,7 @@ export default function Home() {
 
         </section>
         {blocks.map((block, index) => 
-          <section className='block'>
+          <section className='block' key={index}>
             <div className="d-flex">
               <div className="col-6">
                 <h2>What is Lorem Ipsum?</h2>

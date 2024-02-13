@@ -12,7 +12,7 @@ export const Navbar = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { profile } = useProfile();
+  const { profile, profileIsLoading } = useProfile();
   const { open: openImage } = useSelector((state) => state.images);
 
   const handleResponsiveAside = () => dispatch(toggleAside(true));
@@ -37,13 +37,13 @@ export const Navbar = () => {
   ]);
 
   const handleClick = (page) => {
-    document.title = `Messenger | ${page.title}`;
+    document.title = `SwiftChat | ${page.title}`;
     navigate(page.url);
   };
 
   return (
     <>
-    {profile && <Profile />}
+      {profileIsLoading || profile ? <Profile /> : null}
       {openImage && <ModalImage />}
       <ul>
         {pages.map((page, index) => (

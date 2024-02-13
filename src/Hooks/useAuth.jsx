@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-import { setAuth, setLoading, setMercure, setNewConnection, setUser } from "../Slices/authSlice"
+import { setAuth, setLoading, setUser } from "../Slices/authSlice"
 import { useTranslation } from "react-i18next"
 import Notifications from "../Components/Notifications/Notifications"
 import toast from "react-hot-toast"
@@ -27,7 +27,6 @@ export default function useAuth() {
                 dispatch(setUser(null))
                 dispatch(setLoading(false))
             } else {
-                dispatch(setMercure(response.datas.mercure))
                 dispatch(setUser(response?.datas.user))
                 dispatch(setLoading(false))
             }
@@ -43,13 +42,12 @@ export default function useAuth() {
      * @returns bool
      */
     const connectUser = async (user) => {
-        const response = await axios.post("/auth/login", user)
+        const response = await axios.post("api/auth/login", user)
         
         if(!response?.status) {
             toast.error(t('auth.wrong_credentials'))
             return false
         }
-        dispatch(setMercure(response.datas.mercure))
         dispatch(setAuth(response.datas.token))
         dispatch(setUser(response.datas.user))
         return true
@@ -63,7 +61,7 @@ export default function useAuth() {
      * @returns bool
      */
     const registerUser = async (user) => {
-        const response = await axios.post("/auth/register", user)
+        const response = await axios.post("api/auth/register", user)
         return response.status
     }
 

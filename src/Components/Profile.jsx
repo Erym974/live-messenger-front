@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import './profile.scss';
 import { openImages as openSliceImages } from './../Slices/imagesSlices'
@@ -8,18 +8,16 @@ import { useDispatch } from 'react-redux';
 
 export default function Profile() {
 
-    const { profile, closeProfile, showProfile } = useProfile()
+    const { profile, closeProfile, showProfile, profileIsLoading } = useProfile()
     const { sendInvite, acceptInvite, deleteFriend, deleteInvitation } = useFriends()
     const { t, language } = useTranslation()
 
     const { user } = useAuth()
     const dispatch = useDispatch()
 
-    useEffect(() => {
-        console.log(profile);
-    }, [])
-
     const handleButton = async (type = "") => {
+
+        if(!profile) return
 
         const id = profile?.relationship?.id ?? profile?.invitation?.id ?? null;
         switch(type) {
@@ -48,6 +46,7 @@ export default function Profile() {
     }
 
     const convertDate = () => {
+        if(!profile) return
         const date = new Date(profile?.relationship?.since)
         switch(language){
           case "fr":
@@ -69,28 +68,27 @@ export default function Profile() {
             <div className="modal-background" onClick={closeProfile}></div>
             <div className="modal-content">
                 <header>
-                    <div className="background-cover">
-                        <img onClick={() => { openImages(profile.user.coverPicture) }} className="clickable" src={profile.user.coverPicture} alt="" />
+                    <div className={`background-cover ${profileIsLoading && 'skeleton'}`}>
+                        <img onClick={() => { openImages(profile?.user?.coverPicture) }} className="clickable" src={profile?.user?.coverPicture} alt="" />
                     </div>
-                    <div className="profile-picture">
-                        <img onClick={() => { openImages(profile.user.profilePicture) }} className="clickable" src={profile.user.profilePicture} alt="" />
+                    <div className={`profile-picture ${profileIsLoading && 'd-none'}`}>
+                        <img onClick={() => { openImages(profile?.user?.profilePicture) }} className="clickable" src={profile?.user?.profilePicture} alt="" />
                     </div>
                 </header>
                 <main>
                     <div className="d-flex g-10">
-                        <h3>{profile.user.fullname}</h3>
+                        <h3 className={`${profileIsLoading && 'skeleton'}`}>{profile?.user?.fullname || `Loading...`}</h3>
                     </div>
-                    {profile.user.biography && <>
-                        <h4 className="pt-2">{t('profile.aboutme')}</h4>
-                        <span className="description pb-2">{profile.user.biography}</span>
-                    </>}
+                    <h4 className="pt-2">{t('profile.aboutme')}</h4>
+                    <p className={`mb-2 text-muted ${profileIsLoading && 'skeleton'}`}>{profile?.user?.biography}</p>
                     <hr className="my-2" />
                     <div className="d-flex f-c">
-                        <span className="">{t(`friends.friends_since`, { since: convertDate() })}</span>
-                        <span className="text-muted">{t(`friends.mutual_friend${profile?.relationship?.mutual?.length > 1 ? "s" : ""}`, { count: profile?.relationship?.mutual?.length})}</span>
+                        <span className={`${profileIsLoading && 'skeleton'}`}>{t(`friends.friends_since`, { since: convertDate() })}</span>
+                        <span className={`text-muted mt-1 ${profileIsLoading && 'skeleton'}`}>{t(`friends.mutual_friend${profile?.relationship?.mutual?.length > 1 ? "s" : ""}`, { count: profile?.relationship?.mutual?.length})}</span>
                     </div>
                 </main>
-                <footer>
+                {profile && 
+                    <footer>
                     {profile?.relationship && <button onClick={() => { console.log("test"); }}>{t('profile.sendMessage')}</button>}
                     {profile?.relationship && <button onClick={() => { handleButton('delete') }}>{t('profile.deleteFriend')}</button>}
                     {(!profile.relationship && !profile?.invitation) && <button onClick={() => { handleButton('send') }}>{t('profile.addToFriend')}</button>}
@@ -105,7 +103,8 @@ export default function Profile() {
                             </>}
                         </>
                     }
-                </footer>
+                    </footer>
+                }
             </div>
         </div>
     )

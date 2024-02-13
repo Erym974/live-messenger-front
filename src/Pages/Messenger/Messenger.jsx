@@ -14,7 +14,7 @@ import { SearchModal } from '../../Components/Search/SearchModal';
 
 export default function Messenger() {
 
-  const { profile } = useProfile();
+  const { profile, profileIsLoading } = useProfile();
   const navigate = useNavigate();
   const { id } = useParams()
   const { open: openImage } = useSelector(state => state.images)
@@ -23,7 +23,7 @@ export default function Messenger() {
   const { searchModal } = useModal();
 
   useEffect(() => {
-  }, [useDocumentTitle("Messenger")])
+  }, [useDocumentTitle("SwiftChat")])
 
   useEffect(() => {
     if(groups?.length === 0) setHasNoGroups(true)
@@ -39,7 +39,7 @@ export default function Messenger() {
   return (
     <section id="dashboard">
 
-      {profile && <Profile />}
+      {profileIsLoading || profile ? <Profile /> : null}
       {openImage && <ModalImage />}
       {searchModal && <SearchModal />}
 

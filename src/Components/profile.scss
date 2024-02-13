@@ -89,5 +89,31 @@ div.modal#profile {
                 }
             }
         }
+
+        .skeleton {
+            position: relative;
+            
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0; left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 10;
+                border-radius: 5px;
+                background: linear-gradient(90deg, #eee, #e4e4e4, #eee);
+                background-size: 200%;
+                animation: loading 1s infinite reverse;
+            }
+        }    
+    }
+}
+
+@keyframes loading {
+    0% {
+        background-position: -100% 0;
+    }
+    100% {
+        background-position: 100% 0;
     }
 }

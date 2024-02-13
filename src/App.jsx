@@ -12,7 +12,7 @@ import {
 
 import { Login, Register, Error, Messenger, General, Account, Security, Friends, Home } from './Pages/pages'
 import ProtectedRoute from './Custom/ProtectedRoute';
-import { useTheme, useAuth, useModal } from './Hooks/CustomHooks';
+import { useTheme, useAuth, useModal, useFriends } from './Hooks/CustomHooks';
 import PublicRoute from './Custom/PublicRoute';
 import { Modal } from './Components/Modal';
 import { socket } from './socket';
@@ -20,15 +20,18 @@ import { socket } from './socket';
 
 export default function App() {
   
-  const { fetchAuth, auth } = useAuth()
+  const { fetchAuth, user } = useAuth()
+  const { newInvite } = useFriends()
   const { isModalOpen, searchModal } = useModal()
   
+  /** If there is not Auth then don't connect to socket */
   useEffect(() => {
+    if(!user) return
     socket.connect()
     return () => {
       socket.disconnect()
     };
-  }, [])
+  }, [user])
 
   useTheme()
 
@@ -36,18 +39,24 @@ export default function App() {
     fetchAuth()
   }, [])
 
-  useEffect(() => {
-    if(!auth) return
-    
-    socket.emit('authenticateUser', {
-      token: auth,
-    })
-
-    socket.on('authenticateUser', (result) => {
-        if(result.status === false) toast.error("Une erreure est survenue lors de la connexion au serveur.")
-    })
-
-  }, [auth])
+    /**
+     * 
+     * On User Connect
+     * 
+     */
+    useEffect(() => {
+      if(!user) return
+  
+      /* Subscribe to invitations */
+      socket.emit('join-invitation', {code: user?.friendCode})
+  
+      socket.on('invitation-received', newInvite)
+  
+      return () => {
+          socket.emit('join-invitation', () => {})
+          socket.emit('invitation-received', () => {})
+      }
+  }, [user])
 
   return (
         <>

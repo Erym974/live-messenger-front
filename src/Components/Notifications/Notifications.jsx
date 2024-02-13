@@ -1,8 +1,6 @@
 import React from 'react'
 import useNotification from '../../Hooks/useNotification'
 import toast from 'react-hot-toast';
-import useFriends from '../../Hooks/useFriends';
-import useTranslation from '../../Hooks/useTranslation';
 
 const Notifications = () => <> </>;
 
@@ -32,25 +30,11 @@ const FriendRequest = (invitation) => {
             <button onClick={() => { handleClick("accept"); }}>Accept</button>
             <button className="danger" onClick={() => { handleClick("decline"); }} >Decline</button>
         </>,
-        { duration: 7500 }
+        { duration: 12500 }
     )
 
 }
 Notifications.FriendRequest = FriendRequest;
-
-const FriendRequestAccepted = (friend) => {
-
-    const { notificationMessage } = useNotification()
-    if(!friend) return
-    notificationMessage(
-        "Nouvel ami", 
-        <>Vous êtes maintenant ami avec <b>{friend?.friend?.fullname}</b></>,
-        <><button onClick={ () => { console.log('accept') } }>Dire bonjour !</button></>,
-        { duration: 5000 }
-    )
-
-}
-Notifications.FriendRequestAccepted = FriendRequestAccepted;
 
 
 const PromiseNotif = (callback, loading, success, error) => {

@@ -69,6 +69,7 @@ export const Options = ({ message }) => {
     }
 
     const handleClickEmoji = (e) => {
+        console.log("test");
         emojiEvent.current = e
         toggleEmoji(message.id)
     }
@@ -82,10 +83,12 @@ export const Options = ({ message }) => {
             { !message.deleted && 
             <div className="message-actions d-flex aic jce gap-5" data-message={message.id}>
                 { !["emoji"].includes(message.type) &&<div className="emoji-container">
-                    <BsFillEmojiSmileFill className="react-icon" onClick={handleClickEmoji} />
+                    <div data-tooltip-id="tooltip" data-tooltip-content={t('message.react')}>
+                    <BsFillEmojiSmileFill  className="react-icon" onClick={handleClickEmoji} />
                     {emoji && <div className="emoji" data-message={message.id} >
                         <Picker data={{...data, theme: "light" }} perLine={9} onEmojiSelect={handleEmoji} />
                     </div>}
+                    </div>
                 </div>}
                 <FaReply data-tooltip-id="tooltip" data-tooltip-content={t('message.reply')} title={t('message.reply')} onClick={() => { handleReply(message) }} />
                 {message.sender.id == user.id &&

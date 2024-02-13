@@ -1,10 +1,19 @@
 import useMessenger from "./useMessenger"
-import toast from "react-hot-toast"
-import axios from "../Api/axios"
+import { socket } from "../socket"
+import { useEffect } from "react"
 
 export default function useCommands() {
 
     const { group } = useMessenger()
+
+    useEffect(() => {
+        if(!socket) return
+        socket.on('easter-received', execEaster)
+        return () => {
+            socket.off("easter-received", () => {})
+        }
+    
+    }, [socket])
 
     const easters = [
         {active: true, name: "mango", chat: true, audio: "mango", alias: ["mangue"], image: "https://media0.giphy.com/media/S8HRMhG0ecGOTuVnVP/giphy.gif?cid=ecf05e47t1x6bltn2pnjgvbduc5f9na0kwu0uc07egykwrfe&ep=v1_gifs_search&rid=giphy.gif&ct=g"}, 
@@ -12,9 +21,6 @@ export default function useCommands() {
         {active: false, name: "idle", chat: false, audio: "idle", alias: [], image: "https://media.tenor.com/acFXt21UBcgAAAAC/sleepy-kid.gif"},
     ]
 
-    const commands= [
-        
-    ]
 
     const executeCommand = (cmd, chat) => {
 
@@ -22,18 +28,21 @@ export default function useCommands() {
 
         const easter = easters.find(easter => easter.name === cmd || easter.alias.includes(cmd));
 
-        if(easter && easter.active && (easter.chat === null || easter.chat === chat)) return sendEaster(easter)
-        if(easter && !easter.active) return
-        
-        const command = commands.find(command => command.name === cmd || command.alias.includes(cmd))
+        if(easter) {
+            if(!easter.active) return false
 
-        if(!command) return toast.error("Commande inconnue")
-        return command.callback()
+            if(easter.chat === null || easter.chat === chat) {
+                sendEaster(easter)
+                return true
+            }
+        }
+    
+        return false
 
     }
 
     const sendEaster = async (easter) => {
-        const response = await axios.post('/api/realtime/easter', { group: group.id, easter: easter.name })
+        socket.emit("send-easter", {id: group.id, easter})
     }
 
     const execEaster = (easter) => {
