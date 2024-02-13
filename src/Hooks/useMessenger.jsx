@@ -39,7 +39,7 @@ export default function useMessenger() {
         },
         queryFn: async ({ pageParam = 1 }) => {
             if(conversation) return await axios.get(`/api/messages/${conversation}?limit=${messageLimit}&page=${pageParam}`)
-        }
+        },
     })
 
     const { isLoading: groupIsLoading, data: groupResponse, refetch: fetchGroup } = useQuery({
@@ -62,6 +62,7 @@ export default function useMessenger() {
     // Fetch group
     useEffect(() => {
         if(!conversation) return
+        dispatch(setMessages([]))
         fetchGroup()
     }, [conversation])
     

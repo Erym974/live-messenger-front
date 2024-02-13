@@ -113,7 +113,7 @@ export default function Messages({ conversation, messages }) {
             {messageIsFetching && <Loader />}
             <div className="messages">
             <Tooltip id="tooltip" data-tooltip-offset="55" data-tooltip-place="top" />
-            {(!messageIsFetching && messages?.length == 0) && <NoMessageYet />}
+            {(!messageIsFetching && messages?.length == 0 && conversation?.members?.length == 2) && <NoMessageYet />}
             {messages?.map(message => <Message key={message.id} message={message} /> )}
             <div id="scroll-target" data-init="false"></div> 
         </div>
