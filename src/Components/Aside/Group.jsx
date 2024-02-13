@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { useMessenger } from '../../Hooks/CustomHooks'
 import { toggleAside } from '../../Slices/settingsSlice'
 import { useDispatch } from 'react-redux'
 
@@ -27,7 +26,7 @@ export const Group = ({ group }) => {
 
     return (
         <div className="conversation" onClick={() => { handleClick(group?.id) }}>
-            <img src={group?.picture} alt="" />
+            <img src={group?.picture} alt="Picture of the group" />
             <div className="right">
                 <span className="name">{group?.name}</span>
                 <span className="message">

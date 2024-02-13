@@ -1,6 +1,7 @@
 export default {
     global: {
         error: "An error occurred",
+        saving: "Saving"
     },
     settings: {
         general: "General",
@@ -84,6 +85,17 @@ export default {
         AcceptFriendRequest: "Accept friend request",
         DeclineFriendRequest: "Decline friend request",
         aboutme: "About me",
+    },
+    createGroup: {
+        title: "Create group",
+        name: "Group name",
+        membersLength: "2 members minimum",
+        members: "Members",
+    },
+    form: {
+        create: "Create",
+        cancel: "Cancel",
+        save: "Save",
     }
 }
 

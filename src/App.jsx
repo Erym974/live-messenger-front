@@ -63,9 +63,10 @@ export default function App() {
           <Toaster
             position="bottom-right"
           />
-          {isModalOpen && <Modal />}
+          
 
           <Router>
+          {isModalOpen && <Modal />}
               <Routes>
                     <Route element={<ProtectedRoute />}>
                       <Route path="/messenger/:id?" element={<Messenger />} />

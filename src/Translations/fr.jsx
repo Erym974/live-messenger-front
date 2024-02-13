@@ -1,6 +1,7 @@
 export default {
     global: {
         error: "Une erreur est survenue",
+        saving: "Creation"
     },
     settings: {
         general: "Général",
@@ -84,6 +85,17 @@ export default {
         AcceptFriendRequest: "Accepter la demande d'ami",
         DeclineFriendRequest: "Refuser la demande d'ami",
         aboutme: "À propos de moi",
+    },
+    createGroup: {
+        title: "Créer un groupe",
+        name: "Nom du groupe",
+        membersLength: "2 membres minimum",
+        members: "Membres",
+    },
+    modal: {
+        create: "Créer",
+        cancel: "Annuler",
+        save: "Sauvegarder"
     }
 }
 

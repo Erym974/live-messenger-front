@@ -425,6 +425,15 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--color-dark);
 }
 
+.bg-primary {
+    background-color: $color-primary;
+
+}
+
+.bg-danger {
+    background-color: $color-danger !important;
+}
+
 .jce {
     justify-content: flex-end !important;
 }
@@ -502,6 +511,19 @@ h1, h2, h3, h4, h5, h6 {
 
 .text-white {
     color: var(--color-white);
+}
+
+.select__control {
+    background-color: var(--color-white) !important;
+}
+
+.select__multi-value {
+    background-color: var(--color-white-lighten) !important;
+    color: var(--color-dark) !important;
+    
+    .select__multi-value__label {
+        color: var(--color-dark) !important;
+    }
 }
 
 span.text-muted {

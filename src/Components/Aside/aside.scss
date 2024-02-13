@@ -59,48 +59,55 @@ section#dashboard {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
+            align-items: center;
             gap: 15px;
             color: var(--color-dark);
 
-            .conversation {
+            .conversations {
                 display: flex;
-                align-items: center;
-                gap: 10px;
-                border-radius: 10px;
-                padding: 5px 10px;
-                cursor: pointer;
-                transition: all 0.2s ease-in-out;
+                flex-direction: column;
+                gap: 5px !important;
 
-                &:hover {
-                    // background-color: $color-primary;
-                    img {
-                        border-radius: 15px;
-                    }
-                }
-
-                img {
-                    height: 50px;
-                    width: 50px;
-                    border-radius: 50%;
-                    transition: all 0.2s ease-in-out;
-                }
-
-                .right {
+                .conversation {
                     display: flex;
-                    flex-direction: column;
-                    flex-grow: 1;
-                    max-width: calc(100% - 50px);
-
-                    .name {
-                        font-weight: bold;
+                    align-items: center;
+                    gap: 10px;
+                    border-radius: 10px;
+                    padding: 5px 10px;
+                    cursor: pointer;
+                    transition: all 0.2s ease-in-out;
+    
+                    &:hover {
+                        // background-color: $color-primary;
+                        img {
+                            border-radius: 15px;
+                        }
                     }
-
-                    .message {
-                        text-decoration: none;
-                        text-overflow: ellipsis;
-                        display: block;
-                        overflow: hidden;
-                        white-space: nowrap;
+    
+                    img {
+                        height: 50px;
+                        width: 50px;
+                        border-radius: 50%;
+                        transition: all 0.2s ease-in-out;
+                    }
+    
+                    .right {
+                        display: flex;
+                        flex-direction: column;
+                        flex-grow: 1;
+                        max-width: calc(100% - 50px);
+    
+                        .name {
+                            font-weight: bold;
+                        }
+    
+                        .message {
+                            text-decoration: none;
+                            text-overflow: ellipsis;
+                            display: block;
+                            overflow: hidden;
+                            white-space: nowrap;
+                        }
                     }
                 }
             }
