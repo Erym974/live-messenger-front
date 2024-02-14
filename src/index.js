@@ -20,11 +20,11 @@ const queryClient = new QueryClient({
 })
 
 root.render(
-  <React.Fragment>
+  <React.StrictMode>
     <QueryClientProvider client={queryClient}>
     <Provider store={store}>
       <App />
     </Provider>
     </QueryClientProvider>
-  </React.Fragment>
+  </React.StrictMode>
 );

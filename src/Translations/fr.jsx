@@ -1,7 +1,10 @@
 export default {
     global: {
+        membersList: "Liste des membres",
         error: "Une erreur est survenue",
-        saving: "Creation"
+        saving: "Creation",
+        kick: "Expulser",
+        promote: "Promouvoir",
     },
     settings: {
         general: "Général",

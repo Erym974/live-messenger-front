@@ -10,7 +10,7 @@ export default function useCommands() {
         if(!socket) return
         socket.on('easter-received', execEaster)
         return () => {
-            socket.off("easter-received", () => {})
+            socket.off("easter-received")
         }
     
     }, [socket])

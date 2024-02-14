@@ -23,6 +23,7 @@ import {
   useRealtime,
   useTheme,
   useSettings,
+  useModal,
 } from "../../Hooks/CustomHooks";
 import { useIdle } from "@uidotdev/usehooks";
 import GifPicker from "gif-picker-react";
@@ -37,21 +38,14 @@ export default function Chat({ conversation }) {
   const easterIdle = useIdle((60 * 30) * 1000);
   const [files, setFiles] = useState([]);
   const { theme } = useTheme();
+  const { openModal } = useModal()
 
 
   const [emoji, toggleEmoji] = useState();
   const [gif, toggleGif] = useState();
 
   const { user } = useAuth();
-  const {
-    sendMessage,
-    messages,
-    edition,
-    reply,
-    setReply,
-    setEdition,
-    editMessage,
-  } = useMessenger();
+  const { sendMessage, messages, edition, reply, setReply, setEdition, editMessage, group } = useMessenger();
 
   /**
    *
@@ -284,6 +278,8 @@ export default function Chat({ conversation }) {
     setFiles(imgs);
   };
 
+  const handleMembers = () => openModal("Members", group)
+
   return (
     <section id="chat">
       <header>
@@ -307,11 +303,14 @@ export default function Chat({ conversation }) {
           <ButtonRounded size="small dropdown-button" onClick={toggleDropDown}>
             <FaEllipsisH />
             <div className="dropdown-menu" dropdown-menu="false">
-              {conversation && (
-                <div className="dropdown-item p-2 mx-2" onClick={handleProfile}>
-                  {conversation?.private ? (<span>{t("profile.see")}</span>) : (t("profile.members"))}
-                </div>
-              )}
+              {conversation && (<>
+                {conversation?.private  && <div className="dropdown-item p-2 mx-2" onClick={handleProfile}>
+                  <span>{t("profile.see")}</span>
+                </div>}
+                {!conversation?.private  && <div className="dropdown-item p-2 mx-2" onClick={handleMembers}>
+                  <span>{t("profile.members")}</span>
+                </div>}
+                </>)}
             </div>
           </ButtonRounded>
           <ButtonRounded

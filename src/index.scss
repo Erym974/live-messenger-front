@@ -434,6 +434,10 @@ h1, h2, h3, h4, h5, h6 {
     background-color: $color-danger !important;
 }
 
+.bg-info {
+    background-color: $color-info !important;
+}
+
 .jce {
     justify-content: flex-end !important;
 }
@@ -563,6 +567,10 @@ span.text-muted {
     align-items: center;
 }
 
+.jce {
+    justify-content: flex-end;
+}
+
 .d-flex {
     display: flex;
 }
@@ -575,8 +583,8 @@ span.text-muted {
     justify-content: end;
 }
 
-.g-10 {
-    gap: 10px;
+.jcb {
+    justify-content: space-between;
 }
 
 .mt-10 {
@@ -585,6 +593,23 @@ span.text-muted {
 
 .mb-30 {
     margin-bottom: 30px !important;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+$fullSides: (
+    'top': 'top',
+    'bottom': 'bottom',
+    'left': 'left',
+    'right': 'right'
+);
+
+@each $side, $value in $fullSides {
+    .border-#{$side} {
+        border-#{$side}: 1px solid var(--color-dark-variant) !important;
+    }
 }
 
 $gap: (

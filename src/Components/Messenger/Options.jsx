@@ -90,11 +90,11 @@ export const Options = ({ message }) => {
                     </div>}
                     </div>
                 </div>}
-                <FaReply data-tooltip-id="tooltip" data-tooltip-content={t('message.reply')} title={t('message.reply')} onClick={() => { handleReply(message) }} />
+                <FaReply data-tooltip-id="tooltip" data-tooltip-content={t('message.reply')} onClick={() => { handleReply(message) }} />
                 {message.sender.id == user.id &&
                     <>
-                        { !["gif", "emoji", "file"].includes(message.type) && <FaPen data-tooltip-id="tooltip" data-tooltip-content={t('message.edit')} title={t('message.edit')} className={`${edition?.id === message.id && "selected"}`} onClick={() => { edition.active ? setEdition({active: false, id: null, content: null}) : setEdition({active: true, id: message.id, content: message.content}) }} /> }
-                        <FaRegTrashAlt data-tooltip-id="tooltip" data-tooltip-content={t('message.delete')} title={t('message.delete')} onClick={() => { deleteMessage(message.id) }} />
+                        { !["gif", "emoji", "file"].includes(message.type) && <FaPen data-tooltip-id="tooltip" data-tooltip-content={t('message.edit')} className={`${edition?.id === message.id && "selected"}`} onClick={() => { edition.active ? setEdition({active: false, id: null, content: null}) : setEdition({active: true, id: message.id, content: message.content}) }} /> }
+                        <FaRegTrashAlt data-tooltip-id="tooltip" data-tooltip-content={t('message.delete')} onClick={() => { deleteMessage(message.id) }} />
                     </>
                 }
             </div>

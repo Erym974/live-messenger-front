@@ -12,7 +12,7 @@ import {
 
 import { Login, Register, Error, Messenger, General, Account, Security, Friends, Home } from './Pages/pages'
 import ProtectedRoute from './Custom/ProtectedRoute';
-import { useTheme, useAuth, useModal, useFriends } from './Hooks/CustomHooks';
+import { useTheme, useAuth, useModal, useFriends, useMessenger } from './Hooks/CustomHooks';
 import PublicRoute from './Custom/PublicRoute';
 import { Modal } from './Components/Modal';
 import { socket } from './socket';
@@ -22,6 +22,7 @@ export default function App() {
   
   const { fetchAuth, user } = useAuth()
   const { newInvite } = useFriends()
+  const { onKick, } = useMessenger()
   const { isModalOpen, searchModal } = useModal()
   
   /** If there is not Auth then don't connect to socket */
@@ -49,12 +50,13 @@ export default function App() {
   
       /* Subscribe to invitations */
       socket.emit('join-invitation', {code: user?.friendCode})
-  
+
+      /** When we receive new invite event */
       socket.on('invitation-received', newInvite)
-  
+      socket.on('kicked', onKick)
       return () => {
-          socket.emit('join-invitation', () => {})
-          socket.emit('invitation-received', () => {})
+          socket.off('invitation-received')
+          socket.off('kicked')
       }
   }, [user])
 
@@ -64,7 +66,6 @@ export default function App() {
             position="bottom-right"
           />
           
-
           <Router>
           {isModalOpen && <Modal />}
               <Routes>

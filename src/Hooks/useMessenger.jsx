@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { setGroup, setGroups, setReply as setReplySlice, setMessages, setMessage, newMessage, replaceMessage, setEdition as setSliceEdition, setLoadingGroup, setLoadingGroups, setToggleScroll, setTotalMessages, addMoreMessages } from "../Slices/messengerSlice"
+import { removeConversation, setGroup, setGroups, setReply as setReplySlice, setMessages, setMessage, newMessage, replaceMessage, setEdition as setSliceEdition, setLoadingGroup, setLoadingGroups, setToggleScroll, setTotalMessages, addMoreMessages } from "../Slices/messengerSlice"
 import axios from "../Api/axios"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { socket } from "../socket"
+import toast from "react-hot-toast"
 
 export default function useMessenger() {
 
@@ -84,20 +85,27 @@ export default function useMessenger() {
     useEffect(() => {
         if(!groupResponse) return
 
+        console.log(group);
+
         socket.emit('join', {id: groupResponse.id, token: auth})
 
-        socket.on('join-response', (response) => {
-            socket.on('new-message', onMessageReceived)
-            socket.on('message-updated', onMessageUpdated)
-        })
+        socket.on('new-message', onMessageReceived)
+        socket.on('message-updated', onMessageUpdated)
+        socket.on('group-updated', onGroupUpdated)
 
         return () => {
             socket.emit('leave', groupResponse.id)
-            socket.on('join-response', () => {})
-            socket.on('new-message', () => {})
-            socket.on('message-updated', () => {})
+
+            socket.off('new-message')
+            socket.off('message-updated')
+            socket.off('group-updated')
         }
     }, [groupResponse])
+
+    /** When the group is updated */
+    const onGroupUpdated = async (group) => {
+        dispatch(setGroup(group))
+    }
 
     /** When we send a message */
     const sendMessage = async (id, content, files = []) => {
@@ -138,6 +146,12 @@ export default function useMessenger() {
         dispatch(replaceMessage(message))
     }
 
+    /** When we are kicked from the group */
+    const onKick = async (group) => {
+        toast.error(`You have been kicked from ${group?.name}`)
+        dispatch(removeConversation(group?.id))
+    }
+
     const activeMessage = async (id) => {
         if(message === id) dispatch(setMessage(null))
         else dispatch(setMessage(id))
@@ -151,8 +165,6 @@ export default function useMessenger() {
     const editMessage = async () => {
         if(edition?.content?.trim()?.length > 0) {
             socket.emit('edit-message', {id: edition.id, content: edition.content, token: auth})
-            // const response = await axios.patch('api/message', { id: edition.id, content: edition.content })
-            // if(!response?.status) return
         }
         setEdition({active: false, id: null, content: null})
     }
@@ -165,6 +177,14 @@ export default function useMessenger() {
         dispatch(setReplySlice(message))
     }
 
-    return { setConversation, fetchGroups, messageIsFetching, messageHasNextPage, groupResponse, groups, group, messages, message, messages_showed, edition, groupsIsLoading, reply, messageFetchNextPage, setReply, onMessageReceived, setEdition, fetchGroup, sendMessage, activeMessage,  deleteMessage, editMessage, reactToMessage }
+    const kickUser = async (user) => {
+        socket.emit('kick-user', {id: group.id, user: user, token: auth})
+    }
+
+    const promoteUser = async (user) => {
+        socket.emit('promote-user', {id: group.id, user: user, token: auth})
+    }
+
+    return { onKick, setConversation, fetchGroups, kickUser, promoteUser, messageIsFetching, messageHasNextPage, groupResponse, groups, group, messages, message, messages_showed, edition, groupsIsLoading, reply, messageFetchNextPage, setReply, onMessageReceived, setEdition, fetchGroup, sendMessage, activeMessage,  deleteMessage, editMessage, reactToMessage }
 
 }

@@ -1,7 +1,10 @@
 export default {
     global: {
+        membersList: "Members list",
         error: "An error occurred",
-        saving: "Saving"
+        saving: "Saving",
+        kick: "Kick",
+        promote: "Promote",
     },
     settings: {
         general: "General",

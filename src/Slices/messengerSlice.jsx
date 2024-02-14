@@ -65,8 +65,12 @@ export const messengerSlice = createSlice({
         },
         setReply: (state, action) => {
             state.reply = action.payload;
+        },
+        removeConversation: (state, action) => {
+            state.groups = state.groups.filter(group => group.id !== action.payload)
+        
         }
     }
 })
 
-export const { addMoreMessages, setReply, setTotalMessages, setGroup, setGroups, setSubMenu, setMessages, replaceGroup, setMessage, newMessage, setReaded, replaceMessage, setToggleScroll, setEdition, setLoadingGroups, setLoadingGroup } = messengerSlice.actions;
+export const { removeConversation, addMoreMessages, setReply, setTotalMessages, setGroup, setGroups, setSubMenu, setMessages, replaceGroup, setMessage, newMessage, setReaded, replaceMessage, setToggleScroll, setEdition, setLoadingGroups, setLoadingGroup } = messengerSlice.actions;
