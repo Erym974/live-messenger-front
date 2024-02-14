@@ -82,10 +82,12 @@ export default function Profile() {
                     <h4 className="pt-2">{t('profile.aboutme')}</h4>
                     <p className={`mb-2 text-muted ${profileIsLoading && 'skeleton'}`}>{profile?.user?.biography}</p>
                     <hr className="my-2" />
+                    {profile?.relationship && 
                     <div className="d-flex f-c">
                         <span className={`${profileIsLoading && 'skeleton'}`}>{t(`friends.friends_since`, { since: convertDate() })}</span>
                         <span className={`text-muted mt-1 ${profileIsLoading && 'skeleton'}`}>{t(`friends.mutual_friend${profile?.relationship?.mutual?.length > 1 ? "s" : ""}`, { count: profile?.relationship?.mutual?.length})}</span>
                     </div>
+                    }
                 </main>
                 {profile && 
                     <footer>

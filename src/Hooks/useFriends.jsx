@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAuth from "./useAuth";
 import { socket } from "../socket"
 import Notifications from "../Components/Notifications/Notifications";
+import toast from 'react-hot-toast';
 
 export default function useFriends(opts) {
   const { friends, invites: invitations, listened } = useSelector((state) => state.friends);
@@ -122,6 +123,7 @@ export default function useFriends(opts) {
     }
     dispatch(pushNewInvite(response.datas));
     socket.emit("invitation-sended", response.datas)
+    toast.success("Invitation sent")
     return "sended";
   };
 

@@ -1,27 +1,44 @@
 import React, { useEffect, useRef } from 'react'
-import { useAuth, useMessenger } from '../../Hooks/CustomHooks'
+import { useAuth, useFriends, useMessenger, useTranslation } from '../../Hooks/CustomHooks'
 
 export const NoMessageYet = () => {
 
     const { group, sendMessage, groupsIsLoading } = useMessenger()
+    const { language } = useTranslation()
+    const { friends } = useFriends()
     const { user } = useAuth()
 
-    const friend = useRef(null)
+    const friendship = useRef(null)
 
     useEffect(() => {
         if(!group) return
-        if(group?.private) friend.current = group?.members.find(member => member.id != user.id)
+        if(!group?.private) return
+        let friend = group?.members.find(member => member.id != user.id)
+        friendship.current = friends.find(fs => fs.friend.id == friend.id)
+        if(!friendship.current) friendship.current = { friend }
     }, [group])
+
+    const convertDate = (dateToConvert) => {
+        const date = new Date(dateToConvert)
+        switch(language){
+          case "fr":
+            return date.toLocaleDateString("fr-FR")
+          case "en":
+            return date.toLocaleDateString("en-US")
+          default:
+            return date.toLocaleDateString("en-US")
+        }
+    }
  
     return (
         (group && !groupsIsLoading) ?
         <>
             {group?.private ?
                 <div className='d-flex aic jcc f-c mt-5'>
-                    <h1 className='mb-2'>Commencez la discussion avec {friend?.current?.fullname}</h1>
-                    {friend?.current?.friend && <span className="text-muted">Vous êtes amis depuis le : </span>}
-                    {friend?.current?.friend && <span className="text-muted">Vous avez {"0"} amis en commun</span>}
-                    {!friend?.current?.friend && <span className="text-muted">Vous pouvez envoyer une demande d'ami à <b>{friend?.current?.fullname}</b></span>}
+                    <h1 className='mb-2'>Commencez la discussion avec {friendship?.current?.friend?.fullname}</h1>
+                    {friendship?.current?.since && <span className="text-muted">Vous êtes amis depuis le : {convertDate(friendship?.current?.since)}</span>}
+                    {friendship?.current?.mutual && <span className="text-muted">Vous avez {friendship?.current?.mutual?.length} amis en commun</span>}
+                    {!friendship?.current?.since && <span className="text-muted">Vous pouvez envoyer une demande d'ami à <b>{friendship?.current?.friend?.fullname}</b></span>}
                     <button className='mt-3' onClick={() => { sendMessage(group.id, "Bonjour 👋") }}>Dire Bonjour 👋</button>
                 </div> 
                 :
