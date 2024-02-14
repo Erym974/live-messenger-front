@@ -294,10 +294,7 @@ export default function Chat({ conversation }) {
               <>
                 <span className="name">{conversation?.name}</span>
                 <span className="status">
-                  {conversation?.members?.length > 2
-                    ? `${conversation?.members?.length} participant${
-                        conversation?.members?.length > 1 ? "s" : ""
-                      }`
+                  {!conversation?.private ? `${conversation?.members?.length} participant${conversation?.members?.length > 1 ? "s" : ""}`
                     : `${"online"}`}
                 </span>
               </>
@@ -312,11 +309,7 @@ export default function Chat({ conversation }) {
             <div className="dropdown-menu" dropdown-menu="false">
               {conversation && (
                 <div className="dropdown-item p-2 mx-2" onClick={handleProfile}>
-                  {conversation?.members?.length === 2 ? (
-                    <span>{t("profile.see")}</span>
-                  ) : (
-                    t("profile.members")
-                  )}
+                  {conversation?.private ? (<span>{t("profile.see")}</span>) : (t("profile.members"))}
                 </div>
               )}
             </div>

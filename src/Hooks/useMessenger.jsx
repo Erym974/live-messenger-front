@@ -63,6 +63,7 @@ export default function useMessenger() {
     useEffect(() => {
         if(!conversation) return
         dispatch(setMessages([]))
+        dispatch(setGroup(null))
         fetchGroup()
     }, [conversation])
     
@@ -86,10 +87,8 @@ export default function useMessenger() {
         socket.emit('join', {id: groupResponse.id, token: auth})
 
         socket.on('join-response', (response) => {
-
             socket.on('new-message', onMessageReceived)
             socket.on('message-updated', onMessageUpdated)
-
         })
 
         return () => {
