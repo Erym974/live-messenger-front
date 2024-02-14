@@ -21,6 +21,7 @@ export const authSlice = createSlice({
         },
         setUser: (state, action) => {
             let user = action.payload
+            console.log(user);
             if(user) {
                 user.settings = user?.settings.map(setting => ({
                     value: setting.meta.allowed === "string" ? setting.value : JSON.parse(setting.value),
@@ -28,13 +29,8 @@ export const authSlice = createSlice({
                 }));
             }
             state.user = user
-        },
-        setMercure: (state, action) => {
-            const jwt = action.payload
-            Cookies.set('mercureAuthorization', jwt, { expires: 1 })
-            state.mercure = jwt
         }
     }
 })
 
-export const { setLoading, setAuth, setUser, setMercure, setNewConnection } = authSlice.actions;
+export const { setLoading, setAuth, setUser, setNewConnection } = authSlice.actions;

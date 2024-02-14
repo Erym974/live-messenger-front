@@ -39,7 +39,8 @@ export default {
         already_friend: "You are already friends with this user",
         friendCodeNotFound: "This friend code does not correspond to any user",
         friendCode: "Your friend code : {{ code }}",
-        friendCodeCopied: "Friend code copied !"
+        friendCodeCopied: "Friend code copied !",
+        notAllowNewFriendRequest: "This user does not allow new friend requests",
     },
     general: {
         firstname: "Firstname",

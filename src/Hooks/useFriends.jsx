@@ -113,12 +113,13 @@ export default function useFriends(opts) {
     const response = await axios.post("/api/invitations", { code });
 
     if (!response?.status || Number.isInteger(response?.status)) {
-      if (response.message === "This user doesn't allow friend request")
-        return "disallowed";
+      console.log(response);
+      if (response.message === "This user doesn't allow friend request") return "disallowed";
       if (response.message === "Already sent invitation") return "already_sent";
       if (response.message === "Already your friend") return "already_friend";
       if (response.message === "User not found") return "NotFound";
-      if (response.message === "Yourself") return "Yourself";
+      if (response.message === "Yourself") return "yourself";
+      if (response.message === "User doesn't allow friend request") return "notAllowNewFriendRequest";
       return "error";
     }
     dispatch(pushNewInvite(response.datas));

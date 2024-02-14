@@ -15,7 +15,8 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use((response) => {
     return response.data;
 }, (error) => {
-    console.log({ status: false, data: error });
+    if(error?.response?.data?.message) return error?.response?.data
+    else console.warn({ status: false, data: error });
 });
 
 export default axios;

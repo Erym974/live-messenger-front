@@ -35,23 +35,8 @@ export const InviteFriend = () => {
           case "sended": 
             toast.success(t('friends.invite_sended'))
             break
-          case "Invalid":
-            toast.error(t('friends.invalid_code'))
-            break
-          case "Yourself":
-            toast.error(t('friends.yourself'))
-            break
-          case "disallowed":
-            toast.error(t('friends.disallowed'))
-            break
-          case "already_sent":
-            toast.error(t('friends.already_sent'))
-            break
-          case "already_friend":
-            toast.error(t('friends.already_friend'))
-            break
           default: 
-            toast.error(t('friends.friendCodeNotFound'))
+            toast.error(t(`friends.${result}`))
             break
         }
     
