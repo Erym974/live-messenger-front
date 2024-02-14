@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { removeConversation, setGroup, setGroups, setReply as setReplySlice, setMessages, setMessage, newMessage, replaceMessage, setEdition as setSliceEdition, setLoadingGroup, setLoadingGroups, setToggleScroll, setTotalMessages, addMoreMessages } from "../Slices/messengerSlice"
+import { removeConversation, setGroup, setGroups, setReply as setReplySlice, setMessages, setMessage, newMessage, replaceMessage, setEdition as setSliceEdition } from "../Slices/messengerSlice"
 import axios from "../Api/axios"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { socket } from "../socket"
@@ -84,8 +84,6 @@ export default function useMessenger() {
 
     useEffect(() => {
         if(!groupResponse) return
-
-        console.log(group);
 
         socket.emit('join', {id: groupResponse.id, token: auth})
 

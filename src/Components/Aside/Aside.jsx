@@ -81,14 +81,16 @@ export default function Aside() {
             </div>
 
             <div className="content">
-                <ButtonRounded onClick={handleCreateGroup}>
-                    <IoMdAdd />
-                </ButtonRounded>
+                <>
+                    <button className="btn-type-2 w-100" onClick={handleCreateGroup}>
+                        <IoMdAdd />
+                    </button>
+                </>
                 <Conversation />
             </div>
 
             <div className="bottom">
-            <button onClick={() => { dispatch(toggleAside(!asideState)) }}><FaArrowLeftLong /></button>
+            <button className="btn-type-2" onClick={() => { dispatch(toggleAside(!asideState)) }}><FaArrowLeftLong /></button>
             </div>
 
         </aside>

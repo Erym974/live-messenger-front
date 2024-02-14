@@ -16,6 +16,7 @@ export const Group = ({ group }) => {
         if(!group) return
         if(!group?.lastMessage) return setLastMessage(<i>{t('chat.notyet')}</i>)
         const filesLength = group?.lastMessage?.files?.length ?? 0
+        console.log(group?.lastMessage);
         return setLastMessage(<>{group?.lastMessage?.content ? group?.lastMessage?.content : t(filesLength <= 1 ? 'chat.sentfile' : 'chat.sentfiles', {count: filesLength})}</>)
     }, [group])
 
@@ -30,7 +31,7 @@ export const Group = ({ group }) => {
             <div className="right">
                 <span className="name">{group?.name}</span>
                 <span className="message">
-                    {group?.unread ?
+                    {group?.lastMessage?.unread ?
                         <span className="text-muted unread">{lastMessage}</span>
                         :
                         <span className='text-muted'>{lastMessage}</span> 

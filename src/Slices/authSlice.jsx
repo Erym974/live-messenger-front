@@ -21,7 +21,6 @@ export const authSlice = createSlice({
         },
         setUser: (state, action) => {
             let user = action.payload
-            console.log(user);
             if(user) {
                 user.settings = user?.settings.map(setting => ({
                     value: setting.meta.allowed === "string" ? setting.value : JSON.parse(setting.value),

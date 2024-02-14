@@ -23,19 +23,6 @@ export const messengerSlice = createSlice({
         setSubMenu: (state, action) => {
             state.subMenu = action.payload;
         },
-        replaceGroup: (state, action) => {
-            state.groups = state.groups.map(group => group.id === action.payload.id ? action.payload : group)
-            const group = state.groups.find(group => group.id === action.payload.id)
-            group.unread = true
-            state.groups = [group, ...state.groups.filter(group => group.id !== action.payload.id)]
-        },
-        setReaded: (state, action) => {
-            state.groups = state.groups.map(group => group.id === action.payload ? {...group, unread: false} : group)
-        },
-        addMoreMessages: (state, action) => {
-            state.messages = [...action.payload, ...state.messages]
-            state.messages_showed = state.messages.length
-        },
         setMessages: (state, action) => {
             state.messages = action.payload;
             state.messages_showed = state.messages.length
@@ -46,7 +33,6 @@ export const messengerSlice = createSlice({
         newMessage: (state, action) => {
             if(state.messages.find(message => message.id === action.payload.id)) return
             state.messages.push(action.payload);
-            state.groups = state.groups.map(group => group.id === state.group.id ? {...group, lastMessage: action.payload} : group)
             state.messages_showed = state.messages.length
             state.messages_total += 1
         },
@@ -68,9 +54,12 @@ export const messengerSlice = createSlice({
         },
         removeConversation: (state, action) => {
             state.groups = state.groups.filter(group => group.id !== action.payload)
-        
+        },
+        moveConversationToTop: (state, action) => {
+            const newGroup = {...state.groups.find(group => group.id === action?.payload?.group), lastMessage: action?.payload?.message}
+            state.groups = [newGroup, ...state.groups.filter(group => group.id !== action.payload.group)]
         }
     }
 })
 
-export const { removeConversation, addMoreMessages, setReply, setTotalMessages, setGroup, setGroups, setSubMenu, setMessages, replaceGroup, setMessage, newMessage, setReaded, replaceMessage, setToggleScroll, setEdition, setLoadingGroups, setLoadingGroup } = messengerSlice.actions;
+export const { moveConversationToTop, removeConversation, setReply, setTotalMessages, setGroup, setGroups, setSubMenu, setMessages, setMessage, newMessage, replaceMessage, setToggleScroll, setEdition, setLoadingGroups, setLoadingGroup } = messengerSlice.actions;

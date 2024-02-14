@@ -59,9 +59,10 @@ section#dashboard {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            align-items: center;
             gap: 15px;
             color: var(--color-dark);
+
+            // align-items: center;
 
             .conversations {
                 display: flex;
@@ -78,7 +79,6 @@ section#dashboard {
                     transition: all 0.2s ease-in-out;
     
                     &:hover {
-                        // background-color: $color-primary;
                         img {
                             border-radius: 15px;
                         }
@@ -123,25 +123,27 @@ section#dashboard {
             align-items: center;
             justify-content: center;
 
-            button {
 
-                display: flex;
-                align-items: center;
-                justify-content: center;
+        }
 
-                width: 75%;
-                height: 35px;
-                border-radius: $border-radius;
-                background: $color-primary;
-                border: none;
-                cursor: pointer;
+        button.btn-type-2 {
 
-                color: var(--color-dark);
-                transition: background-color 0.3s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-                &:hover {
-                    background-color: darken($color-primary, 10%);
-                }
+            width: 75%;
+            height: 35px;
+            border-radius: $border-radius;
+            background: $color-primary;
+            border: none;
+            cursor: pointer;
+
+            color: var(--color-white) !important;
+            transition: background-color 0.3s ease-in-out;
+
+            &:hover {
+                background-color: darken($color-primary, 10%);
             }
         }
     }
@@ -173,17 +175,20 @@ section#dashboard {
                     gap: 5px;
                 }
 
-                .conversations {
-                    align-items: center;
-                    justify-content: center;
+                .content {
 
-                    .conversation {
-                        padding: 0 !important;
-                        gap: 0 !important;
-
-                        .right {
-                            span {
-                                display: none !important;
+                    .conversations {
+                        align-items: center;
+                        justify-content: center;
+    
+                        .conversation {
+                            padding: 0 !important;
+                            gap: 0 !important;
+    
+                            .right {
+                                span {
+                                    display: none !important;
+                                }
                             }
                         }
                     }
@@ -192,12 +197,14 @@ section#dashboard {
                 .bottom {
                     padding: 25px 0 0 0 !important;
 
-                    button {
-                        padding: 0;
 
-                        svg {
-                            rotate: 180deg !important;
-                        }
+                }
+
+                button.btn-type-2 {
+                    padding: 0;
+
+                    svg {
+                        rotate: 180deg !important;
                     }
                 }
             }
