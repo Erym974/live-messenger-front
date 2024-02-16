@@ -16,7 +16,6 @@ export const Group = ({ group }) => {
         if(!group) return
         if(!group?.lastMessage) return setLastMessage(<i>{t('chat.notyet')}</i>)
         const filesLength = group?.lastMessage?.files?.length ?? 0
-        console.log(group?.lastMessage);
         return setLastMessage(<>{group?.lastMessage?.content ? group?.lastMessage?.content : t(filesLength <= 1 ? 'chat.sentfile' : 'chat.sentfiles', {count: filesLength})}</>)
     }, [group])
 

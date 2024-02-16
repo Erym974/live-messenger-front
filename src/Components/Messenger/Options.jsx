@@ -11,8 +11,7 @@ import { FaReply } from 'react-icons/fa6'
 export const Options = ({ message }) => {
 
     const { t } = useTranslation()
-    const [emoji, toggleEmoji] = useState(null)
-    const [dropdown, setDropdown] = useState(null)
+    const [emoji, setEmoji] = useState(null)
     const emojiEvent = useRef() 
     const { deleteMessage, setEdition, edition, reactToMessage, setReply } = useMessenger()
     const { user } = useAuth()
@@ -24,7 +23,8 @@ export const Options = ({ message }) => {
         document.addEventListener('mousemove', checkMouseDistance, true)
         toggleHoverEffect(true)
 
-        const element = document.querySelector(`.emoji[data-message="${message.id}"]`)
+        const element = document.querySelector(`.react-emoji-picker[data-message="${message.id}"]`)
+        if(!element) return
         emojiEvent.current.screenY > 600 ? element.style.bottom = `40px` : element.style.top = `40px`
         message.sender.id === user.id ? element.style.right = `100px` : element.style.left = `20px`
 
@@ -36,21 +36,18 @@ export const Options = ({ message }) => {
     }, [emoji])
 
     const checkEmojiClick = (e) => {
-        if(e.target.closest('.emoji') === null) return toggleEmoji(null)
-        if(e.target.closest('.emoji').dataset.message != message.id) return toggleEmoji(null)
+        if(e.target.closest('.react-emoji-picker') === null) return setEmoji(null)
+        if(e.target.closest('.react-emoji-picker').dataset.message != message.id) return setEmoji(null)
         return
     }
 
     const checkMouseDistance = (e) => {
-        const element = document.querySelector(`.emoji[data-message="${message.id}"]`)
-
-        // get element position 
+        const element = document.querySelector(`.react-emoji-picker[data-message="${message.id}"]`)
+        if(!element) return
         const rect = element.getBoundingClientRect()
         const y = rect.top + window.scrollY
-
         const distance = e.clientY - y
-        if(distance > 500 || distance < -200) return toggleEmoji(null)
-
+        if(distance > 500 || distance < -200) return setEmoji(null)
     }
 
     const toggleHoverEffect = (state = true) => {
@@ -63,34 +60,29 @@ export const Options = ({ message }) => {
     }
 
     const handleEmoji = (e) => {
-        if(!emoji) return
-        reactToMessage(emoji, e.native)
-        toggleEmoji(null)
-    }
-
-    const handleClickEmoji = (e) => {
-        console.log("test");
         emojiEvent.current = e
-        toggleEmoji(message.id)
+        if(emoji) return setEmoji(null)
+        setEmoji(message.id)
     }
 
-    const handleReply = (message) => {
-       setReply(message) 
+    const handleClickEmoji = (evt) => {
+        reactToMessage(message.id, evt.native)
+        setEmoji(null)
     }
 
     return (
         <>
-            { !message.deleted && 
+            { !message.deleted &&
             <div className="message-actions d-flex aic jce gap-5" data-message={message.id}>
                 { !["emoji"].includes(message.type) &&<div className="emoji-container">
-                    <div data-tooltip-id="tooltip" data-tooltip-content={t('message.react')}>
-                    <BsFillEmojiSmileFill  className="react-icon" onClick={handleClickEmoji} />
-                    {emoji && <div className="emoji" data-message={message.id} >
-                        <Picker data={{...data, theme: "light" }} perLine={9} onEmojiSelect={handleEmoji} />
-                    </div>}
+                    <div data-tooltip-id="tooltip" data-tooltip-content={t('message.react')}  className="react-emoji-picker-container">
+                        <BsFillEmojiSmileFill onClick={handleEmoji} />
+                        <div className="react-emoji-picker" data-message={message.id}>
+                            {emoji && <Picker data={{...data, theme: "light" }} perLine={9} onEmojiSelect={(e) => handleClickEmoji(e)} />}
+                        </div>
                     </div>
                 </div>}
-                <FaReply data-tooltip-id="tooltip" data-tooltip-content={t('message.reply')} onClick={() => { handleReply(message) }} />
+                <FaReply data-tooltip-id="tooltip" data-tooltip-content={t('message.reply')} onClick={() => { setReply(message) }} />
                 {message.sender.id == user.id &&
                     <>
                         { !["gif", "emoji", "file"].includes(message.type) && <FaPen data-tooltip-id="tooltip" data-tooltip-content={t('message.edit')} className={`${edition?.id === message.id && "selected"}`} onClick={() => { edition.active ? setEdition({active: false, id: null, content: null}) : setEdition({active: true, id: message.id, content: message.content}) }} /> }

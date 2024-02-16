@@ -21,8 +21,8 @@ export const Emoji = ({ message, type, option }) => {
         <div className="message-content-container">
           <div className={`message-content ${type} ${message.position}`}>
             {message.content}
+            {!isMobileView && <Options message={message} />}
           </div>
-          {!isMobileView && <Options message={message} />}
         </div>
       </div>
     </div>
