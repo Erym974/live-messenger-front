@@ -20,15 +20,15 @@ export const File = ({ message, type, option }) => {
         {(message.position === "bottom" || message.position === "both") && <img src={message.sender.profilePicture} className="message-profile-picture" />}
       </div>}
       <div className="message-content-container">
-        <div className={`message-content ${type} ${message.position}`} onClick={onMessageClick}>
+        <div className={`message-content ${type} ${message.position}`} >
           {message.files.map((file, index) => 
-              <div key={index} className="message-file">
+              <div key={index} className="message-file" onClick={onMessageClick}>
                 <img src={file.path} alt={file.name} />
               </div>
           )}
-        {<Reactions message={message} />}
+          {<Reactions message={message} />}
+          {!isMobileView && <Options message={message} />}
         </div>
-        {!isMobileView && <Options message={message} />}
       </div>
     </div>
   )

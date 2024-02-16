@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { removeConversation, setGroup, setGroups, setReply as setReplySlice, setMessages, setMessage, newMessage, replaceMessage, setEdition as setSliceEdition } from "../Slices/messengerSlice"
+import { removeConversation, setGroup, setGroups, setReply as setReplySlice, setEmoji as setEmojiSlice, setMessages, setMessage, newMessage, replaceMessage, setEdition as setSliceEdition } from "../Slices/messengerSlice"
 import axios from "../Api/axios"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { socket } from "../socket"
@@ -9,7 +9,7 @@ import toast from "react-hot-toast"
 export default function useMessenger() {
 
     const dispatch = useDispatch()
-    const { group, groups, messages, message, edition, reply, messages_showed } = useSelector(state => state.messenger)
+    const { group, groups, messages, message, edition, reply, emoji, messages_showed } = useSelector(state => state.messenger)
     const { auth } = useSelector(state => state.auth)
 
     const [conversation, setConversation] = useState(null)
@@ -175,6 +175,10 @@ export default function useMessenger() {
         dispatch(setReplySlice(message))
     }
 
+    const setEmoji = async (position, message) => {
+        dispatch(setEmojiSlice(position, message))
+    }
+
     const kickUser = async (user) => {
         socket.emit('kick-user', {id: group.id, user: user, token: auth})
     }
@@ -183,6 +187,6 @@ export default function useMessenger() {
         socket.emit('promote-user', {id: group.id, user: user, token: auth})
     }
 
-    return { onKick, setConversation, fetchGroups, kickUser, promoteUser, messageIsFetching, messageHasNextPage, groupResponse, groups, group, messages, message, messages_showed, edition, groupsIsLoading, reply, messageFetchNextPage, setReply, onMessageReceived, setEdition, fetchGroup, sendMessage, activeMessage,  deleteMessage, editMessage, reactToMessage }
+    return { onKick, setConversation, fetchGroups, kickUser, promoteUser, setEmoji, emoji, messageIsFetching, messageHasNextPage, groupResponse, groups, group, messages, message, messages_showed, edition, groupsIsLoading, reply, messageFetchNextPage, setReply, onMessageReceived, setEdition, fetchGroup, sendMessage, activeMessage,  deleteMessage, editMessage, reactToMessage }
 
 }

@@ -31,11 +31,11 @@ export const Gif = ({ message, type, option }) => {
               <span>{message.reply.content}</span>
         </div>}
         <div className="message-content-container">
-          <div className={`message-content ${type} ${message.position}`} onClick={onMessageClick}>
-              <img src={getGifUrl()} alt={getGifUrl()} />
+          <div className={`message-content ${type} ${message.position}`} >
+              <img src={getGifUrl()} alt={getGifUrl()} onClick={onMessageClick} />
               {<Reactions message={message} />}
+              {!isMobileView && <Options message={message} />}
           </div>
-          {!isMobileView && <Options message={message} />}
         </div>
       </div>
     </div>

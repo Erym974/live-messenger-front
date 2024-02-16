@@ -7,6 +7,7 @@ export const messengerSlice = createSlice({
         groups: [],
         messages: [],
         message: null,
+        emoji: null,
         reply: null,
         subMenu: null,
         edition: {active: false, id: null, content: null},
@@ -52,6 +53,9 @@ export const messengerSlice = createSlice({
         setReply: (state, action) => {
             state.reply = action.payload;
         },
+        setEmoji: (state, action) => {
+            state.emoji = action.payload;
+        },
         removeConversation: (state, action) => {
             state.groups = state.groups.filter(group => group.id !== action.payload)
         },
@@ -62,4 +66,4 @@ export const messengerSlice = createSlice({
     }
 })
 
-export const { moveConversationToTop, removeConversation, setReply, setTotalMessages, setGroup, setGroups, setSubMenu, setMessages, setMessage, newMessage, replaceMessage, setToggleScroll, setEdition, setLoadingGroups, setLoadingGroup } = messengerSlice.actions;
+export const { moveConversationToTop, removeConversation, setReply, setEmoji, setTotalMessages, setGroup, setGroups, setSubMenu, setMessages, setMessage, newMessage, replaceMessage, setToggleScroll, setEdition, setLoadingGroups, setLoadingGroup } = messengerSlice.actions;

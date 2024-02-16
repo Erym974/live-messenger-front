@@ -59,6 +59,18 @@ export default function Chat({ conversation }) {
 
   /**
    * 
+   * When the group changing reset all the values
+   * 
+   */
+  useEffect(() => {
+    setContent("")
+    setReply()
+    setEdition({active: false, id: null, content: null})
+    setFiles([])
+  }, [conversation])
+
+  /**
+   * 
    * When user is inactif since too much
    * 
    */
@@ -124,7 +136,6 @@ export default function Chat({ conversation }) {
  * 
  * When a user click on a Gif 
  */
-
   const onGifClick = (gif) => {
     toggleGif(false);
     sendMessage(conversation?.id, `gif:${gif?.url}`);
@@ -279,6 +290,8 @@ export default function Chat({ conversation }) {
   };
 
   const handleMembers = () => openModal("Members", group)
+
+
 
   return (
     <section id="chat">

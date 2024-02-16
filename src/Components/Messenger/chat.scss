@@ -102,11 +102,12 @@ section#chat {
     }
 
     main {
+        position: relative;
         flex: 1;
+        padding: 15px;
         overflow-y: scroll;
         background-color: var(--color-white);
         box-shadow: var(--box-shadow);
-        padding: 15px;
         border-radius: 8px;
         transition: 0.4s ease-in-out;
         &::-webkit-scrollbar {
@@ -121,18 +122,33 @@ section#chat {
             justify-content: center;
         }
 
+
+
         .messages {
 
+            position: relative;
             display: flex;
             flex-direction: column;
             padding: 15px 0;
             gap: 6px;
 
+            .react-emoji-picker-container {
+
+                position: relative;
+
+                z-index: 9999;
+                .react-emoji-picker {
+                    top: 25px;
+                    position: absolute;
+                    z-index: 9999;
+                }
+            }
+
             .message-options-container {
                 position: fixed;
                 height: 100%; width: 100%;
                 top: 0; left: 0;
-                z-index: 3;
+                z-index: 1000;
                 backdrop-filter: blur(7px);
 
                 display: flex;
@@ -255,6 +271,7 @@ section#chat {
                         white-space: pre-wrap;
                         word-wrap: break-word;
                         color: #fff !important;
+                        z-index: 500;
                         
                         &.emoji,
                         &.text {
@@ -285,6 +302,7 @@ section#chat {
                             max-width: 100%;
                             cursor: pointer;
                             img {
+                                z-index: 50;
                                 width: 100%;
                                 height: auto;
                                 object-fit: contain;
@@ -318,6 +336,8 @@ section#chat {
                         padding: 5px 10px;
                         border-radius: 20px;
                         left: calc(100% + 20px);
+                        top: 50%;
+                        transform: translateY(-50%);
                         gap: 10px;
                         background-color: var(--color-white-darken);
                         color: var(--color-dark);
@@ -325,14 +345,19 @@ section#chat {
                         display: none;
     
                         .emoji-container {
+                            z-index: 10000;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
                             .emoji {
                                 width: 100%;
                                 position: fixed;
                                 z-index: 10000;
+                                left: 50px;
                                 bottom: 0 !important;
-                                left: -5px !important;
                                 cursor: pointer;
                                 em-emoji-picker {
+                                    background-color: red;
                                     height: 350px;
                                 }
                             }
@@ -367,7 +392,6 @@ section#chat {
 
                         svg {
                             font-size: 13px !important;
-                            // height: 13px !important;
                             width: 13px !important;
                             rotate: 90deg;
                             transform: scaleX(-1);
