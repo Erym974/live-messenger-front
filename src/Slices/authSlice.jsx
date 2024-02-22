@@ -32,4 +32,4 @@ export const authSlice = createSlice({
     }
 })
 
-export const { setLoading, setAuth, setUser, setNewConnection } = authSlice.actions;
+export const { setLoading, setAuth, setUser } = authSlice.actions;

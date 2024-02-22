@@ -2,25 +2,24 @@
 
 section#chat {
 
-
     // Mobile devices
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    width: 100%;
     color: var(--color-dark);
+    overflow: hidden;
 
     header {
         display: flex;
         align-items: center;
         justify-content: space-between;
 
-        width: 100%;
         max-height: 10vh;
         background-color: var(--color-white);
         box-shadow: var(--box-shadow);
         transition: 0.4s ease-in-out;
-        z-index: 1;
+        z-index: 998;
         padding: 15px 10px 15px 25px;
         border-radius: 8px;
 
@@ -58,6 +57,9 @@ section#chat {
                 position: relative;
 
                 .dropdown-menu {
+
+                    
+
                     &[dropdown-menu="false"] {
                         display: none;
                     }
@@ -67,6 +69,7 @@ section#chat {
                     }
 
                     position: absolute;
+                    z-index: 99999 !important;
                     top: 125%;
                     right: 0;
                     background-color: var(--color-white-darken);
@@ -76,7 +79,6 @@ section#chat {
                     min-width: 200px;
                     flex-direction: column;
                     gap: 10px;
-                    z-index: 1;
 
                     .dropdown-item {
                         // padding: 10px 20px;
@@ -115,14 +117,13 @@ section#chat {
         }
         display: flex;
         flex-direction: column;
+        z-index: 997;
 
         #load-more {
             display: flex;
             align-items: center;
             justify-content: center;
         }
-
-
 
         .messages {
 
@@ -131,18 +132,6 @@ section#chat {
             flex-direction: column;
             padding: 15px 0;
             gap: 6px;
-
-            .react-emoji-picker-container {
-
-                position: relative;
-
-                z-index: 9999;
-                .react-emoji-picker {
-                    top: 25px;
-                    position: absolute;
-                    z-index: 9999;
-                }
-            }
 
             .message-options-container {
                 position: fixed;
@@ -201,8 +190,6 @@ section#chat {
                 position: relative;
                 width: 100%;
                 display: flex;
-
-                display: flex;
                 align-items: center;
                 gap: 5px;
 
@@ -225,6 +212,25 @@ section#chat {
                     display: flex;
                     flex-direction: column;
                     width: 100%;
+
+                    .react-emoji-picker-container {
+                        display: flex;
+                        position: relative;
+    
+                        .react-emoji-picker {
+
+                            position: absolute;
+                            z-index: 9999 !important;
+
+                            &.top {
+                                top: 25px !important;
+                            }
+        
+                            &.bottom {
+                                bottom: 25px !important;
+                            }
+                        }
+                    }
                 }
 
                 .message-reply {
@@ -313,20 +319,47 @@ section#chat {
                         .message-reacts {
                             position: absolute;
                             bottom: -17.5px;
+                            right: 0;
 
                             display: flex;
                             align-items: center;
                             justify-content: flex-end;
                             gap: 5px;
 
-                            width: 100%;
+                            background-color: $color-primary;
+                            border-radius: 50px;
+
+                            .message-react-count {
+                                padding: 0 10px 0 0px;
+                            }
 
                             .message-react {
+                                position: relative;
                                 display: flex;
-                                padding: 0 5px;
 
-                                background-color: $color-primary;
-                                border-radius: 50px;
+                                &.multiple {
+                                    height: 23px;
+                                    width: 30px;
+                                    span {
+                                        position: absolute;
+                                        left: 12.5px;
+                                        top: 0%;
+
+                                        &:nth-child(1) {
+                                            z-index: 350;
+                                            background-color: $color-primary;
+                                            border-radius: 50%;
+                                        }
+                                        &:nth-child(2) {
+                                            z-index: 259;
+                                            left: 1px;
+                                        }
+                                    }
+                                }
+
+                                // span {
+                                //     position: absolute;
+                                // }
                             }
                         }
                     }
@@ -372,6 +405,7 @@ section#chat {
                     }
                 }
 
+                &.message-actions__open,
                 &:hover {
                     .message-actions {
                         display: flex;
@@ -379,7 +413,6 @@ section#chat {
                 }
 
                 &.me {
-                    justify-content: flex-end;
 
                     .message-body {
                         align-items: flex-end;
@@ -388,7 +421,6 @@ section#chat {
                     .message-reply {
                         position: relative;
                         flex-direction: row-reverse;
-                        padding-right: 20px;
 
                         svg {
                             font-size: 13px !important;
@@ -400,7 +432,7 @@ section#chat {
                     }
 
                     .message-content-container {
-                        flex-direction: row-reverse;
+                        // flex-direction: row-reverse;
 
                         .message-content {
                             &.text {
@@ -417,12 +449,10 @@ section#chat {
                             }
     
                             &.gif {
+                                z-index: 0;
                                 flex-direction: row-reverse;
                             }
 
-                            .message-reacts {
-                                justify-content: flex-start;
-                            }
                         } 
 
                         .message-actions {
@@ -431,14 +461,18 @@ section#chat {
                         }
                     }
 
+                    .react-emoji-picker-container {
+        
+                        .react-emoji-picker {
+                            right: 0;
+                        }
+                    }
+
 
                 }
 
                 &.participant {
                     
-                    .message-reply {
-                        padding-left: 20px;
-                    }
                     .message-content {
                         &.text {
                             &.top {
@@ -461,12 +495,12 @@ section#chat {
 
     footer {
         transition: 0.4s ease-in-out;
-        width: 100%;
 
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        z-index: 998;
 
         .files {
             width: 100%;

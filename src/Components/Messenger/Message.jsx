@@ -241,7 +241,7 @@ export default function Message({ message }) {
 
     return (
         <>
-            {optionsFor && <div className={`message-options-container ${parsedMessage?.me ? "me" : "participant"}`}>
+            {optionsFor && <div className={`message-options-container ${parsedMessage?.me ? "me" : "participant"}`} >
                 {getMessage(true)}
                 <ul className="message-options-mobile">
                     <li className="message-option" onClick={() => handleOptionClick('react')}>

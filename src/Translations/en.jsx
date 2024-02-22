@@ -5,6 +5,7 @@ export default {
         saving: "Saving",
         kick: "Kick",
         promote: "Promote",
+        all: "All"
     },
     settings: {
         general: "General",
@@ -41,6 +42,14 @@ export default {
         friendCode: "Your friend code : {{ code }}",
         friendCodeCopied: "Friend code copied !",
         notAllowNewFriendRequest: "This user does not allow new friend requests",
+    },
+    reactions: {
+        title: "Reactions",
+        remove: "Click to remove"
+    },
+    modal: {
+        cancel: "Cancel",
+        close: "Close",
     },
     general: {
         firstname: "Firstname",

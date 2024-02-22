@@ -5,6 +5,7 @@ export default {
         saving: "Creation",
         kick: "Expulser",
         promote: "Promouvoir",
+        all: "Tout"
     },
     settings: {
         general: "Général",
@@ -26,6 +27,14 @@ export default {
         notyet: "Aucun message",
         sentfile: "{{ count }} fichier envoyé",
         sentfiles: "{{ count }} fichier envoyés",
+    },
+    reactions: {
+        title: "Reactions",
+        remove: "Cliquer pour supprimer"
+    },
+    modal: {
+        cancel: "Annuler",
+        close: "Fermer",
     },
     friends: {
       mutual_friend: "{{ count }} ami en commun",
