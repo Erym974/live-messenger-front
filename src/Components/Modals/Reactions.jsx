@@ -31,7 +31,7 @@ export default function CreateGroup() {
                             <span>{t('global.all')}</span>
                         </div>
                         {params?.reactions?.map((reaction, index) => 
-                            <div key={index} className="text-dark" style={stylizedTabHeaderDiv()} onClick={() => setActiveTab(reaction.content)}>
+                            <div key={`${index}-${reaction.content}-${reaction.count}`} className="text-dark" style={stylizedTabHeaderDiv()} onClick={() => setActiveTab(reaction.content)}>
                                 <span>{reaction.content} {reaction.count}</span>
                             </div>
                         )}

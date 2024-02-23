@@ -66,7 +66,7 @@ export default function Messages({ conversation, messages }) {
             }
             {messageIsFetching && <Loader />}
             <div className="messages">
-                <Tooltip id="tooltip" data-tooltip-offset="55" data-tooltip-place="top" />
+                <Tooltip id="tooltip" data-tooltip-offset="55" data-tooltip-place="top" style={{ zIndex: 99999 }} />
 
                 {(!messageIsFetching && messages?.length == 0) && <NoMessageYet />}
                 {messages?.map(message => <Message key={message.id} message={message} /> )}

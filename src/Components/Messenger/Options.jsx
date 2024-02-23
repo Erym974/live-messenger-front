@@ -1,13 +1,12 @@
-import { FaRegTrashAlt, FaPen, FaEllipsisH } from 'react-icons/fa'
+import { FaRegTrashAlt, FaPen } from 'react-icons/fa'
 import { BsFillEmojiSmileFill } from 'react-icons/bs'
 
 import { useTranslation } from 'react-i18next'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import { useAuth, useMessenger } from '../../Hooks/CustomHooks'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import { FaReply } from 'react-icons/fa6'
-import EmojiPicker, { Theme } from 'emoji-picker-react';
 
 export const Options = ({ message }) => {
 
@@ -17,7 +16,7 @@ export const Options = ({ message }) => {
 
     useEffect(() => {
         if(!emoji) {
-            document.querySelectorAll('.message-actions__open').forEach(e => e.classList.remove('message-actions__open'))
+            // document.querySelectorAll('.message-actions__open').forEach(e => e.classList.remove('message-actions__open'))
             return
         }
         if(emoji.message != message.id) return
@@ -41,6 +40,8 @@ export const Options = ({ message }) => {
         }
 
         return () => {
+            document.querySelector(`.message[data-message="${message.id}"]`)?.classList.remove('message-actions__open')
+            element.classList.remove('bottom', 'top')
             document.removeEventListener('click', checkEmojiClick, true)
             document.removeEventListener('mousemove', checkMouseDistance, true)
         }
@@ -75,7 +76,7 @@ export const Options = ({ message }) => {
         }
     }
 
-    const handleEmoji = (e) => setEmoji({ message: message.id, event: {screenY: e.screenY} })
+    const handleEmoji = (e) => setEmoji({ message: message.id, event: {screenY: e.screenY, screenX: e.screenX} })
 
     const handleClickEmoji = (evt) => {
         reactToMessage(message.id, evt.native)
@@ -86,12 +87,10 @@ export const Options = ({ message }) => {
         <>
             { !message.deleted &&
             <div className="message-actions d-flex aic jce gap-5" data-message={message.id}>
-                { !["emoji"].includes(message.type) && <div className="emoji-container">
-                    <div data-tooltip-id="tooltip" data-tooltip-content={t('message.react')}  className="react-emoji-picker-container">
-                        <BsFillEmojiSmileFill onClick={handleEmoji} />
-                        <div className={`react-emoji-picker`} data-message={message.id}>
-                            {(emoji && emoji.message == message.id) && <Picker data={{...data, theme: "dark" }} perLine={9} onEmojiSelect={(e) => handleClickEmoji(e)} /> }
-                        </div>
+                { !["emoji"].includes(message.type) && <div className="react-emoji-picker-container" data-tooltip-id="tooltip" data-tooltip-content={t('message.react')}>
+                    <BsFillEmojiSmileFill onClick={handleEmoji} />
+                    <div className={`react-emoji-picker`} data-message={message.id}>
+                        {(emoji && emoji.message == message.id) && <Picker data={{...data, theme: "dark" }} perLine={9} onEmojiSelect={(e) => handleClickEmoji(e)} /> }
                     </div>
                 </div>}
                 <FaReply data-tooltip-id="tooltip" data-tooltip-content={t('message.reply')} onClick={() => { setReply(message) }} />

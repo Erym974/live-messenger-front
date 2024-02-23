@@ -13,13 +13,11 @@ export const Reactions = ({ message }) => {
     }
   }
 
-  const onReactionsClick = () => {
-      openModal("Reactions", message)
-  }
+  const onReactionsClick = () => openModal("Reactions", message)
 
   return (
     <>
-    {message.reactions && <div className="message-reacts" onClick={onReactionsClick}>
+    {message.reactions && <div className="message-reactions" onClick={onReactionsClick}>
         <div className={`message-react${getReactionsCount() > 1 ? " multiple" : ""}`}>
           {message.reactions.slice(0, 2).map((reaction, index) => 
             <span key={index}>{reaction.content}</span>

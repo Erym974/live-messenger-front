@@ -19,7 +19,7 @@ export const Text = ({ message, type, option }) => {
           </div>}
           <div className="message-content-container">
             <div className={`message-content ${type} ${message.position}`}>
-                {message.content}
+                <p className="message-text">{message.content}</p>
                 {message.reactions.length > 0 && <Reactions message={message} />}
                 {!isMobileView && <Options message={message} />}
             </div>
