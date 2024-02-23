@@ -1,13 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import useModal from '../../Hooks/useModal'
 
 export const Reactions = ({ message }) => {
+
+  const { openModal } = useModal()
+
+  const getReactionsCount = () => {
+    if(message.reactions) {
+      return message.reactions.reduce((acc, reaction) => {
+        return acc + reaction.count
+      }, 0)
+    }
+  }
+
+  const onReactionsClick = () => openModal("Reactions", message)
+
   return (
     <>
-    {message.reactions && <div className="message-reacts">
-        {message.reactions.map((reaction, index) => <div className="message-react" key={index}>
-            <span>{reaction.content}</span>
-            {reaction.count > 1 && <span>+{reaction.count}</span>}
-        </div>)}
+    {message.reactions && <div className="message-reactions" onClick={onReactionsClick}>
+        <div className={`message-react${getReactionsCount() > 1 ? " multiple" : ""}`}>
+          {message.reactions.slice(0, 2).map((reaction, index) => 
+            <span key={index}>{reaction.content}</span>
+          )}
+        </div>
+        {getReactionsCount() > 1 && <span className="message-react-count">+{getReactionsCount()}</span>}
     </div>}
     </>
   )
