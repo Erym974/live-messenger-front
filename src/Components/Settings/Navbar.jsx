@@ -8,6 +8,9 @@ import { toggleAside } from "../../Slices/settingsSlice";
 import Profile from "../Profile";
 import { ModalImage } from "../ModalImage";
 
+import { MdOutlineSettings } from "react-icons/md";
+import { FaUserAlt, FaLock, FaUserFriends } from "react-icons/fa";
+
 export const Navbar = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -21,18 +24,22 @@ export const Navbar = () => {
     {
       url: "/settings/general",
       title: t("settings.general"),
+      icon: <MdOutlineSettings />
     },
     {
       url: "/settings/account",
       title: t("settings.my_account"),
+      icon: <FaUserAlt />
     },
     {
       url: "/settings/security",
       title: t("settings.security"),
+      icon: <FaLock />
     },
     {
       url: "/settings/friends",
       title: t("settings.my_friends"),
+      icon: <FaUserFriends />
     },
   ]);
 
@@ -47,16 +54,13 @@ export const Navbar = () => {
       {openImage && <ModalImage />}
       <ul>
         {pages.map((page, index) => (
-          <li key={index} onClick={() => handleClick(page)}>
-            {page.title}
+          <li key={index} onClick={() => handleClick(page)} className="link">
+            <span className="text">{page.title}</span>
+            <span className="icon">{page.icon}</span>
           </li>
         ))}
       </ul>
-      <ButtonRounded
-        size="small"
-        attributes={{ "data-open-aside": "true" }}
-        onClick={handleResponsiveAside}
-      >
+      <ButtonRounded size="small" attributes={{ "data-open-aside": "true" }} onClick={handleResponsiveAside}>
         <FaXmark />
       </ButtonRounded>
     </>

@@ -1,11 +1,42 @@
 export default {
+    public: {
+        home: "Accueil",
+        blog: "Blog",
+        careers: "Carrières",
+        register: "S'inscrire",
+        login: "Connexion",
+        homeDescription: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo voluptate quibusdam dolore nobis dolores labore ex, at eligendi voluptatibus necessitatibus fugit error, voluptas minima beatae enim quisquam animi eum atque. Debitis non perferendis fugiat. Sed necessitatibus commodi possimus laborum provident maxime soluta natus ipsum voluptas illo deleniti excepturi, obcaecati minus, magni ea cumque autem harum officia tempora consequatur unde?",
+        block1_title: "Créez un endroit sur invitation où vous vous sentez chez vous",
+        block1_description: "Les serveurs Discord sont organisés en canaux basés sur des sujets où vous pouvez collaborer, partager et simplement parler de votre journée sans encombrer une conversation de groupe.",
+        block2_title: "Où passer du temps ensemble est facile",
+        block2_description: "Prenez place dans un salon vocal quand vous êtes disponible. Les amis de votre serveur peuvent voir que vous êtes disponible et venir immédiatement discuter sans avoir à appeler.",
+        block3_title: "Restez en contact avec vos amis",
+        block3_description: "Faites fonctionner une communauté de toutes tailles avec des outils de modération et un accès personnalisé aux membres. Donnez à vos membres des pouvoirs spéciaux, configurez des canaux privés, et plus encore.",
+        links: "Liens",
+        terms: "Conditions",
+        privacy: "Confidentialité",
+        all: "Tous"
+    },
+    addMember: {
+        title: "Rajouter un membre",
+        members: "Membres"
+    },
+    error: {
+        occured: "Une erreur est survenue",
+        lost: "Il semble que vous soyez perdu",
+        back_home: "Revenir en lieu sûr",
+        please_retry: "Merci de bien vouloir réessayer ultérieurement.",
+        server_connection_failed: "Impossible de se connecter au serveur",
+        please_wait: "Merci de patienter quelques secondes...",
+        reload: "Recharger"
+    },
     global: {
         membersList: "Liste des membres",
-        error: "Une erreur est survenue",
         saving: "Creation",
         kick: "Expulser",
         promote: "Promouvoir",
-        all: "Tout"
+        all: "Tout",
+        loading: "Chargement",
     },
     settings: {
         general: "Général",
@@ -32,10 +63,6 @@ export default {
         title: "Reactions",
         remove: "Cliquer pour supprimer"
     },
-    modal: {
-        cancel: "Annuler",
-        close: "Fermer",
-    },
     friends: {
       mutual_friend: "{{ count }} ami en commun",
       mutual_friends: "{{ count }} amis en commun",
@@ -51,6 +78,15 @@ export default {
       friendCodeCopied: "Code ami copié !",
       notAllowNewFriendRequest: "Cet utilisateur n'autorise pas les nouvelles demandes d'amis",
     },
+    activeAccount: {
+        request_sended: "Un email d'activation vous a été envoyé. Veuillez vérifier votre boîte de réception ainsi que votre dossier de courrier indésirable.",
+        account_actived: "Votre compte a été activé avec succès",
+        activation: "Activation en cours",
+        verified: "Votre email a bien été vérifiée",
+        send_email: "Envoyer un email d'activation",
+        email_verified: "Votre adresse mail a bien été vérifiée",
+        email_not_verified: "Votre adresse mail n'a pas encore été vérifiée",
+    },
     general: {
         firstname: "Prénom",
         lastname: "Nom",
@@ -58,23 +94,36 @@ export default {
         password: "Mot de passe",
         newPassword: "Nouveau mot de passe",
         confirmNewPassword: "Confirmer votre mot de passe",
+        all_fields_required: "Tous les champs sont requis",
+        password_mismatch: "Les mots de passe ne correspondent pas",
         email: "Email",
         save: "Enregistrer",
         saving: "Enregistrement",
+        saved: "Enregistré",
     },
     auth: {
         loggingin: "Connexion en cours",
         login: "Se connecter",
         register: "S'inscrire",
+        registered: "Votre compte a bien été créé",
+        registration_in_progress: "Création du compte en cours...",
         password: "Mot de passe",
         confirm_password: "Confirmez votre mot de passe",
         already_registered: "Déjà inscrit ?",
         not_registered: "Pas encore inscrit ?",
         login_failed: "Identifiants invalides",
         registration_failed: "Inscription échouée",
+        password_cannot_be_empty: "Le mot de passe ne peut pas être vide",
         remember: "Se souvenir de moi",
         expired: "Votre session a expirée",
         wrong_credentials: "Identifiants invalides",
+        reset_password: "Mot de passe oublié ?",
+        sending: "Envoi...",
+        reset_password_title: "Réinitialiser votre mot de passe",
+        reset_password_edited: "Votre mot de passe a bien été modifié",
+        reset_password_send: "Envoyer",
+        reset_password_sended: "Si cette email correspond à un compte, un email de réinitialisation de mot de passe vous a été envoyé. Vérifiez votre boîte de réception et vos spams.",
+        reset_password_back: "Retourner à la page de connexion",
     },
     account: {
         edited: "Votre compte a bien été modifié",
@@ -105,10 +154,18 @@ export default {
         membersLength: "2 membres minimum",
         members: "Membres",
     },
+    removeGroup: {
+        title: "Supprimer le groupe"
+    },
+    leaveGroup: {
+        title: "Quitter le groupe"
+    },
     modal: {
         create: "Créer",
         cancel: "Annuler",
-        save: "Sauvegarder"
+        save: "Sauvegarder",
+        close: "Fermer",
+        add: "Ajouter",
     }
 }
 

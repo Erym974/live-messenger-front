@@ -1,11 +1,42 @@
 export default {
+    public: {
+        home: "Home",
+        blog: "Blog",
+        careers: "Careers",
+        register: "Register",
+        login: "Login",
+        homeDescription: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo voluptate quibusdam dolore nobis dolores labore ex, at eligendi voluptatibus necessitatibus fugit error, voluptas minima beatae enim quisquam animi eum atque. Debitis non perferendis fugiat. Sed necessitatibus commodi possimus laborum provident maxime soluta natus ipsum voluptas illo deleniti excepturi, obcaecati minus, magni ea cumque autem harum officia tempora consequatur unde?",
+        block1_title: "Create an invite-only place where you belong",
+        block1_description: "Discord servers are organized into topic-based channels where you can collaborate, share, and just talk about your day without clogging up a group chat.",
+        block2_title: "Where hanging out is easy",
+        block2_description: "Grab a seat in a voice channel when you’re free. Friends in your server can see you’re around and instantly pop in to talk without having to call.",
+        block3_title: "Keep in touch with your friends",
+        block3_description: "Get a community of any size running with moderation tools and custom member access. Give members special powers, set up private channels, and more.",
+        links: "Links",
+        terms: "Terms",
+        privacy: "Privacy",
+        all: "All"
+    },
+    addMember: {
+        title: "Add a member",
+        members: "Members"
+    },
+    error: {
+        occured: "An error occurred",
+        lost: "It seems you are lost",
+        back_home: "Return to safe place",
+        please_retry: "Please try again later.",
+        server_connection_failed: "Failed to connect to the server",
+        please_wait: "Please wait few seconds...",
+        reload: "Reload"
+    },
     global: {
         membersList: "Members list",
-        error: "An error occurred",
         saving: "Saving",
         kick: "Kick",
         promote: "Promote",
-        all: "All"
+        all: "All",
+        loading: "Loading",
     },
     settings: {
         general: "General",
@@ -48,8 +79,11 @@ export default {
         remove: "Click to remove"
     },
     modal: {
+        create: "Create",
         cancel: "Cancel",
+        save: "Save",
         close: "Close",
+        add: "Add",
     },
     general: {
         firstname: "Firstname",
@@ -58,23 +92,45 @@ export default {
         email: "Email",
         save: "Save",
         saving: "Saving",
+        password_mismatch: "Passwords do not match",
+        all_fields_required: "All fields are required",
         password: "Password",
         newPassword: "New password",
         confirmNewPassword: "Confirme your password",
+        saved: "Saved",
+    },
+    activeAccount: {
+        request_sended: "An activation email has been sent to you. Please check your inbox and spam folder.",
+        account_actived: "Your account has been activated successfully",
+        activation: "Activation in progress",
+        verified: "Your email has been verified",
+        send_email: "Send an activation email",
+        email_verified: "Your email has been verified",
+        email_not_verified: "Your email has not been verified yet",
     },
     auth: {
         loggingin: "Logging in",
         login: "Login",
         register: "Register",
+        registered: "You're account has been created successfully",
+        registration_in_progress: "Registration in progress...",
         password: "Password",
         confirm_password: "Confirm password",
         already_registered: "Already have an account ?",
         not_registered: "Not registered yet ?",
         login_failed: "Invalid credentials",
         registration_failed: "Registration failed",
+        password_cannot_be_empty: "Password cannot be empty",
         remember: "Remember me",
         expired: "You're session has expired",
         wrong_credentials: "Invalid credentials",
+        sending: "Sending...",
+        reset_password: "Forgot password ?",
+        reset_password_title: "Reset your password",
+        reset_password_edited: "Your password has been edited successfully",
+        reset_password_send: "Send",
+        reset_password_sended: "If this email corresponds to an account, a password reset email has been sent to you. Please check your inbox and spam folder.",
+        reset_password_back: "Go back to the login form",
     },
     account: {
         edited: "You're account was edited successfully",
@@ -87,6 +143,9 @@ export default {
         edit: "Edit",
         reply: "Reply",
         react: "React"
+    },
+    removeGroup: {
+        title: "Remove group"
     },
     profile: {
         see: "See profile",
@@ -104,6 +163,9 @@ export default {
         name: "Group name",
         membersLength: "2 members minimum",
         members: "Members",
+    },
+    leaveGroup: {
+        title: "Leave group"
     },
     form: {
         create: "Create",

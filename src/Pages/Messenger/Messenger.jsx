@@ -15,10 +15,9 @@ import { SearchModal } from '../../Components/Search/SearchModal';
 export default function Messenger() {
 
   const { profile, profileIsLoading } = useProfile();
-  const navigate = useNavigate();
   const { id } = useParams()
   const { open: openImage } = useSelector(state => state.images)
-  const { groups, groupsIsLoading } = useMessenger()
+  const { setConversation, groups, groupIsLoading, groupsIsLoading, group } = useMessenger()
   const [hasNoGroups, setHasNoGroups] = useState(false);
   const { searchModal } = useModal();
 
@@ -31,10 +30,8 @@ export default function Messenger() {
   }, [groups])
 
     useEffect(() => {
-      if(groupsIsLoading) return
-      if(!id && groups?.length > 0) return navigate(`/messenger/${groups[0]?.id}`)
-      if(id && !groups.find(group => group.id === parseInt(id))) return navigate(`/messenger/${groups[0]?.id}`)
-    }, [id, groupsIsLoading, groups])
+      setConversation(id)
+    }, [id])
 
   return (
     <section id="dashboard">
@@ -45,7 +42,7 @@ export default function Messenger() {
 
       <Aside />
 
-      {(!groupsIsLoading && !hasNoGroups) && <Chat conversation={groups.find(group => group.id === parseInt(id))} />}
+      {(!groupIsLoading && !hasNoGroups) && <Chat conversation={group} />}
       {(!groupsIsLoading && hasNoGroups) && <NoGroupYet />}
 
     </section>

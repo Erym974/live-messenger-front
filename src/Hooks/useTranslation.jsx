@@ -23,6 +23,10 @@ export default function useTranslation() {
         i18n.changeLanguage(language)
     }, [language])
 
-    return { language, setLanguage, t }
+    const getLanguageData = (language) => {
+        return Language.LIST.find(lang => lang.code === language)
+    }
+
+    return { language, setLanguage, t, getLanguageData, Languages: Language.LIST }
 
 }

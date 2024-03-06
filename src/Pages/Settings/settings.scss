@@ -47,9 +47,12 @@ section#settings {
             list-style: none;
 
             li {
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 background-color: $color-primary;
-                color: var(--color-dark);
-                padding: 10px 20px;
+                color: #fff;
+                padding: 10px;
                 border-radius: 20px;
                 cursor: pointer;
                 transition: 0.4s ease-in-out;
@@ -57,12 +60,40 @@ section#settings {
                 &:hover {
                     background-color: darken($color-primary, 10%);
                 }
+
+                .text {
+                    display: none;
+                }
+
+                .icon {
+                    height: 20px !important; 
+                    width: 20px !important;
+                    svg {
+                        color: #fff;
+                        height: inherit !important; 
+                        width: inherit !important;
+                    }
+                }
+                
             }
         }
 
         @media screen and (min-width: 768px) {
             & > button {
                 display: none;
+            }
+
+            ul {
+                li {
+                    padding: 10px 20px;
+                    .text {
+                        display: block;
+                    }
+
+                    .icon {
+                        display: none;
+                    }
+                }
             }
         }
     }
@@ -343,7 +374,12 @@ section#settings {
     }
 
     & > footer {
-        display: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        gap: 30px;
+        padding: 10px;
     }
 
 }

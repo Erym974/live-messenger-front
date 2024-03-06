@@ -3,6 +3,7 @@ import { setUser } from "../Slices/authSlice";
 import Notifications from "../Components/Notifications/Notifications"
 import axios from "../Api/axios";
 import { useEffect, useState } from "react";
+import { useTranslation } from "./CustomHooks";
 
 export default function useSettings() {
 
@@ -10,6 +11,7 @@ export default function useSettings() {
 
     const { user } = useSelector(state => state.auth)
     const [isMobileView, setMobileView] = useState(false)
+    const { t } = useTranslation()
     const dispatch = useDispatch()
 
     /** Set the mobile view */
@@ -43,7 +45,7 @@ export default function useSettings() {
             if(!response?.status) return false
             dispatch(setUser(response.datas))
             return true
-        }, "Enregistrement en cours", "Enregistré", "Une erreur est survenue")
+        }, t('general.saving'), t('general.saved'), t('error.occured'))
 
     } 
 
@@ -68,7 +70,7 @@ export default function useSettings() {
             if(!response?.status) return false
             dispatch(setUser(response.datas))
             return true
-        }, "Enregistrement en cours", "Enregistré", "Une erreur est survenue")
+        }, t('general.saving'), t('general.saved'), t('error.occured'))
 
     } 
 

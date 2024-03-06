@@ -2,7 +2,6 @@ import React from 'react'
 import { FaArrowTurnDown } from 'react-icons/fa6'
 import { Options } from '../Options'
 import useSettings from '../../../Hooks/useSettings'
-import { Reactions } from '../Reactions'
 
 export const Emoji = ({ message, type, option }) => {
 
