@@ -7,7 +7,7 @@ import { Footer } from '../../Components/Public/Footer';
 
 export default function Login() {
 
-  const [datas, setDatas] = useState({ email: "admin@admin.fr", password: "admin", remember: false });
+  const [datas, setDatas] = useState({ email: "", password: "", remember: false });
   const [loading, setLoading] = useState(false);
   const { connectUser } = useAuth();
   const { t } = useTranslation()
