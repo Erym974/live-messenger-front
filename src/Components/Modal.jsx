@@ -2,6 +2,10 @@ import React, { useRef } from 'react'
 import useModal from '../Hooks/useModal'
 import CreateGroup from './Modals/CreateGroup'
 import Members from './Modals/Members'
+import Reactions from './Modals/Reactions'
+import AddMember from './Modals/AddMember'
+import RemoveGroup from './Modals/RemoveGroup'
+import LeaveGroup from './Modals/LeaveGroup'
 
 export const Modal = () => {
 
@@ -10,6 +14,10 @@ export const Modal = () => {
   const allowedModal = useRef({
     "CreateGroup": <CreateGroup />,
     "Members": <Members />,
+    "Reactions": <Reactions />,
+    "AddMember": <AddMember />,
+    "LeaveGroup": <LeaveGroup />,
+    "RemoveGroup": <RemoveGroup />
   })
 
   const getModalInstance = () => {

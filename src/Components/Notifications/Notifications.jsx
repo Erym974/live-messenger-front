@@ -37,13 +37,13 @@ const FriendRequest = (invitation) => {
 Notifications.FriendRequest = FriendRequest;
 
 
-const PromiseNotif = (callback, loading, success, error) => {
+const PromiseNotif = (callback, loading, success, err) => {
 
     toast.promise(callback(),
     {
         loading,
         success,
-        error,
+        error: (err) => err.toString().replace("Error: ", ""),
     })
 
 }

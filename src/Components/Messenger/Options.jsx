@@ -1,8 +1,8 @@
-import { FaRegTrashAlt, FaPen, FaEllipsisH } from 'react-icons/fa'
+import { FaRegTrashAlt, FaPen } from 'react-icons/fa'
 import { BsFillEmojiSmileFill } from 'react-icons/bs'
 
 import { useTranslation } from 'react-i18next'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import { useAuth, useMessenger } from '../../Hooks/CustomHooks'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
@@ -11,25 +11,37 @@ import { FaReply } from 'react-icons/fa6'
 export const Options = ({ message }) => {
 
     const { t } = useTranslation()
-    const [emoji, setEmoji] = useState(null)
-    const emojiEvent = useRef() 
-    const { deleteMessage, setEdition, edition, reactToMessage, setReply } = useMessenger()
+    const { deleteMessage, setEdition, edition, reactToMessage, setReply, emoji, setEmoji } = useMessenger()
     const { user } = useAuth()
 
     useEffect(() => {
-        if(!emoji) return
+        if(!emoji) {
+            // document.querySelectorAll('.message-actions__open').forEach(e => e.classList.remove('message-actions__open'))
+            return
+        }
+        if(emoji.message != message.id) return
+
+        let emojiEvent = emoji.event
 
         document.addEventListener('click', checkEmojiClick, true)
         document.addEventListener('mousemove', checkMouseDistance, true)
-        toggleHoverEffect(true)
 
         const element = document.querySelector(`.react-emoji-picker[data-message="${message.id}"]`)
         if(!element) return
-        emojiEvent.current.screenY > 600 ? element.style.bottom = `40px` : element.style.top = `40px`
-        message.sender.id === user.id ? element.style.right = `100px` : element.style.left = `20px`
+
+        document.querySelector(`.message[data-message="${message.id}"]`)?.classList.add('message-actions__open')
+
+        if(emojiEvent.screenY > 500) {
+            element.classList.add('bottom')
+            element.classList.remove('top')
+        } else {
+            element.classList.add('top')
+            element.classList.remove('bottom')
+        }
 
         return () => {
-            toggleHoverEffect(false)
+            document.querySelector(`.message[data-message="${message.id}"]`)?.classList.remove('message-actions__open')
+            element.classList.remove('bottom', 'top')
             document.removeEventListener('click', checkEmojiClick, true)
             document.removeEventListener('mousemove', checkMouseDistance, true)
         }
@@ -46,24 +58,25 @@ export const Options = ({ message }) => {
         if(!element) return
         const rect = element.getBoundingClientRect()
         const y = rect.top + window.scrollY
-        const distance = e.clientY - y
-        if(distance > 500 || distance < -200) return setEmoji(null)
+        const x = rect.left + window.scrollX
+
+        const distanceY = e.clientY - y
+        const distanceX = e.clientX - x
+
+        if(message.me) {
+            if(distanceX > 400 || distanceX < -30) return setEmoji(null)
+        } else {
+            if(distanceX > 400 || distanceX < -50) return setEmoji(null)
+        }
+
+        if(element.classList.contains('bottom')) {
+            if(distanceY > 500 || distanceY < -20) return setEmoji(null)
+        } else {
+            if(distanceY > 450 || distanceY < -40) return setEmoji(null)
+        }
     }
 
-    const toggleHoverEffect = (state = true) => {
-        document.querySelectorAll('.message-actions-container').forEach(container => {
-            if(container.dataset.message != message.id) {
-                if(state) container.classList.add('disabled')
-                else container.classList.remove('disabled')
-            }
-        })
-    }
-
-    const handleEmoji = (e) => {
-        emojiEvent.current = e
-        if(emoji) return setEmoji(null)
-        setEmoji(message.id)
-    }
+    const handleEmoji = (e) => setEmoji({ message: message.id, event: {screenY: e.screenY, screenX: e.screenX} })
 
     const handleClickEmoji = (evt) => {
         reactToMessage(message.id, evt.native)
@@ -74,12 +87,10 @@ export const Options = ({ message }) => {
         <>
             { !message.deleted &&
             <div className="message-actions d-flex aic jce gap-5" data-message={message.id}>
-                { !["emoji"].includes(message.type) &&<div className="emoji-container">
-                    <div data-tooltip-id="tooltip" data-tooltip-content={t('message.react')}  className="react-emoji-picker-container">
-                        <BsFillEmojiSmileFill onClick={handleEmoji} />
-                        <div className="react-emoji-picker" data-message={message.id}>
-                            {emoji && <Picker data={{...data, theme: "light" }} perLine={9} onEmojiSelect={(e) => handleClickEmoji(e)} />}
-                        </div>
+                { !["emoji"].includes(message.type) && <div className="react-emoji-picker-container" data-tooltip-id="tooltip" data-tooltip-content={t('message.react')}>
+                    <BsFillEmojiSmileFill onClick={handleEmoji} />
+                    <div className={`react-emoji-picker`} data-message={message.id}>
+                        {(emoji && emoji.message == message.id) && <Picker data={{...data, theme: "dark" }} perLine={9} onEmojiSelect={(e) => handleClickEmoji(e)} /> }
                     </div>
                 </div>}
                 <FaReply data-tooltip-id="tooltip" data-tooltip-content={t('message.reply')} onClick={() => { setReply(message) }} />

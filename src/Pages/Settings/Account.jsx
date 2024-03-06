@@ -45,20 +45,12 @@ export default function Account() {
     const length = document.getElementById("biography").value.length;
     document.querySelector(".charCount").innerHTML = `${length}/${maxDescChar}`;
 
-    document
-      .getElementById("cover-picture")
-      ?.addEventListener("change", inputFileEventListener, true);
-    document
-      .getElementById("profile-picture")
-      ?.addEventListener("change", inputFileEventListener, true);
+    document.getElementById("cover-picture")?.addEventListener("change", inputFileEventListener, true);
+    document.getElementById("profile-picture")?.addEventListener("change", inputFileEventListener, true);
 
     return () => {
-      document
-        .getElementById("cover-picture")
-        ?.removeEventListener("change", inputFileEventListener, true);
-      document
-        .getElementById("profile-picture")
-        ?.removeEventListener("change", inputFileEventListener, true);
+      document.getElementById("cover-picture")?.removeEventListener("change", inputFileEventListener, true);
+      document.getElementById("profile-picture")?.removeEventListener("change", inputFileEventListener, true);
     };
   }, [datas]);
 
@@ -73,9 +65,7 @@ export default function Account() {
     if (key === "biography") {
       const length = evt.target.value.length;
       if (length > maxDescChar) return;
-      document.querySelector(
-        ".charCount"
-      ).innerHTML = `${length}/${maxDescChar}`;
+      document.querySelector(".charCount").innerHTML = `${length}/${maxDescChar}`;
     }
     setDatas({ ...datas, [key]: evt.target.value });
   };
@@ -95,8 +85,7 @@ export default function Account() {
     if (datas.email !== user?.email) body.email = datas.email;
     if (datas.biography !== user?.biography) body.biography = datas.biography;
 
-    if (Object.keys(body).length === 0)
-      return toast.error(t("settings.no_change"));
+    if (Object.keys(body).length === 0) return toast.error(t("settings.no_change"));
 
     updateUser(body);
   };
@@ -215,7 +204,6 @@ export default function Account() {
             </div>
           </section>
         </main>
-        <footer className="block"></footer>
       </section>
     </section>
   );

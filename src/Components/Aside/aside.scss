@@ -13,7 +13,7 @@ section#dashboard {
             display: none;
         }
 
-        z-index: 2;
+        z-index: 1000;
         width: calc(100% - 30px) !important;
         max-width: 100% !important;
         border-radius: 20px;

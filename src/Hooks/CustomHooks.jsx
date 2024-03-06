@@ -8,6 +8,6 @@ import useSettings from './useSettings';
 import useTheme from './useTheme';
 import useTranslation from './useTranslation';
 import useModal from './useModal';
-import useRealtime from './useRealtime';
+import useError from './useError';
 
-export { useRealtime, useAuth, useCommands, useFriends, useLocalStorage, useMessenger, useProfile, useSettings, useTheme, useTranslation, useModal }
+export { useError, useAuth, useCommands, useFriends, useLocalStorage, useMessenger, useProfile, useSettings, useTheme, useTranslation, useModal }

@@ -20,7 +20,6 @@ import {
   useProfile,
   useMessenger,
   useCommands,
-  useRealtime,
   useTheme,
   useSettings,
   useModal,
@@ -202,11 +201,9 @@ export default function Chat({ conversation }) {
    * 
    */
   const toggleDropDown = (evt) => {
-    const dropdownMenu = evt.target
-      .closest(".dropdown-button")
-      .querySelector(".dropdown-menu");
-    if (dropdownMenu.getAttribute("dropdown-menu") === "true")
-      dropdownMenu.setAttribute("dropdown-menu", "false");
+    if(!group) return;
+    const dropdownMenu = evt.target.closest(".dropdown-button").querySelector(".dropdown-menu");
+    if (dropdownMenu.getAttribute("dropdown-menu") === "true") dropdownMenu.setAttribute("dropdown-menu", "false");
     else dropdownMenu.setAttribute("dropdown-menu", "true");
   };
 
@@ -290,8 +287,9 @@ export default function Chat({ conversation }) {
   };
 
   const handleMembers = () => openModal("Members", group)
-
-
+  const addMember = () => openModal("AddMember", group)
+  const leaveGroup = () => openModal("LeaveGroup", group)
+  const removeGroup = () => openModal("RemoveGroup", group)
 
   return (
     <section id="chat">
@@ -320,9 +318,20 @@ export default function Chat({ conversation }) {
                 {conversation?.private  && <div className="dropdown-item p-2 mx-2" onClick={handleProfile}>
                   <span>{t("profile.see")}</span>
                 </div>}
-                {!conversation?.private  && <div className="dropdown-item p-2 mx-2" onClick={handleMembers}>
-                  <span>{t("profile.members")}</span>
-                </div>}
+                {!conversation?.private  && <>
+                  <div className="dropdown-item p-2 mx-2" onClick={handleMembers}>
+                    <span>{t("profile.members")}</span>
+                  </div>
+                  {conversation.administrator.id == user.id &&<div className="dropdown-item p-2 mx-2" onClick={addMember}>
+                    <span>{t("addMember.title")}</span>
+                  </div>}
+                  {conversation.administrator.id != user.id &&<div className="dropdown-item p-2 mx-2" onClick={leaveGroup}>
+                    <span>{t("leaveGroup.title")}</span>
+                  </div>}
+                  {conversation.administrator.id == user.id && <div className="dropdown-item p-2 mx-2" onClick={removeGroup}>
+                    <span>{t("removeGroup.title")}</span>
+                  </div>}
+                </>}
                 </>)}
             </div>
           </ButtonRounded>

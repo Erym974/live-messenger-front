@@ -15,7 +15,7 @@ export default function useProfile() {
      */
     const showProfile = async (id) => {
         updateLoading(true)
-        const response = await axios.get(`/api/users/${id}`)
+        const response = await axios.get(`/users/${id}`)
         updateLoading(false)
         if(!response?.status) return
         dispatch(setProfile(response?.datas))

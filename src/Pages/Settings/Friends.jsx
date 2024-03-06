@@ -16,32 +16,23 @@ import { SearchModal } from "../../Components/Search/SearchModal";
 
 export default function Friends() {
 
+  const { friends, friendsIsLoading, fetchFriends, fetchInvites } = useFriends();
   const { t } = useTranslation();
   const { searchModal } = useModal();
-
-  const {
-    friends,
-    friendsIsLoading,
-  } = useFriends();
-
   const [tab, setTab] = useState("friends");
-
   const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+    fetchFriends()
+    fetchInvites()
+  }, [])
 
   const FriendTab = () => {
     return (
       <>
       {searchModal && <SearchModal />}
         <div className="search-friends mt-3">
-          <input
-            type="search"
-            id="search"
-            value={filter}
-            onChange={(e) => {
-              setFilter(e.target.value);
-            }}
-            placeholder="Chercher dans mes Amis"
-          />
+          <input type="search" id="search" value={filter} onChange={(e) => { setFilter(e.target.value); }} placeholder="Chercher dans mes Amis"/>
         </div>
         <div className="friends-container">
           {friends?.length > 0 ? (
@@ -80,18 +71,13 @@ export default function Friends() {
 
             <ul>
               <li onClick={() => setTab("friends")}>{t("settings.friends")}</li>
-              <li onClick={() => setTab("invite")}>
-                {t("settings.friendsInvite")}
-              </li>
+              <li onClick={() => setTab("invite")}>{t("settings.friendsInvite")}</li>
             </ul>
-
-            {/*  */}
 
             {tab === "friends" && FriendTab()}
             {tab === "invite" && InviteTab()}
           </section>
         </main>
-        <footer className="block"></footer>
       </section>
     </section>
   );

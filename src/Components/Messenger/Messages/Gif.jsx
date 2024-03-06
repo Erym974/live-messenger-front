@@ -21,7 +21,7 @@ export const Gif = ({ message, type, option }) => {
   }
 
   return (
-    <div data-message={message.id} className={`message ${type} ${message.me ? "me" : "participant"} ${(["bottom", "both"].includes(message.position)) ? "mb-2" : ""}`}>
+    <div data-message={message.id} className={`message ${type} ${message.me ? "me" : "participant"} ${(["bottom", "both"].includes(message.position)) ? "mb-2" : ""}`} style={{ marginBottom: message.reactions.length > 0 ? "15px" : "0px" }}>
       {(!message.me && !option) && <div className="message-profile-picture">
         {(message.position === "bottom" || message.position === "both") && <img src={message.sender.profilePicture} className="message-profile-picture" />}
       </div>}
@@ -33,7 +33,7 @@ export const Gif = ({ message, type, option }) => {
         <div className="message-content-container">
           <div className={`message-content ${type} ${message.position}`} >
               <img src={getGifUrl()} alt={getGifUrl()} onClick={onMessageClick} />
-              {<Reactions message={message} />}
+              {message.reactions.length > 0 && <Reactions message={message} />}
               {!isMobileView && <Options message={message} />}
           </div>
         </div>

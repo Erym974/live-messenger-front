@@ -1,12 +1,15 @@
 import realAxios from 'axios'
+import Cookies from 'js-cookie';
 
 const axios = realAxios.create({
-    baseURL: 'http://127.0.0.1:8000/',
+    baseURL: 'http://api.swiftchat.local:8000/',
 });
 
 axios.interceptors.request.use((config) => {
-    const token = localStorage.getItem('auth');
+    const token = Cookies.get('auth');
     if (token) config.headers['Authorization'] = `Bearer ${token}`;
+    const lang = localStorage.getItem('language') || 'en';
+    if (lang) config.headers['Content-Language'] = lang;
     return config;
 }, (error) => {
     return Promise.reject(error);

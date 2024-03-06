@@ -3,14 +3,22 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { toggleAside } from '../../Slices/settingsSlice'
 import { useDispatch } from 'react-redux'
+import useMessenger from '../../Hooks/useMessenger'
+import toast from 'react-hot-toast'
 
 export const Group = ({ group }) => {
 
     const navigate = useNavigate()
     const { t } = useTranslation()
     const dispatch = useDispatch()
+    const [canMove, setCanMove] = useState(true)
+    const { groupIsFetching, messagesIsFetching } = useMessenger()
 
     const [lastMessage, setLastMessage] = useState("")
+
+    useEffect(() => {
+        setCanMove((groupIsFetching || messagesIsFetching) ? false : true);
+    }, [groupIsFetching, messagesIsFetching]);
 
     useEffect(() => {
         if(!group) return
@@ -20,6 +28,7 @@ export const Group = ({ group }) => {
     }, [group])
 
     const handleClick = async (id) => {
+        if(!canMove) return toast.error(t('error.please_wait'))
         dispatch(toggleAside(false));
         navigate(`/messenger/${id}`)
     }
