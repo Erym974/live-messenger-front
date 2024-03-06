@@ -38,7 +38,7 @@ export default function CreateGroup() {
 
         setCreationInProgess(true)
 
-        const response = await axios.post('/api/groups', datas)
+        const response = await axios.post('/groups', datas)
         if(!response.status) return toast.error(t('createGroup.failed'))
 
         setCreationInProgess(false)

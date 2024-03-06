@@ -17,7 +17,7 @@ export const Blog = () => {
   const { data, refetch } = useQuery({
     queryKey: ['posts'],
     queryFn: async () => {
-        const response = await axios.get('/api/blog/posts')
+        const response = await axios.get('/blog/posts')
         if(response?.status) return response.datas
         setError(true)
         toast.error(t('error.occured'))

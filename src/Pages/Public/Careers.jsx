@@ -14,7 +14,7 @@ export const Careers = () => {
     const { data, refetch } = useQuery({
         queryKey: ['jobs'],
         queryFn: async () => {
-            const response = await axios.get('/api/jobs')
+            const response = await axios.get('/jobs')
             if(response?.status) return response.datas
             setError(true)
             toast.error(t('error.occured'))

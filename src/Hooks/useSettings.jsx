@@ -41,7 +41,7 @@ export default function useSettings() {
         }
 
         Notifications.Promise(async () => {
-            const response = await axios.post('/api/settings', { meta, value: !setting.value })
+            const response = await axios.post('/settings', { meta, value: !setting.value })
             if(!response?.status) return false
             dispatch(setUser(response.datas))
             return true
@@ -66,7 +66,7 @@ export default function useSettings() {
         }
 
         Notifications.Promise(async () => {
-            const response = await axios.post('/api/settings', { meta, value })
+            const response = await axios.post('/settings', { meta, value })
             if(!response?.status) return false
             dispatch(setUser(response.datas))
             return true

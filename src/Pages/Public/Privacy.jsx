@@ -15,7 +15,7 @@ export const Privacy = () => {
   const { data, refetch } = useQuery({
     queryKey: ['privacy'],
     queryFn: async () => {
-        const response = await axios.get('/api/legal-notices/privacy')
+        const response = await axios.get('/legal-notices/privacy')
         if(response?.status) return response.datas
         toast.error(t('error.occured'))
         return []

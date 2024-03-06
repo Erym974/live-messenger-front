@@ -20,7 +20,7 @@ export default function useMessenger() {
         enabled: false,
         queryFn: async () => {
             try {
-                const response = await axios.get('/api/groups')
+                const response = await axios.get('/groups')
                 if (!response.status || response.status === false) return [];
                 dispatch(setGroups(response.datas || []));
                 return response.datas || [];
@@ -39,7 +39,7 @@ export default function useMessenger() {
             else return allPages.length + 1
         },
         queryFn: async ({ pageParam }) => {
-            if(conversation) return await axios.get(`/api/messages/${conversation}?limit=${messageLimit}&page=${pageParam}`)
+            if(conversation) return await axios.get(`/messages/${conversation}?limit=${messageLimit}&page=${pageParam}`)
         },
     })
 
@@ -49,7 +49,7 @@ export default function useMessenger() {
         queryFn: async (id) => {
             if(conversation) {
                 try {
-                    const response = await axios.get(`/api/groups/${conversation}`);
+                    const response = await axios.get(`/groups/${conversation}`);
                     if (!response.status || response.status === false) return null;
                     dispatch(setGroup(response.datas))
                     return response.datas || null;
@@ -120,7 +120,7 @@ export default function useMessenger() {
 
     /** Check if we have the permission to access to a group id */
     const checkGroup = async (group) => {
-        const response = await axios.get(`api/permissions/group/${group}`)
+        const response = await axios.get(`/permissions/group/${group}`)
         if(response?.status) return response.datas
         else return false 
     }

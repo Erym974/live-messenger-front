@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-const URL = 'http://localhost:3001';
+const URL = 'http://socket.swiftchat.local:3001';
 
 export const socket = io(URL, {
     autoConnect: false,

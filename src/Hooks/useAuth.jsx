@@ -22,7 +22,7 @@ export default function useAuth() {
      */
     const fetchAuth = async () => {
         if(auth) {
-            const response = await axios.get('api/users/me')
+            const response = await axios.get('/users/me')
             if(!response?.status || response.hasOwnProperty('code')) {
                 switch(response?.message) {
                     case "Invalid JWT Token":
@@ -54,11 +54,11 @@ export default function useAuth() {
      */
     const connectUser = async (user) => {
         try {
-            const response = await axios.post("api/auth/login", user)
+            const response = await axios.post('/auth/login', user)
             if(response.hasOwnProperty('code')) return toast.error(t('auth.wrong_credentials'))
             dispatch(setAuth(response.token))
             
-            const userResponse = await axios.get('api/users/me')
+            const userResponse = await axios.get('/users/me')
 
             if(!userResponse?.status) {
                 
@@ -96,7 +96,7 @@ export default function useAuth() {
     const sendActiveAccountRequest = () => {
 
         Notifications.Promise(async () => {
-            const response = await axios.post('api/auth/active-account/request', { email: user.email })
+            const response = await axios.post('/auth/active-account/request', { email: user.email })
             if(!response?.status) throw new Error(response.message)
             return true
         }, t('auth.sending'), t('activeAccount.request_sended'), t('error.occured'))
@@ -111,7 +111,7 @@ export default function useAuth() {
     const sendActiveAccount = async (token) => {
 
         Notifications.Promise(async () => {
-            const response = await axios.post('api/auth/active-account', { token })
+            const response = await axios.post('/auth/active-account', { token })
             if(!response?.status) throw new Error(response.message)
             return true
         }, t('activeAccount.activation'), t('activeAccount.verified'), t('error.occured'))
@@ -125,7 +125,7 @@ export default function useAuth() {
      */
     const sendResetPassword = async (passwords, token) => {
         Notifications.Promise(async () => {
-            const response = await axios.post('api/auth/reset-password/reset', { password: passwords[0], confirmPassword: passwords[1], token })
+            const response = await axios.post('/auth/reset-password/reset', { password: passwords[0], confirmPassword: passwords[1], token })
             if(!response.status) throw new Error(response.message)
             return true
         }, t('auth.sending'), t('auth.reset_password_edited'))
@@ -138,7 +138,7 @@ export default function useAuth() {
      */
     const sendResetPasswordRequest = (email) => {
         Notifications.Promise(async () => {
-            const response = await axios.post('api/auth/reset-password', { email })
+            const response = await axios.post('/auth/reset-password', { email })
             if(!response?.status) throw new Error(response.message)
             return true
         }, t('auth.sending'), t('auth.reset_password_sended'), t('error.occured'))
@@ -154,7 +154,7 @@ export default function useAuth() {
      */
     const registerUser = async (user) => {
         Notifications.Promise(async () => {
-            const response = await axios.post("api/auth/register", user)
+            const response = await axios.post('/auth/register', user)
             if(!response.status) throw new Error(response.message)
         }, t('auth.registration_in_progress'), t('auth.registered'))
     }
@@ -174,7 +174,7 @@ export default function useAuth() {
      */
     const updateUser = async(datas) => {
         Notifications.Promise(async () => {
-            const response = await axios.patch('api/users/me', datas)
+            const response = await axios.patch('/users/me', datas)
             console.log(response);
             if(!response?.status) return FaBullseye
             dispatch(setUser(response.datas?.user))
@@ -190,7 +190,7 @@ export default function useAuth() {
             formData.append('file', file)
             formData.append('picture', type)
     
-            const response = await axios.post('api/users/me', formData)
+            const response = await axios.post('/users/me', formData)
             if(!response?.status) return false
             dispatch(setUser(response.datas?.user))
             return true

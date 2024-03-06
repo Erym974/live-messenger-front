@@ -15,7 +15,7 @@ export const Terms = () => {
   const { data, refetch } = useQuery({
     queryKey: ['terms'],
     queryFn: async () => {
-        const response = await axios.get('/api/legal-notices/terms')
+        const response = await axios.get('/legal-notices/terms')
         if(response?.status) return response.datas
         toast.error(t('error.occured'))
         return []

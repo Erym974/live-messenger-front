@@ -29,7 +29,7 @@ export default function useFriends(opts) {
     queryFn: async (id) => {
       if(!user) return null
       try {
-        const response = await axios.get("/api/friends");
+        const response = await axios.get('/friends');
         if (!response.status || response.status === false) return [];
         dispatch(setFriends(response.datas || []));
         return response.datas || [];
@@ -46,7 +46,7 @@ export default function useFriends(opts) {
     queryFn: async (id) => {
       if(!user) return null
       try {
-        const response = await axios.get("/api/invitations");
+        const response = await axios.get('/invitations');
         if (!response.status || response.status === false) return [];
         dispatch(setInvites(response.datas || []));
         return response.datas || [];
@@ -98,7 +98,7 @@ export default function useFriends(opts) {
     const regex = new RegExp(/^\d{5}-\d{5}-\d{5}$/);
     if (!regex.test(code)) return "Invalid";
     if (code.length < 16 || code.length > 17) return "Invalid";
-    const response = await axios.post("/api/invitations", { code });
+    const response = await axios.post('/invitations', { code });
 
     if (!response?.status || Number.isInteger(response?.status)) {
       console.log(response);
@@ -122,7 +122,7 @@ export default function useFriends(opts) {
    *
    */
   const deleteInvitation = async (invitation) => {
-    const response = await axios.delete("api/invitations", {
+    const response = await axios.delete('/invitations', {
       data: { invitation },
     });
     if (!response?.status) return;
@@ -135,7 +135,7 @@ export default function useFriends(opts) {
    *
    */
   const acceptInvite = async (invitation) => {
-    const response = await axios.patch("/api/invitations", { invitation });
+    const response = await axios.patch('/invitations', { invitation });
     if (!response?.status) return;
     fetchFriends()
     fetchInvites()
@@ -147,7 +147,7 @@ export default function useFriends(opts) {
    *
    */
   const deleteFriend = async (friend) => {
-    const response = await axios.delete("/api/friends", {data: { friend: friend },});
+    const response = await axios.delete('/friends', {data: { friend: friend },});
     if (!response?.status) return;
     fetchFriends()
   };
