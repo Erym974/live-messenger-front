@@ -87,6 +87,14 @@ export default {
         email_verified: "Votre adresse mail a bien été vérifiée",
         email_not_verified: "Votre adresse mail n'a pas encore été vérifiée",
     },
+    cookie: {
+        one: "En utilisant notre site, vous reconnaissez avoir lu et compris notre",
+        two: "Politique de confidentialité",
+        three: "et notre",
+        four: "Conditions de service",
+        agree: "Accepter",
+        decline: "Refuser",
+    },
     general: {
         firstname: "Prénom",
         lastname: "Nom",
