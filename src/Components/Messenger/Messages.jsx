@@ -11,9 +11,8 @@ import { useDispatch } from 'react-redux';
 
 export default function Messages({ conversation, messages }) {
     
-    const { messageHasNextPage, messageIsFetching, setConversation, activeMessage: setActiveMessage, reactToMessage, messageFetchNextPage } = useMessenger()
+    const { messageHasNextPage, messagesIsFetching, setConversation, messageFetchNextPage } = useMessenger()
     const { t } = useTranslation()
-    const dispatch = useDispatch()
     
     const [dropdown, setDropdown] = useState(null)
 
@@ -59,16 +58,17 @@ export default function Messages({ conversation, messages }) {
 
     return (
         <>
-            {(!messageIsFetching && messageHasNextPage) && 
+            {(!messagesIsFetching && messageHasNextPage) && 
                 <div id="load-more">
-                    <button onClick={messageFetchNextPage}>{t('message.loadMore')}</button>
+                    <button onClick={() => { messageFetchNextPage() }}>{t('message.loadMore')}</button>
                 </div>
             }
-            {messageIsFetching && <Loader />}
+            {messagesIsFetching && <Loader />}
+            
             <div className="messages">
                 <Tooltip id="tooltip" data-tooltip-offset="55" data-tooltip-place="top" style={{ zIndex: 99999 }} />
 
-                {(!messageIsFetching && messages?.length == 0) && <NoMessageYet />}
+                {(!messagesIsFetching && messages?.length == 0) && <NoMessageYet />}
                 {messages?.map(message => <Message key={message.id} message={message} /> )}
                 <div id="scroll-target" data-init="false"></div> 
             </div>

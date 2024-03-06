@@ -11,6 +11,7 @@ import Language from "../../Constant/Language";
 import { SelectLanguageItem } from "../../Components/Settings/General/SelectLanguageItem";
 import { useAuth, useModal, useSettings, useTranslation } from "../../Hooks/CustomHooks";
 import { SearchModal } from "../../Components/Search/SearchModal";
+import { Link } from "react-router-dom";
 
 export default function General() {
   const { language, t } = useTranslation();
@@ -33,26 +34,13 @@ export default function General() {
         <main className="block">
           <section id="general">
             <h1>{t("settings.general")}</h1>
-            <FormSwitch
-              setData={() => {
-                toggleSetting("allow-friend-request");
-              }}
-              data={
-                user.settings.find(
-                  (setting) => setting.meta === "allow-friend-request"
-                )?.value
-              }
-            >
+            <FormSwitch setData={() => toggleSetting("allow-friend-request")} data={user.settings.find((setting) => setting.meta === "allow-friend-request")?.value}>
               {t("settings.allow_friends")}
             </FormSwitch>
 
             <div className="language-selector">
               <span>{t("settings.language_selector")}</span>
-              <Select
-                value={language}
-                label="Language"
-                onChange={handleLanguageChange}
-              >
+              <Select value={language} label="Language" onChange={handleLanguageChange}>
                 {Language.LIST.map((lang) => (
                   <MenuItem value={lang.code} key={lang.code}>
                     <SelectLanguageItem language={lang} />
@@ -62,7 +50,10 @@ export default function General() {
             </div>
           </section>
         </main>
-        <footer className="block"></footer>
+        <footer className="block">
+          <Link to="/terms" target="_blank">{t('public.terms')}</Link>
+          <Link to="/privacy" target="_blank">{t('public.privacy')}</Link>
+        </footer>
       </section>
     </section>
   );

@@ -5,17 +5,12 @@ import { Loader } from '../Components/Loader'
 
 export default function PublicRoute() {
 
-    const { user, loading } = useAuth()
+    const { auth } = useAuth()
 
     return (
-      !loading ?
-        user === null ?
-          <Outlet /> 
-          : 
-          <Navigate to="/messenger" replace />
-      :
-      <div className="d-flex aic jcc h-100">
-        <Loader />
-      </div>
+      auth === false ?
+        <Outlet /> 
+        : 
+        <Navigate to="/settings/account" replace />
     )
 }

@@ -1,0 +1,27 @@
+@import './../../variables.scss';
+
+section.error {
+    height: 100vh;
+    width: 100%;
+
+    background-color: var(--color-background);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .btn {
+        margin-top: 20px;
+        background-color: $color-primary;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: $border-radius;
+        text-decoration: none;
+        transition: 0.4s ease-in-out;
+        &:hover {
+            background-color: $color-primary-variant;
+        }
+    }
+}

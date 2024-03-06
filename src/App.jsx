@@ -1,87 +1,56 @@
 import './index.scss';
 import "./i18n";
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 
-import React, { useEffect, useState } from 'react'
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route
-} from "react-router-dom";
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 
-import { Login, Register, Error, Messenger, General, Account, Security, Friends, Home } from './Pages/pages'
-import ProtectedRoute from './Custom/ProtectedRoute';
-import { useTheme, useAuth, useModal, useFriends, useMessenger } from './Hooks/CustomHooks';
+import { Login, Register, Error, Messenger, General, Account, Security, Friends, Home, Careers, Blog, Terms, Privacy, ResetPassword, ActiveAccount } from './Pages/pages'
+import AuthenticatedRoute from './Custom/AuthenticatedRoute';
+import { useTheme, useModal } from './Hooks/CustomHooks';
 import PublicRoute from './Custom/PublicRoute';
 import { Modal } from './Components/Modal';
-import { socket } from './socket';
+import { Cookie } from './Components/Cookie';
+import { useSelector } from 'react-redux';
 
 
 export default function App() {
   
-  const { fetchAuth, user } = useAuth()
-  const { newInvite } = useFriends()
-  const { onKick, } = useMessenger()
-  const { isModalOpen, searchModal } = useModal()
-  
-  /** If there is not Auth then don't connect to socket */
-  useEffect(() => {
-    if(!user) return
-    socket.connect()
-    return () => {
-      socket.disconnect()
-    };
-  }, [user])
+  const { isModalOpen } = useModal()
+  const { cookie } = useSelector(state => state.general)
 
   useTheme()
 
-  useEffect(() => {
-    fetchAuth()
-  }, [])
-
-    /**
-     * 
-     * On User Connect
-     * 
-     */
-    useEffect(() => {
-      if(!user) return
-  
-      /* Subscribe to invitations */
-      socket.emit('join-invitation', {code: user?.friendCode})
-
-      /** When we receive new invite event */
-      socket.on('invitation-received', newInvite)
-      socket.on('kicked', onKick)
-      return () => {
-          socket.off('invitation-received')
-          socket.off('kicked')
-      }
-  }, [user])
-
   return (
         <>
-          <Toaster
-            position="bottom-right"
-          />
-          
+          <Toaster position="bottom-right" />
+
           <Router>
+          {!cookie && <Cookie />}
           {isModalOpen && <Modal />}
               <Routes>
-                    <Route element={<ProtectedRoute />}>
-                      <Route path="/messenger/:id?" element={<Messenger />} />
-                      <Route path="/settings/general" element={<General />} />
-                      <Route path="/settings/account" element={<Account />} />
-                      <Route path="/settings/security" element={<Security />} />
-                      <Route path="/settings/friends" element={<Friends />} />
+                    <Route element={<AuthenticatedRoute />}>
+                        <Route path="/messenger/:id" element={<Messenger />} />
+                        <Route path="/settings/general" element={<General />} />
+                        <Route path="/settings/account" element={<Account />} />
+                        <Route path="/settings/security" element={<Security />} />
+                        <Route path="/settings/friends" element={<Friends />} />
                     </Route>
 
                     <Route element={<PublicRoute />}>
                       <Route path="/auth/login" element={<Login />} />
                       <Route path="/auth/register" element={<Register />} />
+                      <Route path="/auth/reset-password/:token?" element={<ResetPassword />} />
                     </Route>
+                    <Route path="/auth/active-account/:token" element={<ActiveAccount />} />
+                    
+
                     <Route path="/" element={<Home />} />
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="/privacy" element={<Privacy />} />
+                    <Route path="/careers" element={<Careers />} />
+                    <Route path="/blog" element={<Blog />} />
                     <Route path="*" element={<Error />} />
               </Routes>
           </Router>

@@ -23,20 +23,14 @@ export default function useFriends(opts) {
   const dispatch = useDispatch();
 
   /** Fetch friends */
-  const {
-    isFetching: friendsIsLoading,
-    data: friendsResponse,
-    refetch: fetchFriends,
-  } = useQuery({
+  const { isFetching: friendsIsLoading, refetch: fetchFriends } = useQuery({
     queryKey: ["friends"],
-    enabled: opts?.fetchFriends !== false,
+    enabled: false,
     queryFn: async (id) => {
       if(!user) return null
       try {
         const response = await axios.get("/api/friends");
-        if (!response.status || response.status === false) {
-          return [];
-        }
+        if (!response.status || response.status === false) return [];
         dispatch(setFriends(response.datas || []));
         return response.datas || [];
       } catch (error) {
@@ -46,20 +40,14 @@ export default function useFriends(opts) {
   });
 
   /** Fetch invitations */
-  const {
-    isFetching: invitationsIsLoading,
-    data: invitationsResponse,
-    refetch: fetchInvites,
-  } = useQuery({
+  const { isFetching: invitationsIsLoading, refetch: fetchInvites } = useQuery({
     queryKey: ["invitations"],
-    enabled: opts?.fetchInvites !== false,
+    enabled: false,
     queryFn: async (id) => {
       if(!user) return null
       try {
         const response = await axios.get("/api/invitations");
-        if (!response.status || response.status === false) {
-          return [];
-        }
+        if (!response.status || response.status === false) return [];
         dispatch(setInvites(response.datas || []));
         return response.datas || [];
       } catch (error) {
@@ -159,25 +147,10 @@ export default function useFriends(opts) {
    *
    */
   const deleteFriend = async (friend) => {
-    const response = await axios.delete("/api/friends", {
-      data: { friend: friend },
-    });
+    const response = await axios.delete("/api/friends", {data: { friend: friend },});
     if (!response?.status) return;
     fetchFriends()
   };
 
-  return {
-    friends,
-    friendsIsLoading,
-    invitations,
-    invitationsIsLoading,
-    fetchInvites,
-    fetchFriends,
-    newFriend,
-    newInvite,
-    sendInvite,
-    deleteInvitation,
-    acceptInvite,
-    deleteFriend,
-  };
+  return { friends, friendsIsLoading, invitations, invitationsIsLoading, fetchInvites, fetchFriends, newFriend, newInvite, sendInvite, deleteInvitation, acceptInvite, deleteFriend };
 }

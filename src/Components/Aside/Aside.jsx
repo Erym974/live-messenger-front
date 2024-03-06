@@ -1,24 +1,24 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
-import { FaBell, FaBellSlash, FaGear, FaArrowLeftLong } from "react-icons/fa6";
+import { FaGear, FaArrowLeftLong } from "react-icons/fa6";
 import { IoMdAdd } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
-
-import Conversation from "./Conversation";
 
 import './aside.scss';
 import ButtonRounded from '../ButtonRounded';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import {  useAuth, useModal, useTheme } from '../../Hooks/CustomHooks';
+import {  useAuth, useMessenger, useModal, useTheme } from '../../Hooks/CustomHooks';
 import { useNavigate } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
 import { openSearchModal, toggleAside } from '../../Slices/settingsSlice';
-import CreateGroup from '../Modals/CreateGroup';
+import { Loader } from '../Loader';
+import { Group } from './Group';
 
 export default function Aside() {
 
     const { logoutUser, user } = useAuth();
+    const { fetchGroups, groups, groupsIsLoading } = useMessenger()
     const { openModal } = useModal();
     const navigate = useNavigate()
     const { asideState } = useSelector(state => state.settings)
@@ -38,6 +38,7 @@ export default function Aside() {
     /** Listen event for CTRL+F */
     useEffect(() => {
         window.addEventListener('keydown', onCtrlF, true)
+
         return () => {
             window.removeEventListener('keydown', onCtrlF, true)
         }
@@ -53,6 +54,12 @@ export default function Aside() {
 
     /** When user click on create group button */
     const handleCreateGroup = () => openModal("CreateGroup")
+
+    /** When user is logged or updated */
+    useEffect(() => {
+        if(!user && !groups) return
+        fetchGroups()
+    }, [user])
 
     return (
         <aside data-toggle={asideState} >
@@ -86,7 +93,12 @@ export default function Aside() {
                         <IoMdAdd />
                     </button>
                 </>
-                <Conversation />
+                <section className="conversations">
+                    {groupsIsLoading && <Loader />}
+                    {groups?.map(group => 
+                        <Group key={group.id} group={group} />
+                    )}
+                </section>
             </div>
 
             <div className="bottom">

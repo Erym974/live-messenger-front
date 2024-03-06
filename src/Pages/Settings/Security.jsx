@@ -11,7 +11,7 @@ import { SearchModal } from "../../Components/Search/SearchModal";
 
 export default function Security() {
   const { t } = useTranslation();
-  const { updateUser } = useAuth();
+  const { updateUser, sendActiveAccountRequest, user } = useAuth();
   const { searchModal } = useModal();
 
   const [datas, setDatas] = useState({
@@ -20,9 +20,7 @@ export default function Security() {
     confirmNewPassword: "",
   });
 
-  const handleChange = (evt, key) => {
-    setDatas({ ...datas, [key]: evt.target.value });
-  };
+  const handleChange = (evt, key) => setDatas({ ...datas, [key]: evt.target.value });
 
   const handleSave = async () => {
     if (datas.password.trim().length === 0) {
@@ -55,54 +53,27 @@ export default function Security() {
         <main className="block">
           <section id="security">
             <h1>Sécurité</h1>
-            <h2>Mot de passe</h2>
+            <h2>{t('general.password')}</h2>
             <form action="" className="mt-3">
               <div className="form-group">
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  value={datas?.password}
-                  autoComplete="current-password"
-                  onChange={(evt) => {
-                    handleChange(evt, "password");
-                  }}
-                  placeholder=""
-                />
+                <input type="password" name="password" id="password" value={datas?.password} autoComplete="current-password" onChange={(evt) => handleChange(evt, "password") } placeholder=""/>
                 <label htmlFor="text">{t("general.password")}</label>
               </div>
               <div className="form-group">
-                <input
-                  type="password"
-                  name="newPassword"
-                  id="newPassword"
-                  value={datas?.newPassword}
-                  autoComplete="new-password"
-                  onChange={(evt) => {
-                    handleChange(evt, "newPassword");
-                  }}
-                  placeholder=""
-                />
+                <input type="password" name="newPassword" id="newPassword" value={datas?.newPassword} autoComplete="new-password" onChange={(evt) => handleChange(evt, "newPassword") } placeholder=""/>
                 <label htmlFor="text">{t("general.newPassword")}</label>
               </div>
               <div className="form-group">
-                <input
-                  type="password"
-                  name="confirmNewPassword"
-                  id="confirmNewPassword"
-                  autoComplete="new-password"
-                  value={datas?.confirmNewPassword}
-                  onChange={(evt) => {
-                    handleChange(evt, "confirmNewPassword");
-                  }}
-                  placeholder=""
-                />
+                <input type="password" name="confirmNewPassword" id="confirmNewPassword" autoComplete="new-password" value={datas?.confirmNewPassword} onChange={(evt) => handleChange(evt, "confirmNewPassword") } placeholder="" />
                 <label htmlFor="text">{t("general.confirmNewPassword")}</label>
               </div>
             </form>
             <div className="d-flex jce">
               <button onClick={handleSave}>{t("general.save")}</button>
             </div>
+            <h2>{t('general.email')}</h2>
+            <p>{ t(user?.isVerified ? 'activeAccount.email_verified' : 'activeAccount.email_not_verified') }</p>
+            {!user?.isVerified && <button onClick={sendActiveAccountRequest}>{t('activeAccount.send_email')}</button>}
           </section>
         </main>
       </section>

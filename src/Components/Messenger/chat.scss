@@ -267,6 +267,20 @@ section#chat {
                                 padding: 5px 13px;
                                 background-color: darken($color-primary, 10%);
                                 border-radius: 20px;
+
+                                .message-text.edited,
+                                .message-text.deleted {
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    gap: 5px;
+                                    font-style: italic;
+                                    color: #ccc !important;
+
+                                    svg {
+                                        font-size: 12px;
+                                    }
+                                }
                             }
 
                             &.emoji {
