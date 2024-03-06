@@ -99,6 +99,14 @@ export default {
         confirmNewPassword: "Confirme your password",
         saved: "Saved",
     },
+    cookie: {
+        one: "By using our site, you acknowledge that you have read and understand our",
+        two: "Privacy Policy",
+        three: "and our",
+        four: "Terms of Service",
+        agree: "Agree",
+        decline: "Decline"
+    },
     activeAccount: {
         request_sended: "An activation email has been sent to you. Please check your inbox and spam folder.",
         account_actived: "Your account has been activated successfully",
