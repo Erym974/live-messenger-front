@@ -58,27 +58,27 @@ export default function useAuth() {
             if(response.hasOwnProperty('code')) return toast.error(t('auth.wrong_credentials'))
             dispatch(setAuth(response.token))
             
-            const userResponse = await axios.get('/users/me')
+            // const userResponse = await axios.get('/users/me')
 
-            if(!userResponse?.status) {
+            // if(!userResponse?.status) {
                 
-                switch(userResponse.message) {
-                    case "Invalid JWT Token":
-                        toast.error(t('auth.invalid'))
-                        break
-                    default:
-                        toast.error(t('auth.expired'))
-                        break
-                }
+            //     switch(userResponse.message) {
+            //         case "Invalid JWT Token":
+            //             toast.error(t('auth.invalid'))
+            //             break
+            //         default:
+            //             toast.error(t('auth.expired'))
+            //             break
+            //     }
 
-                dispatch(setAuth(null))
-                dispatch(setUser(null))
-                dispatch(setLoading(false))
-                navigate('/auth/login')
-            } else {
-                dispatch(setUser(userResponse?.datas.user))
-                dispatch(setLoading(false))
-            }
+            //     dispatch(setAuth(null))
+            //     dispatch(setUser(null))
+            //     dispatch(setLoading(false))
+            //     navigate('/auth/login')
+            // } else {
+            //     dispatch(setUser(userResponse?.datas.user))
+            //     dispatch(setLoading(false))
+            // }
 
             return true
         } catch(err) {
@@ -164,7 +164,7 @@ export default function useAuth() {
      * Disconnect user
      * 
      */
-    const logoutUser = () => {
+    const logoutUser = () => {;
         dispatch(setAuth(null))
         dispatch(setUser(null))
     }
