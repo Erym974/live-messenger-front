@@ -1,6 +1,10 @@
 @import './../../variables.scss';
 
 .auth-pages {
+
+    display: flex;
+    flex-direction: column;
+
     nav {
         padding: 0 10px;
         display: flex;
@@ -200,10 +204,10 @@
     section#register {
 
         display: flex;
+        flex-grow: 1;
         justify-content: center;
         align-items: center;
-
-        height: 100vh;
+        padding: 50px 0;
 
         .container {
             background-color: var(--color-white);

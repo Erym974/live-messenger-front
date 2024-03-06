@@ -21,7 +21,7 @@ export default function AuthenticatedRoute() {
 
     /** Log user */
     useEffect(() => {
-      if(!auth) return navigate('/auth/login')
+      if(!auth) return
       fetchAuth()
     }, [auth])
 
@@ -98,8 +98,10 @@ export default function AuthenticatedRoute() {
 
     return (
       (!loading && !socketLoading) ?
-        user != null ?
-          <Outlet /> 
+        auth != null ?
+          <>
+            {!user ? <Loader /> : <Outlet />}
+          </> 
           : 
           <Navigate to="/auth/login" state={{ from: location }} replace />
       :
