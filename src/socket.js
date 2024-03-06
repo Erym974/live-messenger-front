@@ -1,8 +1,7 @@
 import { io } from 'socket.io-client';
+import config from './config'
 
-const URL = 'http://socket.swiftchat.local:3001';
-
-export const socket = io(URL, {
+export const socket = io(config.SOCKET_BASE_URL, {
     autoConnect: false,
     reconnection: true,
     reconnectionDelay: 1000,

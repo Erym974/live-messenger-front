@@ -1,8 +1,9 @@
 import realAxios from 'axios'
 import Cookies from 'js-cookie';
+import config from './../config'
 
 const axios = realAxios.create({
-    baseURL: 'http://api.swiftchat.local:8000/',
+    baseURL: config.API_BASE_URL,
 });
 
 axios.interceptors.request.use((config) => {
