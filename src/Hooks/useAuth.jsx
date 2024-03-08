@@ -92,7 +92,7 @@ export default function useAuth() {
         Notifications.Promise(async () => {
             const response = await axios.post('/auth/active-account', { token })
             if(!response?.status) throw new Error(response.message)
-            return true
+            navigate('/settings/account')
         }, t('activeAccount.activation'), t('activeAccount.verified'), t('error.occured'))
 
     } 
@@ -106,7 +106,7 @@ export default function useAuth() {
         Notifications.Promise(async () => {
             const response = await axios.post('/auth/reset-password/reset', { password: passwords[0], confirmPassword: passwords[1], token })
             if(!response.status) throw new Error(response.message)
-            return true
+            navigate('/auth/login')
         }, t('auth.sending'), t('auth.reset_password_edited'))
     }
 
@@ -119,7 +119,7 @@ export default function useAuth() {
         Notifications.Promise(async () => {
             const response = await axios.post('/auth/reset-password', { email })
             if(!response?.status) throw new Error(response.message)
-            return true
+            return navigate('/auth/login')
         }, t('auth.sending'), t('auth.reset_password_sended'), t('error.occured'))
 
     }
@@ -134,7 +134,9 @@ export default function useAuth() {
     const registerUser = async (user) => {
         Notifications.Promise(async () => {
             const response = await axios.post('/auth/register', user)
+            if(!response.hasOwnProperty('status')) throw new Error(t('error.occured'))
             if(!response.status) throw new Error(response.message)
+            return navigate('/auth/login')
         }, t('auth.registration_in_progress'), t('auth.registered'))
     }
 
@@ -158,7 +160,7 @@ export default function useAuth() {
             if(!response?.status) return FaBullseye
             dispatch(setUser(response.datas?.user))
             return true
-        }, "Enregistrement en cours", "Enregistré", "Une erreur est survenue")
+        }, t('general.saving'), t('general.saved'), t('error.occured'))
     }
 
     /** Update user profile picture */
@@ -173,7 +175,7 @@ export default function useAuth() {
             if(!response?.status) return false
             dispatch(setUser(response.datas?.user))
             return true
-        }, "Enregistrement en cours", "Enregistré", "Une erreur est survenue")
+        }, t('general.saving'), t('general.saved'), t('error.occured'))
 
     }
 
