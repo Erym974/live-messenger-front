@@ -9,7 +9,7 @@ const FriendRequest = (invitation) => {
     const { notificationMessage } = useNotification()
     // const { t } = useTranslation()
     
-    const handleClick = (choice) => {
+    const handleClick = (choice, id) => {
         switch(choice) {
             case "accept":
                 window.dispatchEvent(new CustomEvent('acceptInvitation', { detail: invitation.id }))
@@ -18,19 +18,21 @@ const FriendRequest = (invitation) => {
                 window.dispatchEvent(new CustomEvent('declineInvitation', { detail: invitation.id }))
                 break;
         }
+    toast.dismiss(id)
     } 
 
     if(!invitation) return
+    const time = new Date().getTime()
     notificationMessage(
         "Demande d'ami !", 
         <>
             <b>{invitation?.emitter.fullname}</b> vous a envoyé une demande d'ami
         </>,
         <>
-            <button onClick={() => { handleClick("accept"); }}>Accept</button>
-            <button className="danger" onClick={() => { handleClick("decline"); }} >Decline</button>
+            <button onClick={() => { handleClick("accept", time); }}>Accept</button>
+            <button className="danger" onClick={() => { handleClick("decline", time); }} >Decline</button>
         </>,
-        { duration: 12500 }
+        { duration: 12500, id: time }
     )
 
 }

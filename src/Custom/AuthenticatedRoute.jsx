@@ -3,7 +3,7 @@ import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth, useError, useFriends, useMessenger } from '../Hooks/CustomHooks'
 import { Loader } from '../Components/Loader'
 import { socket } from './../socket'
-import { moveConversationToTop } from './../Slices/messengerSlice';
+import { moveConversationToTop, updateConversation } from './../Slices/messengerSlice';
 import { useDispatch } from 'react-redux';
 
 export default function AuthenticatedRoute() {
@@ -21,7 +21,7 @@ export default function AuthenticatedRoute() {
 
     /** Log user */
     useEffect(() => {
-      if(!auth) return
+      if(!auth) return navigate('/auth/login')
       fetchAuth()
     }, [auth])
 
@@ -57,9 +57,11 @@ export default function AuthenticatedRoute() {
 
       socket.on('new-group', fetchGroups)
       socket.on('conversation-to-top', (params) => dispatch(moveConversationToTop({group: params.group, message: params.message})))
+      socket.on('update-conversation', (params) => dispatch(updateConversation({group: params.group, message: params.message})))
 
       return () => {
         socket.off("conversation-to-top")
+        socket.off("update-conversation")
         socket.off("new-group")
       }
 

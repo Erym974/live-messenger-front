@@ -32,16 +32,25 @@ section#dashboard {
             align-items: center;
             gap: 10px;
             color: var(--color-dark);
-
+            cursor: pointer;
+            transition: 0.2s ease-in-out;
+            
             img {
                 height: 50px;
                 width: 50px;
                 border-radius: 50%;
+                transition: 0.2s ease-in-out;
             }
 
             .right {
                 display: flex;
                 flex-direction: column;
+            }
+
+            &:hover {
+                img {
+                    border-radius: 15px;
+                }
             }
         }
 
@@ -70,6 +79,7 @@ section#dashboard {
                 gap: 5px !important;
 
                 .conversation {
+                    position: relative;
                     display: flex;
                     align-items: center;
                     gap: 10px;
@@ -77,30 +87,47 @@ section#dashboard {
                     padding: 5px 10px;
                     cursor: pointer;
                     transition: all 0.2s ease-in-out;
-    
+
                     &:hover {
-                        img {
-                            border-radius: 15px;
+                        .group-picture {
+                            img {
+                                border-radius: 15px;
+                            }
                         }
                     }
-    
-                    img {
-                        height: 50px;
-                        width: 50px;
-                        border-radius: 50%;
-                        transition: all 0.2s ease-in-out;
+
+                    .group-picture {
+                        position: relative;
+                        img {
+                            position: relative;
+                            height: 50px;
+                            width: 50px;
+                            border-radius: 50%;
+                            transition: all 0.2s ease-in-out;
+                        }
+
+                        .online {
+                            position: absolute;
+                            bottom: 5px;
+                            right: 0px;
+                            width: 15px;
+                            height: 15px;
+                            border-radius: 50%;
+                            background-color: greenyellow;
+                            z-index: 1000;
+                        }
                     }
-    
+
                     .right {
                         display: flex;
                         flex-direction: column;
                         flex-grow: 1;
                         max-width: calc(100% - 50px);
-    
+
                         .name {
                             font-weight: bold;
                         }
-    
+
                         .message {
                             text-decoration: none;
                             text-overflow: ellipsis;
@@ -180,11 +207,11 @@ section#dashboard {
                     .conversations {
                         align-items: center;
                         justify-content: center;
-    
+
                         .conversation {
                             padding: 0 !important;
                             gap: 0 !important;
-    
+
                             .right {
                                 span {
                                     display: none !important;

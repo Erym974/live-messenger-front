@@ -14,6 +14,7 @@ import { FaSearch } from 'react-icons/fa';
 import { openSearchModal, toggleAside } from '../../Slices/settingsSlice';
 import { Loader } from '../Loader';
 import { Group } from './Group';
+import { Tooltip } from 'react-tooltip';
 
 export default function Aside() {
 
@@ -64,8 +65,8 @@ export default function Aside() {
     return (
         <aside data-toggle={asideState} >
 
-            <div className="top">
-            <img src={user?.profilePicture} alt={user?.firstname + " " + user?.lastname} />
+            <div className="top" onClick={() => navigate('/settings/account')}>
+            <img src={user?.profilePicture} alt={user?.firstname + " " + user?.lastname} data-tooltip-id="aside" data-tooltip-content={t('aside.account')} />
             <div className="right">
                 <span><strong>{user?.firstname} {user?.lastname}</strong></span>
                 <span>{t('chat.online')}</span>
@@ -73,23 +74,23 @@ export default function Aside() {
             </div>
 
             <div className="settings">
-            <ButtonRounded onClick={() => { dispatch(openSearchModal()) }}>
+            <ButtonRounded onClick={() => { dispatch(openSearchModal()) }} attributes={{ "data-tooltip-id":"aside", "data-tooltip-content": t('aside.search')  }}>
                 <FaSearch />
             </ButtonRounded>
-            <ButtonRounded onClick={toggleTheme}>
+            <ButtonRounded onClick={toggleTheme} attributes={{ "data-tooltip-id":"aside", "data-tooltip-content": t('aside.theme')  }} >
                 {themeIcon}
             </ButtonRounded>
-            <ButtonRounded onClick={goToSettings}>
+            <ButtonRounded onClick={goToSettings} attributes={{ "data-tooltip-id":"aside", "data-tooltip-content": t('aside.settings')  }}>
                 <FaGear />
             </ButtonRounded>
-            <ButtonRounded onClick={logoutUser}>
+            <ButtonRounded onClick={logoutUser} attributes={{ "data-tooltip-id":"aside", "data-tooltip-content": t('aside.logout')  }}>
                 <MdLogout />
             </ButtonRounded>
             </div>
 
             <div className="content">
                 <>
-                    <button className="btn-type-2 w-100" onClick={handleCreateGroup}>
+                    <button className="btn-type-2 w-100" onClick={handleCreateGroup} data-tooltip-id="aside" data-tooltip-content={t('aside.createGroup')}>
                         <IoMdAdd />
                     </button>
                 </>
@@ -102,8 +103,10 @@ export default function Aside() {
             </div>
 
             <div className="bottom">
-            <button className="btn-type-2" onClick={() => { dispatch(toggleAside(!asideState)) }}><FaArrowLeftLong /></button>
+                <button className="btn-type-2" onClick={() => { dispatch(toggleAside(!asideState)) }}><FaArrowLeftLong /></button>
             </div>
+
+            <Tooltip id="aside" place="right" hidden={asideState} style={{ zIndex: 99999 }} />
 
         </aside>
     )

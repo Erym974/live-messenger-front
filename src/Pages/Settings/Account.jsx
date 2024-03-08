@@ -101,99 +101,35 @@ export default function Account() {
         <main className="block">
           <section id="account">
             <h1>{t("settings.my_account")}</h1>
-            <form action="">
+            <form action="#">
               <div className="top">
-                <div
-                  className="background-cover"
-                  onClick={(e) => {
-                    handlePicture(e, "cover");
-                  }}
-                >
-                  <img
-                    src={datas?.coverPicture}
-                    alt=""
-                    id="cover-picture-render"
-                  />
-                  <input
-                    type="file"
-                    id="cover-picture"
-                    className="d-none"
-                    data-type="cover"
-                  />
+                <div className="background-cover" onClick={(e) => { handlePicture(e, "cover"); }} >
+                  <img src={datas?.coverPicture} alt="profile picture of User" id="cover-picture-render" />
+                  <input type="file" id="cover-picture" className="d-none" data-type="cover" />
                 </div>
-                <div
-                  className="profile-picture"
-                  onClick={(e) => {
-                    handlePicture(e, "profile");
-                  }}
-                >
-                  <img
-                    src={datas?.profilePicture}
-                    alt=""
-                    id="profile-picture-render"
-                  />
+                <div className="profile-picture" onClick={(e) => { handlePicture(e, "profile"); }} >
+                  <img src={datas?.profilePicture} alt="Profile picture of User" id="profile-picture-render" />
                   <FaPen />
-                  <input
-                    type="file"
-                    id="profile-picture"
-                    className="d-none"
-                    data-type="profile"
-                  />
+                  <input type="file" id="profile-picture" className="d-none" data-type="profile" />
                 </div>
               </div>
               <div className="row">
                 <div className="form-group">
-                  <input
-                    type="text"
-                    name="firstname"
-                    id="firstname"
-                    value={datas?.firstname}
-                    onChange={(evt) => {
-                      handleChange(evt, "firstname");
-                    }}
-                    placeholder=" "
-                  />
+                  <input type="text" name="firstname" id="firstname" value={datas?.firstname} onChange={(evt) => { handleChange(evt, "firstname"); }} placeholder=" " />
                   <label htmlFor="text">{t("general.firstname")}</label>
                 </div>
                 <div className="form-group">
-                  <input
-                    type="text"
-                    name="lastname"
-                    id="lastname"
-                    value={datas?.lastname}
-                    onChange={(evt) => {
-                      handleChange(evt, "lastname");
-                    }}
-                    placeholder=" "
-                  />
+                  <input type="text" name="lastname" id="lastname" value={datas?.lastname} onChange={(evt) => { handleChange(evt, "lastname"); }} placeholder=" "/>
                   <label htmlFor="lastname">{t("general.lastname")}</label>
                 </div>
               </div>
               <div className="form-group mb-30">
-                <textarea
-                  type="text"
-                  name="biography"
-                  id="biography"
-                  value={datas?.biography}
-                  onChange={(evt) => {
-                    handleChange(evt, "biography");
-                  }}
-                  placeholder=" "
-                />
+                <textarea type="text" name="biography" id="biography" value={datas?.biography} onChange={(evt) => { handleChange(evt, "biography"); }} placeholder=" " />
                 <label htmlFor="biography">{t("general.biography")}</label>
                 <span className="charCount">0/40</span>
               </div>
               <div className="form-group">
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  value={datas?.email}
-                  onChange={(evt) => {
-                    handleChange(evt, "email");
-                  }}
-                  placeholder=" "
-                />
+                <input type="email" name="email" id="email" value={datas?.email} onChange={(evt) => { handleChange(evt, "email"); }} placeholder=" " />
                 <label htmlFor="email">{t("general.email")}</label>
               </div>
             </form>

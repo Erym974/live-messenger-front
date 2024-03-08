@@ -5,21 +5,29 @@ export default {
         careers: "Carrières",
         register: "S'inscrire",
         login: "Connexion",
-        homeDescription: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo voluptate quibusdam dolore nobis dolores labore ex, at eligendi voluptatibus necessitatibus fugit error, voluptas minima beatae enim quisquam animi eum atque. Debitis non perferendis fugiat. Sed necessitatibus commodi possimus laborum provident maxime soluta natus ipsum voluptas illo deleniti excepturi, obcaecati minus, magni ea cumque autem harum officia tempora consequatur unde?",
-        block1_title: "Créez un endroit sur invitation où vous vous sentez chez vous",
-        block1_description: "Les serveurs Discord sont organisés en canaux basés sur des sujets où vous pouvez collaborer, partager et simplement parler de votre journée sans encombrer une conversation de groupe.",
-        block2_title: "Où passer du temps ensemble est facile",
-        block2_description: "Prenez place dans un salon vocal quand vous êtes disponible. Les amis de votre serveur peuvent voir que vous êtes disponible et venir immédiatement discuter sans avoir à appeler.",
-        block3_title: "Restez en contact avec vos amis",
-        block3_description: "Faites fonctionner une communauté de toutes tailles avec des outils de modération et un accès personnalisé aux membres. Donnez à vos membres des pouvoirs spéciaux, configurez des canaux privés, et plus encore.",
+        homeDescription: "L'application de messagerie instantanée rapide et sécurisée pour rester connecté où que vous soyez. Conversations fluides, interface intuitive et fonctionnalités avancées.",
+        block1_title: "Où passer du temps ensemble est facile",
+        block1_description: "Une application de messagerie où se rassembler et partager du temps ensemble est fluide et facile. Organisez des discussions, partagez du contenu et restez connectés en toute simplicité.",
+        block2_title: "En groupe ou en privé",
+        block2_description: "Connectez-vous en groupe ou en privé avec notre application de messagerie instantanée. Explorez de nouvelles discussions passionnantes en groupe ou tissez des liens plus intimes en privé.",
+        block3_title: "Faites de nouvelles connaissances.",
+        block3_description: "Découvrez un monde de possibilités avec notre application de messagerie instantanée. Faites de nouvelles connaissances, élargissez vos horizons et créez des liens uniques, tout cela à portée de clic.",
         links: "Liens",
         terms: "Conditions",
         privacy: "Confidentialité",
-        all: "Tous"
+        all: "Tous",
+        app: "Application",
+        no_posts: "Aucun article pour le moment",
+        no_jobs: "Aucun poste pour le moment",
     },
     addMember: {
         title: "Rajouter un membre",
         members: "Membres"
+    },
+    editGroup: {
+        title: "Modifier le groupe",
+        name: "Nom du groupe",
+        emoji: "Emoji",
     },
     error: {
         occured: "Une erreur est survenue",
@@ -37,10 +45,25 @@ export default {
         promote: "Promouvoir",
         all: "Tout",
         loading: "Chargement",
+        online: "Connecté",
+        offline: "Hors ligne",
+    },
+    aside: {
+        search: "Rechercher",
+        theme: "Thème",
+        settings: "Paramètres",
+        logout: "Déconnexion",
+        createGroup: "Créer un groupe",
+        account: "Mon compte" 
+    },
+    easter: {
+        try: "Un utilisateur essaie de vous envoyer un easter",
+        forbiden: "Vous avez désactivé les easter eggs",
     },
     settings: {
         general: "Général",
         allow_friends: "Autoriser les demandes d'amis",
+        allow_easter: "Autoriser les easter eggs",
         security: "Securité",
         my_account: "Mon compte",
         my_friends: "Mes amis",
@@ -51,6 +74,8 @@ export default {
         receive: "Invitations reçues",
         sended: "Invitations envoyées",
         no_change: "Pas de changement",
+        invitation_sent: "Invitations envoyées",
+        invitation_received: "Invitations reçues",
     },
     chat: {
         online: "En ligne",
@@ -58,6 +83,14 @@ export default {
         notyet: "Aucun message",
         sentfile: "{{ count }} fichier envoyé",
         sentfiles: "{{ count }} fichier envoyés",
+        attachment: "{{ count }} Pièce jointe",
+        attachments: "{{ count }} Pièces jointes",
+    },
+    search: {
+        search: "Rechercher",
+        conversations: "Conversations",
+        friends: "Amis",
+        invitations: "Invitations",
     },
     reactions: {
         title: "Reactions",
@@ -108,6 +141,8 @@ export default {
         save: "Enregistrer",
         saving: "Enregistrement",
         saved: "Enregistré",
+        readmore: "Lire la suite",
+        back: "Retour",
     },
     auth: {
         loggingin: "Connexion en cours",
@@ -132,6 +167,8 @@ export default {
         reset_password_send: "Envoyer",
         reset_password_sended: "Si cette email correspond à un compte, un email de réinitialisation de mot de passe vous a été envoyé. Vérifiez votre boîte de réception et vos spams.",
         reset_password_back: "Retourner à la page de connexion",
+        terms: "J\'accepte les conditions d\'utilisation et la politique de confidentialité",
+        agreeTerms: "Vous devez accepter les conditions d\'utilisation et la politique de confidentialité pour continuer",
     },
     account: {
         edited: "Votre compte a bien été modifié",
@@ -143,7 +180,8 @@ export default {
         delete: "Supprimer",
         edit: "Modifier",
         reply: "Répondre",
-        react: "Réagir"
+        react: "Réagir",
+        you: "Vous"
     },
     profile: {
         see: "Voir le profil",

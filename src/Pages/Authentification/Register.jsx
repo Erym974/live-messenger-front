@@ -9,16 +9,18 @@ import { Footer } from '../../Components/Public/Footer';
 export default function Register() {
 
   const [datas, setDatas] = useState({email: "", firstname: "", lastname: "", password: "", password2: ""});
+  const [agreeTerms, setAgreeTerms] = useState(false);
   const { registerUser } = useAuth();
   const { t } = useTranslation()
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
 
+    if(!agreeTerms) return toast.error(t('auth.agreeTerms'))
+
     if(!datas.email || !datas.firstname || !datas.lastname || !datas.password || !datas.password2) return toast.error(t('general.all_fields_required'));
     if(datas.password !== datas.password2) return toast.error(t('general.password_mismatch'));
     registerUser(datas)
-    
   }
 
   const handleChange = (evt, key) => setDatas({...datas, [key]: evt.target.value});
@@ -52,6 +54,14 @@ export default function Register() {
               <div className="form-group">
                 <input type="password" name="confirm-password" id="confirm-password" value={datas.password2} onChange={(evt) => { handleChange(evt, 'password2') }} placeholder=' ' />
                 <label htmlFor="confirm-password">{t('auth.confirm_password')}</label>
+              </div>
+              <div className="form-group d-flex aic">
+                <input type="checkbox" name="terms" checked={agreeTerms} onChange={() => setAgreeTerms(!agreeTerms) } />
+                <label htmlFor="terms">{t('auth.terms')}</label>
+              </div>
+              <div className="d-flex aic jcc g-20">
+                <Link to="/terms" className="" >{t('public.terms')}</Link>
+                <Link to="/privacy" className="" >{t('public.privacy')}</Link>
               </div>
             </form>
           </main>

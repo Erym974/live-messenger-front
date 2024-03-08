@@ -43,12 +43,9 @@ export const InviteFriend = () => {
       }
 
   return (
-    <div className="search-friends mt-4">
-        <div className="d-flex aic jcc g-5">
-            <Cleave
-                placeholder="00000-00000-00000"
-                type="search"
-                options={{
+    <div className="invite-friends-input mt-4">
+        <div className="input">
+            <Cleave placeholder="00000-00000-00000" type="search" options={{
                     blocks: [5, 5, 5],
                     delimiter: '-',
                     numericOnly: true

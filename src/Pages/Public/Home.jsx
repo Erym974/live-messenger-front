@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import './home.scss'
 import { Navbar } from '../../Components/Public/Navbar'
 import { Footer } from '../../Components/Public/Footer'
 import useTranslation from '../../Hooks/useTranslation'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 
 export default function Home() {
 
@@ -13,32 +15,39 @@ export default function Home() {
     { 
       title: t('public.block1_title'),
       description: t('public.block1_description'),
-      image: "https://assets-global.website-files.com/6257adef93867e50d84d30e2/6582c18a9cff186bd3731704_Create%20an%20invite-only%20place%20where%20you%20belong.svg"
+      image: "/ressources/landing-1.png"
     },
     { 
       title: t('public.block2_title'),
       description: t('public.block2_description'),
-      image: "https://assets-global.website-files.com/6257adef93867e50d84d30e2/6582c1b717efff2306ef179e_Where%20hanging%20out%20is%20easy.svg"
+      image: "/ressources/landing-2.png"
     },
     { 
       title: t('public.block3_title'),
       description: t('public.block3_description'),
-      image: "https://assets-global.website-files.com/6257adef93867e50d84d30e2/6582c1d8348e5c81ca608138_From%20few%20to%20a%20fandom.svg"
+      image: "/ressources/landing-3.png"
     },
   ]
 
+  useEffect(() => {
+    AOS.init({
+      duration: 3000,
+      once: true
+    })
+  }, [])
+
   return (
     <section className="homepage public">
-      <Navbar />
+      <Navbar data-aos="fade-down" />
       <main>
         <section id="hero">
-          <h1>Swift Chat</h1>
-          <p>{t('public.homeDescription')}</p>
+          <h1 data-aos="fade-down">Swift Chat</h1>
+          <p data-aos="fade-up">{t('public.homeDescription')}</p>
         </section>
         {sections.map((section, index) => 
           <section className="block" key={index}>
-            <img src={section.image} alt={section.title} />
-            <div className="text">
+            <img data-aos="fade-right" src={section.image} alt={section.title} />
+            <div data-aos="fade-right" className="text">
               <h2>{section.title}</h2>
               <p>{section.description}</p>
             </div>

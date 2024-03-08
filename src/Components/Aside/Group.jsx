@@ -5,6 +5,8 @@ import { toggleAside } from '../../Slices/settingsSlice'
 import { useDispatch } from 'react-redux'
 import useMessenger from '../../Hooks/useMessenger'
 import toast from 'react-hot-toast'
+import { socket } from '../../socket'
+import useAuth from '../../Hooks/useAuth'
 
 export const Group = ({ group }) => {
 
@@ -13,6 +15,7 @@ export const Group = ({ group }) => {
     const dispatch = useDispatch()
     const [canMove, setCanMove] = useState(true)
     const { groupIsFetching, messagesIsFetching } = useMessenger()
+    const { user } = useAuth()
 
     const [lastMessage, setLastMessage] = useState("")
 
@@ -33,17 +36,35 @@ export const Group = ({ group }) => {
         navigate(`/messenger/${id}`)
     }
 
+    const [isOnline, setIsOnline] = useState(false)
+
+      // Get Online or Offline if the conversation is private
+    useEffect(() => {
+        if(!group) return;
+        if(group.private) {
+            const other = group.members.find(member => member.id !== user.id)
+            socket.emit('join-is-online', other.id)
+            socket.on(`is-online`, (data) => {
+                if(data.id != other.id) return
+                setIsOnline(data.status)
+            })
+            return () => {
+                socket.emit('leave-is-online')
+                socket.off(`is-online`)
+            }
+        }
+    }, [group])
+
     return (
-        <div className="conversation" onClick={() => { handleClick(group?.id) }}>
-            <img src={group?.picture} alt="Picture of the group" />
+        <div className="conversation" onClick={() => { handleClick(group?.id) }} data-tooltip-id="aside" data-tooltip-content={group?.name} >
+            <div className="group-picture">
+                <img src={group?.picture} alt="Picture of the group" />
+                {isOnline && <span className="online"></span>}
+            </div>
             <div className="right">
                 <span className="name">{group?.name}</span>
                 <span className="message">
-                    {group?.lastMessage?.unread ?
-                        <span className="text-muted unread">{lastMessage}</span>
-                        :
-                        <span className='text-muted'>{lastMessage}</span> 
-                    }
+                    <span className='text-muted'>{lastMessage}</span> 
                 </span>
             </div>
         </div>

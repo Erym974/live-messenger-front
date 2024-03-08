@@ -27,7 +27,6 @@ export default function Login() {
       <section id="login">
         <div className="container">
           <header>
-            <img src="/ressources/profile_picture.jpg" alt="Default user profile" />
             <h1>{t('auth.login')}</h1>
           </header>
           <main>
@@ -40,7 +39,7 @@ export default function Login() {
                 <input type="password" name="password" id="password" autoComplete='current-password' value={datas.password} onChange={(evt) => { handleChange(evt.target.value, 'password') }} placeholder=' ' />
                 <label htmlFor="password">{t('auth.password')}</label>
               </div>
-              <div className="form-group">
+              <div className="form-group d-flex aic">
                 <input type="checkbox" name="remember" checked={datas.remember} onChange={() => { handleChange(!datas.remember, 'remember') }} />
                 <label htmlFor="remember">{t('auth.remember')}</label>
               </div>

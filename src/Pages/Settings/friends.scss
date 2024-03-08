@@ -3,13 +3,14 @@
 section#friends {
 
     .friends-container {
-        
+
         display: grid;
         grid-gap: 20px;
         width: 100%;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        padding: 20px 0;
+        grid-template-columns: 100%;
 
+        padding: 20px 0;
+        margin-bottom: 20px;
 
         .friend {
             display: flex;
@@ -17,13 +18,13 @@ section#friends {
             padding: 10px 20px;
             cursor: pointer;
             border-radius: 20px;
-            height: 150px;
             color: var(--color-dark);
             background-color: var(--color-background);
             box-shadow: var(--box-shadow);
             transition: background-color 0.2s ease-in-out;
             border: 1px solid #0000001a;
             gap: 10px;
+            width: 100%;
             
             &:hover {
                 background-color: $color-primary;
@@ -48,6 +49,34 @@ section#friends {
             }
         }
 
+        @media screen and (min-width: 768px) {
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+
+            .friend {
+                height: 150px;
+            }
+        }
+
+    }
+
+    .invite-friends-input {
+        display: flex;
+        flex-direction: column;
+
+        .input {
+            display: flex;
+            flex-direction: column;
+            gap: 7.5px;
+        }
+
+        @media screen and (min-width: 768px) {
+
+            .input {
+                flex-direction: row;
+                gap: 20px;
+            }
+            
+        }
     }
 
     & > ul {

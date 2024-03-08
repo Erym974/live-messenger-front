@@ -8,7 +8,6 @@ import { Navbar } from "../../Components/Settings/Navbar";
 import FormSwitch from "../../Components/FormSwitch";
 import { MenuItem, Select } from "@mui/material";
 import Language from "../../Constant/Language";
-import { SelectLanguageItem } from "../../Components/Settings/General/SelectLanguageItem";
 import { useAuth, useModal, useSettings, useTranslation } from "../../Hooks/CustomHooks";
 import { SearchModal } from "../../Components/Search/SearchModal";
 import { Link } from "react-router-dom";
@@ -38,12 +37,19 @@ export default function General() {
               {t("settings.allow_friends")}
             </FormSwitch>
 
+            <FormSwitch setData={() => toggleSetting("allow-easter")} data={user.settings.find((setting) => setting.meta === "allow-easter")?.value}>
+              {t("settings.allow_easter")}
+            </FormSwitch>
+
             <div className="language-selector">
               <span>{t("settings.language_selector")}</span>
               <Select value={language} label="Language" onChange={handleLanguageChange}>
                 {Language.LIST.map((lang) => (
                   <MenuItem value={lang.code} key={lang.code}>
-                    <SelectLanguageItem language={lang} />
+                    <div className="d-flex selectLanguageItem">
+                        <img src={`/flags/${lang.code}.svg`} style={{ height: 20 }} className="mr-2" />
+                        <span>{lang.name}</span>
+                    </div>
                   </MenuItem>
                 ))}
               </Select>
