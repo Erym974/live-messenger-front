@@ -78,10 +78,10 @@ export default function Profile() {
             <div className="modal-content">
                 <header>
                     <div className={`background-cover ${profileIsLoading && 'skeleton'}`}>
-                        <img onClick={() => { openImages(profile?.user?.coverPicture) }} className="clickable" src={profile?.user?.coverPicture} alt="" />
+                        <img onClick={() => { openImages(profile?.user?.coverPicture) }} className="clickable" src={profile?.user?.coverPicture} alt="Cover picture of user" />
                     </div>
                     <div className={`profile-picture ${profileIsLoading && 'd-none'}`}>
-                        <img onClick={() => { openImages(profile?.user?.profilePicture) }} className="clickable" src={profile?.user?.profilePicture} alt="" />
+                        <img onClick={() => { openImages(profile?.user?.profilePicture) }} className="clickable" src={profile?.user?.profilePicture} alt="Profile picture of user" />
                     </div>
                 </header>
                 <main>

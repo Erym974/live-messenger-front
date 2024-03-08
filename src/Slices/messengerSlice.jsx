@@ -55,8 +55,18 @@ export const messengerSlice = createSlice({
         moveConversationToTop: (state, action) => {
             const newGroup = {...state.groups.find(group => group.id === action?.payload?.group), lastMessage: action?.payload?.message}
             state.groups = [newGroup, ...state.groups.filter(group => group.id !== action.payload.group)]
+        },
+        updateConversation: (state, action) => {
+            const newData = action.payload.group;
+            const updatedGroups = state.groups.map(group => {
+                if (group.id === newData.id) {
+                    return {...group, picture: newData.picture, name: newData.name};
+                }
+                return group;
+            });
+            state.groups = updatedGroups;
         }
     }
 })
 
-export const { setMessageFetching, moveConversationToTop, removeConversation, setReply, setEmoji, setGroup, setGroups, setSubMenu, setMessages, setMessage, newMessage, replaceMessage, setEdition } = messengerSlice.actions;
+export const { setMessageFetching, moveConversationToTop, updateConversation, removeConversation, setReply, setEmoji, setGroup, setGroups, setSubMenu, setMessages, setMessage, newMessage, replaceMessage, setEdition } = messengerSlice.actions;

@@ -7,7 +7,7 @@ import { useTranslation } from "./CustomHooks";
 
 export default function useSettings() {
 
-    const SETTINGS = ["allow-friend-request", "allow-notification", "language"]
+    const SETTINGS = ["allow-friend-request", "allow-easter", "language"]
 
     const { user } = useSelector(state => state.auth)
     const [isMobileView, setMobileView] = useState(false)

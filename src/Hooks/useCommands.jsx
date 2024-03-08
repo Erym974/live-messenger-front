@@ -1,10 +1,15 @@
 import useMessenger from "./useMessenger"
 import { socket } from "../socket"
 import { useEffect } from "react"
+import useAuth from "./useAuth"
+import toast from "react-hot-toast"
+import useTranslation from "./useTranslation"
 
 export default function useCommands() {
 
     const { group } = useMessenger()
+    const { user } = useAuth()
+    const { t } = useTranslation()
 
     useEffect(() => {
         if(!socket) return
@@ -16,9 +21,9 @@ export default function useCommands() {
     }, [socket])
 
     const easters = [
-        {active: true, name: "mango", chat: true, audio: "mango", alias: ["mangue"], image: "https://media0.giphy.com/media/S8HRMhG0ecGOTuVnVP/giphy.gif?cid=ecf05e47t1x6bltn2pnjgvbduc5f9na0kwu0uc07egykwrfe&ep=v1_gifs_search&rid=giphy.gif&ct=g"}, 
-        {active: true, name: "issou", chat: true, audio: "issou", alias: ["ayaderisitas"], image: "https://media.tenor.com/ZOPUNPN6FugAAAAd/issou-drole.gif"},
-        {active: false, name: "idle", chat: false, audio: "idle", alias: [], image: "https://media.tenor.com/acFXt21UBcgAAAAC/sleepy-kid.gif"},
+        {id: 1, active: true, name: "mango", chat: true, audio: "mango", alias: ["mangue"], image: "https://media0.giphy.com/media/S8HRMhG0ecGOTuVnVP/giphy.gif?cid=ecf05e47t1x6bltn2pnjgvbduc5f9na0kwu0uc07egykwrfe&ep=v1_gifs_search&rid=giphy.gif&ct=g"}, 
+        {id: 2, active: true, name: "issou", chat: true, audio: "issou", alias: ["ayaderisitas"], image: "https://media.tenor.com/ZOPUNPN6FugAAAAd/issou-drole.gif"},
+        {id: 3, active: false, name: "idle", chat: false, audio: "idle", alias: [], image: "https://media.tenor.com/acFXt21UBcgAAAAC/sleepy-kid.gif"},
     ]
 
 
@@ -42,12 +47,19 @@ export default function useCommands() {
     }
 
     const sendEaster = async (easter) => {
-        socket.emit("send-easter", {id: group.id, easter})
+        const setting = user.settings.find(setting => setting.meta === "allow-easter")
+        if(!setting?.value) return toast.error(t('easter.forbiden'));
+        socket.emit("send-easter", {id: group.id, easter: easter.id})
     }
 
-    const execEaster = (easter) => {
+    const execEaster = (payload) => {
 
-        if(typeof easter === "string")easter = easters.find(e => e.name === easter)
+        const setting = user.settings.find(setting => setting.meta === "allow-easter")
+        if(!setting?.value) return toast(t('easter.try'), {icon: 'ℹ️'});
+
+        let easter = easters.find(e => e.id === payload)
+
+        if(typeof easter === "string") easter = easters.find(e => e.name === easter)
         if(!easter) return
 
         document.body.classList.add("easter")

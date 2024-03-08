@@ -58,6 +58,9 @@ export default function Messages({ conversation, messages }) {
 
     return (
         <>
+            <Tooltip id="message" place="bottom" style={{ zIndex: 9999999 }} />
+            <Tooltip id="message-profile" place="bottom" style={{ zIndex: 9999999 }} />
+            
             {(!messagesIsFetching && messageHasNextPage) && 
                 <div id="load-more">
                     <button onClick={() => { messageFetchNextPage() }}>{t('message.loadMore')}</button>

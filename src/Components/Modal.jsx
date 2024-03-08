@@ -6,6 +6,7 @@ import Reactions from './Modals/Reactions'
 import AddMember from './Modals/AddMember'
 import RemoveGroup from './Modals/RemoveGroup'
 import LeaveGroup from './Modals/LeaveGroup'
+import EditGroup from './Modals/EditGroup'
 
 export const Modal = () => {
 
@@ -17,7 +18,8 @@ export const Modal = () => {
     "Reactions": <Reactions />,
     "AddMember": <AddMember />,
     "LeaveGroup": <LeaveGroup />,
-    "RemoveGroup": <RemoveGroup />
+    "RemoveGroup": <RemoveGroup />,
+    "EditGroup": <EditGroup />
   })
 
   const getModalInstance = () => {

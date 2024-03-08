@@ -63,7 +63,7 @@ body.easter {
         top: 0; left: 0;
 
         background-color: rgba(0, 0, 0, 0.5);
-        z-index: 999;
+        z-index: 9999;
     }
 
     &::before {
@@ -71,10 +71,14 @@ body.easter {
         content: var(--easter-image);
         top: 50%; left: 50%;
         transform: translate(-50%, -50%);
-        z-index: 1000;
+        z-index: 99991;
     }
 
 
+}
+
+.rounded {
+    border-radius: 50%;
 }
 
 .modal {
@@ -230,6 +234,7 @@ input {
     background-color: #eee;
     padding: 10px 20px;
     border-radius: $border-radius;
+    z-index: 9999;
 
     .actions {
         padding-top: 10px;
@@ -351,7 +356,7 @@ input:invalid {
 
     .content {
         position: relative;
-        background-color: var(--color-dark);
+        background-color: var(--color-white);
         padding: 5px;
         border-radius: 8px;
         z-index: 9999;
@@ -366,6 +371,7 @@ input:invalid {
             top: 15px; right: 15px;
             font-size: 1.5rem;
             cursor: pointer;
+            color: var(--color-dark);
         }
 
         .bottoms {
@@ -557,7 +563,7 @@ span.text-muted {
 
 .skeleton {
     position: relative;
-    
+
     &::before {
         content: '';
         position: absolute;
@@ -570,7 +576,15 @@ span.text-muted {
         background-size: 200%;
         animation: loading 1s infinite reverse;
     }
-}   
+
+    &.chat-profile-picture {
+        width: 40px;
+        height: 40%;
+        &::before {
+            border-radius: 50%;
+        }
+    }
+}  
 
 .transparent {
     background-color: transparent !important;
@@ -594,6 +608,10 @@ span.text-muted {
 
 .d-flex {
     display: flex;
+}
+
+.jcc {
+    justify-content: center;
 }
 
 .f-c {
@@ -704,5 +722,24 @@ $spacer: 16px;
         .m#{$side}-#{$size} {
             margin-#{$vl}: $spacer * $value !important;
         }
+    }
+}
+
+.emoji-form-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    em-emoji {
+        cursor: pointer;
+    }
+
+    .edit-group-emoji {
+        position: absolute;
+        top: calc(100% + 5px);
+        right: -5px;
+        z-index: 99999;
     }
 }

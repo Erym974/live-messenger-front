@@ -11,7 +11,7 @@ export default function CreateGroup() {
 
     const { t } = useTranslation()
     const { closeModal } = useModal()
-    const { friends } = useFriends()
+    const { friends, fetchFriends } = useFriends()
     const navigate = useNavigate();
 
     /** set datas */
@@ -22,6 +22,11 @@ export default function CreateGroup() {
 
     const [availableMembers, setAvailableMembers] = useState([])
     const [creationInProgess, setCreationInProgess] = useState(false)
+
+    // Load friends
+    useEffect(() => {
+        fetchFriends()
+    }, [])
 
     /** When friends is loaded */
     useEffect(() => {
@@ -62,7 +67,7 @@ export default function CreateGroup() {
 
   return (
     <>
-        <div className="modal-body">
+        <div className="modal-body" style={{ height: "80vh" }}>
         <h2 className='text-center'>{t('createGroup.title')}</h2>
         
         <div className="form-group">

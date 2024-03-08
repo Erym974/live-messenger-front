@@ -67,7 +67,7 @@ export default function useMessenger() {
     // Fetch group
     useEffect(() => {
         if(!conversation) return
-        if(group?.id == conversation) return
+        if(group?.id === conversation) return
 
         dispatch(setMessages([]))
         dispatch(setGroup(null))
@@ -133,19 +133,10 @@ export default function useMessenger() {
         if(reply != null) datasToSend = {...datasToSend, reply: reply.id}
 
         if(files.length > 0) {
-            datasToSend = new FormData()
-            datasToSend.append('group', id)
-            datasToSend.append('message', content)
-            Array.from(files.map(file => file.file)).forEach(file => {
-                datasToSend.append('files[]', file);
-            });
-
-            // TODO : Send a message with file
-            // socket.emit('send-message', {group: id, message: JSON.stringify(datasToSend), token: auth})
+            socket.emit('send-message', {group: id, message: {message: content, files: files}, token: auth})
         } else {
             socket.emit('send-message', {group: id, message: datasToSend, token: auth})
         }
-
         
     }
 

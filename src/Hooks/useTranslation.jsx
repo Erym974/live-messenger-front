@@ -19,6 +19,7 @@ export default function useTranslation() {
     }, [user])
 
     useEffect(() => {
+        document.documentElement.lang = language
         setLocal(language)
         i18n.changeLanguage(language)
     }, [language])

@@ -7,17 +7,14 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Navbar } from '../../Components/Public/Navbar';
 import { Footer } from '../../Components/Public/Footer';
-import toast from 'react-hot-toast';
 
 export const Careers = () => {
 
-    const { data, refetch } = useQuery({
+    const { data } = useQuery({
         queryKey: ['jobs'],
         queryFn: async () => {
             const response = await axios.get('/jobs')
             if(response?.status) return response.datas
-            setError(true)
-            toast.error(t('error.occured'))
             return []
         }
     })
@@ -26,7 +23,6 @@ export const Careers = () => {
     const [filters, setFilters] = useState([])
     const [filter, setFilter] = useState("")
     const [modal, setModal] = useState(null)
-    const [error, setError] = useState(false)
     const { t } = useTranslation()
 
     useEffect(() => {
@@ -55,7 +51,7 @@ export const Careers = () => {
     <section className="careers public">
     <Navbar />
     <main>
-        {!error ?
+        {jobs.length > 0 ?
         <>
             <section id="careers">
                 <h1>Careers</h1>
@@ -91,8 +87,9 @@ export const Careers = () => {
             </section>
         </>
         :
-        <section className="error">
-            <button onClick={refetch}>{t('error.reload')}</button>
+        <section id="careers">
+            <h1>Careers</h1>
+            <h3 className="pt-2">{t('public.no_jobs')}</h3>
         </section>
         }
     </main>

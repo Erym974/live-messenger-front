@@ -1,10 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import useModal from '../../Hooks/useModal'
 import useTranslation from '../../Hooks/useTranslation'
-import toast from 'react-hot-toast';
-import useFriends from '../../Hooks/useFriends';
-import Select from 'react-select';
-import axios from '../../Api/axios';
 import { useNavigate } from "react-router-dom";
 import { FaCrown, FaUser } from "react-icons/fa";
 import { IoLogOut } from "react-icons/io5";

@@ -12,13 +12,15 @@ export const SearchModal = () => {
     const [search, setSearch] = useState("");
     const [results, setResults] = useState({})
 
-    const { friends, invitations } = useFriends()
+    const { friends, invitations, fetchFriends, fetchInvites } = useFriends()
     const { showProfile } = useProfile()
     const { groups } = useMessenger()
     const navigate = useNavigate()
 
     useEffect(() => {
         if(!search) return setResults([]);
+        fetchFriends()
+        fetchInvites()
         let filtered = {};
         filtered['conversations'] = getResultFromGroups()
         filtered['friends'] = getResultFromFriends()

@@ -8,26 +8,15 @@ export const Invitation = ({ invitation }) => {
 
   const { showProfile } = useProfile()
   const { user } = useAuth()
-  const { current: friend } = useRef( invitation?.emitter?.id == user.id ? invitation.receiver : invitation.emitter)
-
-  const convertDate = () => {
-    const date = new Date(invitation?.createdAt)
-    switch(language){
-      case "fr":
-        return date.toLocaleDateString("fr-FR")
-      case "en":
-        return date.toLocaleDateString("en-US")
-      default:
-        return date.toLocaleDateString("en-US")
-    }
-  }
+  const { current: emitter } = useRef(invitation?.emitter?.id === user.id ? true : false)
+  const { current: friend } = useRef( emitter ? invitation.receiver : invitation.emitter)
 
   return (
     <div className="friend" onClick={() => { showProfile(friend.id) }}>
         <img src={friend?.profilePicture} alt={friend?.fullname} className="friend-avatar" />
         <div className="right">
             <span className="friend-name">{friend?.fullname}</span>
-            <span className="friend-since">{t(`invitations.invitation_sent`, { createdAt: convertDate() })}</span>
+            <span className="friend-since">{t(emitter ? `settings.invitation_sent` : `settings.invitation_received`)}</span>
         </div>
     </div>
   )

@@ -30,7 +30,7 @@ export default function Friends() {
   const FriendTab = () => {
     return (
       <>
-      {searchModal && <SearchModal />}
+        {searchModal && <SearchModal />}
         <div className="search-friends mt-3">
           <input type="search" id="search" value={filter} onChange={(e) => { setFilter(e.target.value); }} placeholder="Chercher dans mes Amis"/>
         </div>

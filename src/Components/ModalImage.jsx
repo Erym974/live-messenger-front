@@ -45,7 +45,7 @@ export const ModalImage = () => {
             <GrFormNext onClick={previousImage} />
         </div>
         }
-        <img src={images[activeImage]} alt="" />
+        <img src={images[activeImage]} alt={images[activeImage]} />
         <div className="bottoms">
             {downloadable && <button onClick={downloadImage}>Download image</button>}
         </div>

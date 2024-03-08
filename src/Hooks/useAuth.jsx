@@ -6,6 +6,7 @@ import toast from "react-hot-toast"
 import axios from "../Api/axios"
 import { FaBullseye } from "react-icons/fa"
 import { useNavigate } from "react-router-dom"
+import { useEffect } from "react"
 
 export default function useAuth() {
 
@@ -57,28 +58,6 @@ export default function useAuth() {
             const response = await axios.post('/auth/login', user)
             if(response.hasOwnProperty('code')) return toast.error(t('auth.wrong_credentials'))
             dispatch(setAuth(response.token))
-            
-            // const userResponse = await axios.get('/users/me')
-
-            // if(!userResponse?.status) {
-                
-            //     switch(userResponse.message) {
-            //         case "Invalid JWT Token":
-            //             toast.error(t('auth.invalid'))
-            //             break
-            //         default:
-            //             toast.error(t('auth.expired'))
-            //             break
-            //     }
-
-            //     dispatch(setAuth(null))
-            //     dispatch(setUser(null))
-            //     dispatch(setLoading(false))
-            //     navigate('/auth/login')
-            // } else {
-            //     dispatch(setUser(userResponse?.datas.user))
-            //     dispatch(setLoading(false))
-            // }
 
             return true
         } catch(err) {

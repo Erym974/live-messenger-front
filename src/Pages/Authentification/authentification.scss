@@ -5,199 +5,7 @@
     display: flex;
     flex-direction: column;
 
-    nav {
-        padding: 0 10px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 10vh;
-        background-color: #202528;
-
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-
-            h1 {
-                font-size: 26px;
-                color: $color-primary;
-
-                span {
-                    color: #fff;
-                }
-            }
-
-            img {
-                height: 60px;
-            }
-        }
-
-        .links {
-            display: none;
-            gap: 15px;
-
-            li {
-                list-style: none;
-            }
-        }
-
-        .auth {
-            display: none;
-            gap: 20px;
-
-            li {
-                list-style: none;
-            }
-        }
-
-        .hamburger {
-            .hamburger-toggler {
-                z-index: 2;
-                background-color: transparent !important;
-                font-size: 30px;
-                color: #fff;
-            }
-
-            .hamburger-links {
-                z-index: 1;
-                position: fixed;
-                display: none;
-                background-color: #202528;
-                right: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                text-align: center;
-                font-size: 30px;
-
-                ul {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 20px;
-
-                    li {
-                        list-style: none;
-                    }
-                }
-
-                .close {
-                    position: absolute;
-                    top: 20px;
-                    right: 20px;
-                    font-size: 30px;
-                    color: #fff;
-                    cursor: pointer;
-                    background-color: transparent;
-                }
-            }
-
-            &[data-open='true'] {
-                .hamburger-links {
-                    display: flex;
-                }
-            }
-        }
-
-        a {
-            text-decoration: none;
-            color: #fff;
-            font-weight: 900;
-            transition: all 0.3s ease;
-
-            &:hover {
-                color: $color-primary;
-            }
-
-            &.special {
-                background-color: $color-primary;
-                padding: 10px 20px;
-                border-radius: $border-radius;
-                transition: all 0.3s ease;
-
-                &:hover {
-                    color: #fff;
-                    background-color: $color-primary-variant;
-                }
-            }
-        }
-
-        .lang-dropdown {
-            position: relative;
-            display: inline-block;
-
-            .current-lang {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 15px;
-                padding: 0 20px 0 10px;
-                color: #fff;
-
-                img {
-                    height: 20px;
-                }
-            }
-
-            .dropdown-content {
-                display: none;
-                position: absolute;
-                background-color: #f9f9f9;
-                min-width: 160px;
-                box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-                padding: 5px 10px;
-                z-index: 1;
-                right: 0;
-                border-radius: $border-radius;
-
-                button {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background-color: transparent;
-                    border: none;
-                    border-radius: 0;
-                    padding: 10px;
-                    width: 100%;
-                    gap: 15px;
-                    transition: all 0.3s ease;
-
-                    img {
-                        height: 20px;
-                    }
-
-                    &:hover {
-                        background-color: #eee;
-                    }
-                }
-            }
-
-            &:hover {
-                .dropdown-content {
-                    display: block;
-                }
-
-            }
-        }
-
-        @media screen and (min-width: 768px) {
-            .links {
-                display: flex;
-            }
-
-            .auth {
-                display: flex;
-            }
-
-            .hamburger {
-                display: none;
-            }
-        }
-    }
+    @include public-nav(#202528);
 
     section#login,
     section#reset-password,
@@ -240,21 +48,20 @@
                 }
 
                 h1 {
-                    padding: 30px 0;
+                    padding: 15px 0;
                 }
             }
 
             main {
 
                 form {
-
-
                     display: flex;
                     flex-direction: column;
                     gap: 20px;
 
                     .form-group {
                         position: relative;
+                        margin: 5px 0;
 
                         label {
                             position: absolute;
@@ -265,7 +72,6 @@
                             color: var(--color-dark);
                             transition: all 0.3s ease;
                             pointer-events: none;
-                            background-color: #fff;
                             background-color: var(--color-white);
                         }
 
@@ -282,25 +88,37 @@
                             cursor: text;
                         }
 
-                        input:not(:placeholder-shown)+label,
-                        input:focus+label {
+                        input:not(:placeholder-shown):not([type="checkbox"])+label,
+                        input:focus:not([type="checkbox"])+label {
                             top: 0px;
                             left: 5px;
                             color: #2892D7;
                             font-size: 12px;
                         }
 
-                        input:not(:placeholder-shown),
-                        input:focus {
+                        input:not(:placeholder-shown):not([type="checkbox"]),
+                        input:focus:not([type="checkbox"]) {
                             border-color: #2892D7;
                         }
 
-                        input:invalid+label {
+                        input:invalid:not([type="checkbox"])+label {
                             color: red;
                         }
 
-                        input:invalid {
+                        input:invalid:not([type="checkbox"]) {
                             border-color: red;
+                        }
+
+                        input[type="checkbox"] {
+                            width: 20px; height: 20px;
+                        }
+
+                        input[type="checkbox"]+label {
+                            padding: 0;
+                            left: 25px;
+                            width: 100%;
+                            // background: transparent;
+                            pointer-events: all;
                         }
                     }
 
@@ -343,41 +161,8 @@
 
     }
 
-    > footer {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 25px;
-        color: #fff;
-        padding: 20px;
-        text-align: center;
-        background-color: #202528;
-
-        .block {
-            h3 {
-                color: #fff;
-            }
-
-            ul {
-                li {
-                    list-style: none;
-
-                    a {
-                        text-decoration: none;
-                        color: #fff;
-
-                        &:hover {
-                            text-decoration: underline;
-                        }
-                    }
-                }
-            }
-        }
-
-        @media screen and (min-width: 768px) {
-            flex-direction: row;
-            justify-content: space-around;
-            padding: 50px;
-        }
+    & > {
+        @include public-footer(#202528);
     }
+
 }

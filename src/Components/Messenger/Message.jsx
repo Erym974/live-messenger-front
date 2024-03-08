@@ -61,17 +61,19 @@ export default function Message({ message }) {
 
     /** Detect if message is a GIF */
     const isGif = () => {
-        const content = message.content.toLowerCase()
-        if(content.split(' ').length > 1) return false
-        if(content.startsWith('gif:http')) return true
+        const content = message.content?.toLowerCase()
+        if(content?.split(' ').length > 1) return false
+        if(content?.startsWith('gif:http')) return true
         return false
     }
 
     /** Detect if message is an Emoji only message */
     const containsOnlyEmoji = () => {
-        const regex = /[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{1FAC0}-\u{1FAFF}\u{1F004}-\u{1F0CF}\u{1F170}-\u{1F251}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}\u{1F004}-\u{1F0CF}]/gu;
-        const emojiFound = message.content.match(regex);
-        return emojiFound !== null && emojiFound.join('') === message.content;
+        const emojiFound = message.content?.match(/(?:<a?:[^:]+:\d{18}>|[\p{Extended_Pictographic}])/gu)
+        if(!emojiFound) return false;
+        let content = message.content
+        const contentWithoutEmoji = content.replace(/(?:<a?:[^:]+:\d{18}>|[\p{Extended_Pictographic}])/gu, '').trim();
+        return contentWithoutEmoji === "";
     }
 
     /** Detect if message is an Emoji only message */

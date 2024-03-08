@@ -5,17 +5,20 @@ export default {
         careers: "Careers",
         register: "Register",
         login: "Login",
-        homeDescription: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo voluptate quibusdam dolore nobis dolores labore ex, at eligendi voluptatibus necessitatibus fugit error, voluptas minima beatae enim quisquam animi eum atque. Debitis non perferendis fugiat. Sed necessitatibus commodi possimus laborum provident maxime soluta natus ipsum voluptas illo deleniti excepturi, obcaecati minus, magni ea cumque autem harum officia tempora consequatur unde?",
-        block1_title: "Create an invite-only place where you belong",
-        block1_description: "Discord servers are organized into topic-based channels where you can collaborate, share, and just talk about your day without clogging up a group chat.",
-        block2_title: "Where hanging out is easy",
-        block2_description: "Grab a seat in a voice channel when you’re free. Friends in your server can see you’re around and instantly pop in to talk without having to call.",
-        block3_title: "Keep in touch with your friends",
-        block3_description: "Get a community of any size running with moderation tools and custom member access. Give members special powers, set up private channels, and more.",
+        homeDescription: "The fast and secure instant messaging app to stay connected wherever you are. Smooth conversations, intuitive interface, and advanced features.",
+        block1_title: "Where spending time together is easy",
+        block1_description: "A messaging app where gathering and sharing time together is smooth and easy. Organize discussions, share content, and stay connected effortlessly.",
+        block2_title: "In groups or privately",
+        block2_description: "Connect in groups or privately with our instant messaging app. Explore new exciting discussions in groups or forge more intimate connections privately.",
+        block3_title: "Make new friends.",
+        block3_description: "Discover a world of possibilities with our instant messaging app. Make new acquaintances, broaden your horizons, and forge unique connections, all at the click of a button.",
         links: "Links",
         terms: "Terms",
         privacy: "Privacy",
-        all: "All"
+        all: "All",
+        app: "Application",
+        no_posts: "No posts yet",
+        no_jobs: "No jobs yet",
     },
     addMember: {
         title: "Add a member",
@@ -37,10 +40,25 @@ export default {
         promote: "Promote",
         all: "All",
         loading: "Loading",
+        online: "Online",
+        offline: "Offline",
+    },
+    aside: {
+        search: "Search",
+        theme: "Theme",
+        settings: "Settings",
+        logout: "Logout",
+        createGroup: "Create a group",
+        account: "My account"
+    },
+    easter: {
+        try: "A user tries to send you an easter",
+        forbiden: "You have disabled easter eggs",
     },
     settings: {
         general: "General",
         allow_friends: "Allow friends requests",
+        allow_easter: "Allow easter eggs",
         security: "Security",
         my_account: "My Account",
         my_friends: "My Friends",
@@ -51,6 +69,8 @@ export default {
         receive: "Invitations received",
         sended: "Invitations sended",
         no_change: "No change",
+        invitation_sent: "Invitations sent",
+        invitation_received: "Invitations received",
     },
     chat: {
         online: "Online",
@@ -58,6 +78,14 @@ export default {
         notyet: "No message yet",
         sentfile: "Sent {{ count }} file",
         sentfiles: "Sent {{ count }} files",
+        attachment: "{{ count }} Attachment",
+        attachments: "{{ count }} Attachments",
+    },
+    search: {
+        search: "Search",
+        conversations: "Conversations",
+        friends: "Friends",
+        invitations: "Invitations",
     },
     friends: {
         mutual_friend: "{{ count }} mutual friend",
@@ -98,6 +126,8 @@ export default {
         newPassword: "New password",
         confirmNewPassword: "Confirme your password",
         saved: "Saved",
+        readmore: "Read more",
+        back: "Back",
     },
     cookie: {
         one: "By using our site, you acknowledge that you have read and understand our",
@@ -139,6 +169,8 @@ export default {
         reset_password_send: "Send",
         reset_password_sended: "If this email corresponds to an account, a password reset email has been sent to you. Please check your inbox and spam folder.",
         reset_password_back: "Go back to the login form",
+        terms: "I accept the terms of service and the privacy policy",
+        agreeTerms: "You must accept the terms of service and the privacy policy to continue",
     },
     account: {
         edited: "You're account was edited successfully",
@@ -150,10 +182,17 @@ export default {
         delete: "Delete",
         edit: "Edit",
         reply: "Reply",
-        react: "React"
+        react: "React",
+        you: "You"
     },
     removeGroup: {
         title: "Remove group"
+    },
+    editGroup: {
+        title: "Edit group",
+        name: "Group name",
+        members: "Members",
+        picture: "Group picture",
     },
     profile: {
         see: "See profile",

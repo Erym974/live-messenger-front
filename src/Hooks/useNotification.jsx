@@ -1,22 +1,19 @@
-import { useDocumentTitle } from "@uidotdev/usehooks"
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { FaTimes } from "react-icons/fa";
 
 export default function useNotification() {
-
-    const notificationTitle = () => {
-    }
     
     const notificationMessage = (title = "Notification", content, actions, options) => {
 
-        // get timestamp
-
-        const time = new Date().getTime();
+        // if there is no id in options
+        if(!options.hasOwnProperty('id')) {
+            options.id = new Date().getTime()
+        }
 
         toast.custom(<div className="notifications">
             <header>
                 <h4>{title}</h4>
-                <FaTimes onClick={() => { toast.dismiss(time) }} />
+                <FaTimes onClick={() => { toast.dismiss(options.id) }} />
             </header>
             <main className="content">
                 {content}
@@ -25,15 +22,13 @@ export default function useNotification() {
                 {actions}
             </footer>
         </div>, {
-            id: time,
             ...options
         })
+
+        return options.id
+
     }
 
-    const notificationSound = () => {
-
-    }
-
-    return { notificationTitle, notificationMessage, notificationSound }
+    return { notificationMessage }
 
 }

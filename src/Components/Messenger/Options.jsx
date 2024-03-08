@@ -15,10 +15,7 @@ export const Options = ({ message }) => {
     const { user } = useAuth()
 
     useEffect(() => {
-        if(!emoji) {
-            // document.querySelectorAll('.message-actions__open').forEach(e => e.classList.remove('message-actions__open'))
-            return
-        }
+        if(!emoji) return
         if(emoji.message != message.id) return
 
         let emojiEvent = emoji.event
