@@ -93,6 +93,7 @@ section.public {
                     font-size: 30px;
                     padding-bottom: 20px;
                     border-bottom: 2px solid #202528;
+                    color: #000;
                 }
     
                 .filters {
@@ -135,6 +136,10 @@ section.public {
                         display: flex;
                         flex-direction: column;
                         gap: 20px;
+
+                        h2 {
+                            color: #181a1e;
+                        }
     
                         .btn {
                             background-color: $color-primary;
@@ -177,6 +182,7 @@ section.public {
                     text-align: center;
                     padding: 20px 0;
                     font-size: 5vh;
+                    color: #181a1e;
                 }
     
                 .post-thumbnail {
@@ -238,6 +244,7 @@ section.public {
                     font-size: 30px;
                     padding-bottom: 20px;
                     border-bottom: 2px solid #202528;
+                    color: #000;
                 }
     
                 .filters {
