@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { removeConversation, setGroup, setGroups, setReply as setReplySlice, setEmoji as setEmojiSlice, setMessages, setMessage, newMessage, replaceMessage, setEdition as setSliceEdition, setMessageFetching } from "../Slices/messengerSlice"
+import { removeConversation, setGroup, setGroups, setReply as setReplySlice, setEmoji as setEmojiSlice, setMessages, setMessage, newMessage, replaceMessage, setEdition as setSliceEdition, setMessageFetching, setMessageNextPage } from "../Slices/messengerSlice"
 import axios from "../Api/axios"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { socket } from "../socket"
@@ -9,7 +9,7 @@ import toast from "react-hot-toast"
 export default function useMessenger() {
 
     const dispatch = useDispatch()
-    const { group, groups, messages, message, edition, reply, emoji, messages_showed, messagesIsFetching } = useSelector(state => state.messenger)
+    const { group, groups, messages, message, edition, reply, emoji, messages_showed, messagesIsFetching, messageNextPage } = useSelector(state => state.messenger)
     const { auth } = useSelector(state => state.auth)
 
     const [conversation, setConversation] = useState(null)
@@ -35,11 +35,15 @@ export default function useMessenger() {
         enabled: false,
         initialPageParam: 1,
         getNextPageParam: (lastPage, allPages) => {
-            if(allPages.length + 1 > lastPage?.datas?.pages) return undefined;
-            else return allPages.length + 1
+            const currentPage = allPages?.length
+            const maxPages = lastPage?.pages;
+            return currentPage < maxPages ? currentPage + 1 : null;
         },
         queryFn: async ({ pageParam }) => {
-            if(conversation) return await axios.get(`/messages/${conversation}?limit=${messageLimit}&page=${pageParam}`)
+            if(conversation) {
+                const response = await axios.get(`/messages/${conversation}?limit=${messageLimit}&page=${pageParam}`)
+                return response.datas
+            }
         },
     })
 
@@ -64,6 +68,10 @@ export default function useMessenger() {
         dispatch(setMessageFetching(messagesIsFetchingQuery))
     }, [messagesIsFetchingQuery])
 
+    useEffect(() => {
+        dispatch(setMessageNextPage(messageHasNextPage))
+    }, [messageHasNextPage])
+
     // Fetch group
     useEffect(() => {
         if(!conversation) return
@@ -78,14 +86,14 @@ export default function useMessenger() {
     // Fetch messages
     useEffect(() => {
         if(!groupResponse) return
-        fetchMessages()
+        // fetchMessages()
     }, [groupResponse])
     
     // Parse 
     useEffect(() => {
         if(!messageResponse) return
         if(messageResponse.pages[0] === undefined) return
-        const msgs =  messageResponse.pages.reverse().map((page) => page.datas.messages).flat()
+        const msgs =  messageResponse.pages.reverse().map((page) => page.messages).flat()
         dispatch(setMessages(msgs))
     }, [messageResponse])
 
@@ -202,6 +210,6 @@ export default function useMessenger() {
         socket.emit('promote-user', {id: group.id, user: user, token: auth})
     }
 
-    return { checkGroup, onKick, leaveGroup, setConversation, fetchGroups, kickUser, promoteUser, setEmoji, messagesIsFetching, groupIsFetching, emoji, messageHasNextPage, groupResponse, groups, group, messages, message, messages_showed, edition, groupsIsLoading, reply, messageFetchNextPage, setReply, onMessageReceived, setEdition, fetchGroup, sendMessage, activeMessage,  deleteMessage, editMessage, reactToMessage }
+    return { messageNextPage, checkGroup, onKick, leaveGroup, setConversation, fetchGroups, kickUser, promoteUser, setEmoji, messagesIsFetching, groupIsFetching, emoji, messageHasNextPage, groupResponse, groups, group, messages, message, messages_showed, edition, groupsIsLoading, reply, messageFetchNextPage, setReply, onMessageReceived, setEdition, fetchGroup, sendMessage, activeMessage,  deleteMessage, editMessage, reactToMessage }
 
 }

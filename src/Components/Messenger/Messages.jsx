@@ -7,11 +7,12 @@ import { Tooltip } from 'react-tooltip';
 import Message from './Message';
 import { Loader } from '../Loader';
 import { NoMessageYet } from './NoMessageYet';
-import { useDispatch } from 'react-redux';
+import { useInView } from 'react-intersection-observer';
 
 export default function Messages({ conversation, messages }) {
     
-    const { messageHasNextPage, messagesIsFetching, setConversation, messageFetchNextPage } = useMessenger()
+    const { messageHasNextPage, messagesIsFetching, setConversation, messageFetchNextPage, messageNextPage } = useMessenger()
+    const { ref, inView } = useInView()
     const { t } = useTranslation()
     
     const [dropdown, setDropdown] = useState(null)
@@ -56,19 +57,28 @@ export default function Messages({ conversation, messages }) {
         if(e.target.closest('.dropdown-more') === null) setDropdown(null)
     }
 
+    useEffect(() => {
+        if(!messageHasNextPage) return
+        console.log(messageHasNextPage);
+        // if(inView && messages?.length > 0) messageFetchNextPage();
+    }, [inView])
+
     return (
         <>
             <Tooltip id="message" place="bottom" style={{ zIndex: 9999999 }} />
             <Tooltip id="message-profile" place="bottom" style={{ zIndex: 9999999 }} />
             
-            {(!messagesIsFetching && messageHasNextPage) && 
-                <div id="load-more">
+            
+
+            {(messages?.length > 0 && messageNextPage) && 
+                <div id="load-more" ref={ref}>
                     <button onClick={() => { messageFetchNextPage() }}>{t('message.loadMore')}</button>
                 </div>
             }
             {messagesIsFetching && <Loader />}
             
             <div className="messages">
+            <span>{messageNextPage}</span>
                 <Tooltip id="tooltip" data-tooltip-offset="55" data-tooltip-place="top" style={{ zIndex: 99999 }} />
 
                 {(!messagesIsFetching && messages?.length == 0) && <NoMessageYet />}

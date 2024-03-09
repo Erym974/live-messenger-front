@@ -11,7 +11,8 @@ export const messengerSlice = createSlice({
         emoji: null,
         reply: null,
         subMenu: null,
-        edition: {active: false, id: null, content: null}
+        edition: {active: false, id: null, content: null},
+        messageNextPage: false
     },
     reducers: {
         setMessageFetching: (state, action) => {
@@ -65,8 +66,11 @@ export const messengerSlice = createSlice({
                 return group;
             });
             state.groups = updatedGroups;
+        },
+        setMessageNextPage: (state, action) => {
+            state.messageNextPage = action.payload;
         }
     }
 })
 
-export const { setMessageFetching, moveConversationToTop, updateConversation, removeConversation, setReply, setEmoji, setGroup, setGroups, setSubMenu, setMessages, setMessage, newMessage, replaceMessage, setEdition } = messengerSlice.actions;
+export const { setMessageFetching,setMessageNextPage,  moveConversationToTop, updateConversation, removeConversation, setReply, setEmoji, setGroup, setGroups, setSubMenu, setMessages, setMessage, newMessage, replaceMessage, setEdition } = messengerSlice.actions;
