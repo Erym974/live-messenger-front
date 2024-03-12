@@ -17,7 +17,6 @@ section#chat {
 
         max-height: 10vh;
         background-color: var(--color-white);
-        box-shadow: var(--box-shadow);
         transition: 0.4s ease-in-out;
         z-index: 998;
         padding: 15px 10px 15px 25px;
@@ -109,7 +108,6 @@ section#chat {
         padding: 15px;
         overflow-y: scroll;
         background-color: var(--color-white);
-        box-shadow: var(--box-shadow);
         border-radius: 8px;
         transition: 0.4s ease-in-out;
 
@@ -205,6 +203,7 @@ section#chat {
                     display: flex;
                     flex-direction: column;
                     justify-content: flex-end;
+                    object-fit: cover;
 
                     &>img {
                         height: 35px;
@@ -530,7 +529,6 @@ section#chat {
 
     footer {
         transition: 0.4s ease-in-out;
-
         display: flex;
         flex-direction: column;
         align-items: center;

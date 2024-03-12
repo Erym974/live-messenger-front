@@ -7,6 +7,7 @@ import AddMember from './Modals/AddMember'
 import RemoveGroup from './Modals/RemoveGroup'
 import LeaveGroup from './Modals/LeaveGroup'
 import EditGroup from './Modals/EditGroup'
+import DeleteAccount from './Modals/DeleteAccount'
 
 export const Modal = () => {
 
@@ -19,7 +20,8 @@ export const Modal = () => {
     "AddMember": <AddMember />,
     "LeaveGroup": <LeaveGroup />,
     "RemoveGroup": <RemoveGroup />,
-    "EditGroup": <EditGroup />
+    "EditGroup": <EditGroup />,
+    "DeleteAccount": <DeleteAccount />,
   })
 
   const getModalInstance = () => {

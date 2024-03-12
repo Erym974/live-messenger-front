@@ -18,7 +18,7 @@ import Notifications from "../Components/Notifications/Notifications";
 import toast from 'react-hot-toast';
 
 export default function useFriends(opts) {
-  const { friends, invites: invitations, listened } = useSelector((state) => state.friends);
+  const { friends, invites: invitations, listened, onlines } = useSelector((state) => state.friends);
   const { user } = useAuth()
   const dispatch = useDispatch();
 
@@ -152,5 +152,5 @@ export default function useFriends(opts) {
     fetchFriends()
   };
 
-  return { friends, friendsIsLoading, invitations, invitationsIsLoading, fetchInvites, fetchFriends, newFriend, newInvite, sendInvite, deleteInvitation, acceptInvite, deleteFriend };
+  return { onlines, friends, friendsIsLoading, invitations, invitationsIsLoading, fetchInvites, fetchFriends, newFriend, newInvite, sendInvite, deleteInvitation, acceptInvite, deleteFriend };
 }

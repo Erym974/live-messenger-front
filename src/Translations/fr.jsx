@@ -7,7 +7,7 @@ export default {
         login: "Connexion",
         homeDescription: "L'application de messagerie instantanée rapide et sécurisée pour rester connecté où que vous soyez. Conversations fluides, interface intuitive et fonctionnalités avancées.",
         block1_title: "Où passer du temps ensemble est facile",
-        block1_description: "Une application de messagerie où se rassembler et partager du temps ensemble est fluide et facile. Organisez des discussions, partagez du contenu et restez connectés en toute simplicité.",
+        block1_description: "Se rassembler et partager du temps ensemble sur une application fluide et intuitive. Organisez des discussions, partagez du contenu et restez connectés en toute simplicité.",
         block2_title: "En groupe ou en privé",
         block2_description: "Connectez-vous en groupe ou en privé avec notre application de messagerie instantanée. Explorez de nouvelles discussions passionnantes en groupe ou tissez des liens plus intimes en privé.",
         block3_title: "Faites de nouvelles connaissances.",
@@ -29,6 +29,14 @@ export default {
         name: "Nom du groupe",
         emoji: "Emoji",
     },
+    noGroupYet: {
+        noFriensYet: "Il semble que tu n'aies pas encore d'amis !",
+        startToTalk: "Pour commencer à discuter, tu peux ajouter des amis en cliquant sur le bouton ci-dessous.",
+        addFriends: "Ajouter des amis",
+        noGroupsYet: "Il semble que tu n'aies pas encore de conversation !",
+        startToTalkWithFriends: "Pour commencer à discuter, tu peux créer un groupe avec un ou plusieurs de tes amis",
+        test: "Il semble que tu n'aies pas encore d'amis !",
+    },
     error: {
         occured: "Une erreur est survenue",
         lost: "Il semble que vous soyez perdu",
@@ -36,7 +44,8 @@ export default {
         please_retry: "Merci de bien vouloir réessayer ultérieurement.",
         server_connection_failed: "Impossible de se connecter au serveur",
         please_wait: "Merci de patienter quelques secondes...",
-        reload: "Recharger"
+        reload: "Recharger",
+        groupNotFind: "Ce groupe n'existe pas",
     },
     global: {
         membersList: "Liste des membres",
@@ -54,7 +63,7 @@ export default {
         settings: "Paramètres",
         logout: "Déconnexion",
         createGroup: "Créer un groupe",
-        account: "Mon compte" 
+        account: "Mon compte",
     },
     easter: {
         try: "Un utilisateur essaie de vous envoyer un easter",
@@ -76,6 +85,7 @@ export default {
         no_change: "Pas de changement",
         invitation_sent: "Invitations envoyées",
         invitation_received: "Invitations reçues",
+        invalid_file: "Types de fichier invalide",
     },
     chat: {
         online: "En ligne",
@@ -143,6 +153,8 @@ export default {
         saved: "Enregistré",
         readmore: "Lire la suite",
         back: "Retour",
+        delete_account: "Supprimer le compte",
+        delete_account_confirmation: "Êtes-vous sûr de vouloir supprimer votre compte ?",
     },
     auth: {
         loggingin: "Connexion en cours",
@@ -169,6 +181,8 @@ export default {
         reset_password_back: "Retourner à la page de connexion",
         terms: "J\'accepte les conditions d\'utilisation et la politique de confidentialité",
         agreeTerms: "Vous devez accepter les conditions d\'utilisation et la politique de confidentialité pour continuer",
+        deleting: "Suppression du compte en cours",
+        deleted: "Votre compte a bien été supprimé",
     },
     account: {
         edited: "Votre compte a bien été modifié",
@@ -199,6 +213,8 @@ export default {
         name: "Nom du groupe",
         membersLength: "2 membres minimum",
         members: "Membres",
+        failed: "Erreur lors de la création du groupe",
+        created: "Groupe créé avec succès",
     },
     removeGroup: {
         title: "Supprimer le groupe"
@@ -212,6 +228,7 @@ export default {
         save: "Sauvegarder",
         close: "Fermer",
         add: "Ajouter",
+        delete: "Supprimer",
     }
 }
 

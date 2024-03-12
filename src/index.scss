@@ -414,7 +414,7 @@ a.button,
 button {
     background-color: $color-primary;
     color: var(--color-dark);
-    padding: 10px 20px;
+    padding: 10px;
     border-radius: 20px;
     cursor: pointer;
     transition: 0.4s ease-in-out;
@@ -433,11 +433,16 @@ button {
         }
     }
 
+    &.bg-danger,
     &.danger {
         background-color: $color-danger;
         &:hover {
-            background-color: darken($color-danger, 10%);
+            background-color: darken($color-danger, 10%) !important;
         }
+    }
+
+    @media screen and (min-width: 768px) {
+        padding: 10px 20px;
     }
 
 

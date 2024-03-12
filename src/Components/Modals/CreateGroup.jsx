@@ -6,13 +6,15 @@ import useFriends from '../../Hooks/useFriends';
 import Select from 'react-select';
 import axios from '../../Api/axios';
 import { useNavigate } from "react-router-dom";
+import { socket } from '../../socket';
+import useAuth from '../../Hooks/useAuth';
 
 export default function CreateGroup() {
 
     const { t } = useTranslation()
     const { closeModal } = useModal()
     const { friends, fetchFriends } = useFriends()
-    const navigate = useNavigate();
+    const { auth } = useAuth()
 
     /** set datas */
     const [datas, setDatas] = useState({
@@ -21,7 +23,6 @@ export default function CreateGroup() {
     })
 
     const [availableMembers, setAvailableMembers] = useState([])
-    const [creationInProgess, setCreationInProgess] = useState(false)
 
     // Load friends
     useEffect(() => {
@@ -37,21 +38,10 @@ export default function CreateGroup() {
     /** When the user valide the group creation */
     const handleForm = async (evt) => {
         evt.preventDefault()
-        if(datas.members.length < 2) {
-            return toast.error(t('createGroup.membersLength'))
-        }
+        if(datas.members.length < 2) return toast.error(t('createGroup.membersLength'))
 
-        setCreationInProgess(true)
-
-        const response = await axios.post('/groups', datas)
-        if(!response.status) return toast.error(t('createGroup.failed'))
-
-        setCreationInProgess(false)
+        socket.emit('create-group', { token: auth, group: datas })
         closeModal()
-        toast.success(t('createGroup.success'))
-        console.log(`/messenger/${response?.datas?.id}`);
-        navigate(`/messenger/${response?.datas?.id}`)
-        
 
     }
 
@@ -75,24 +65,12 @@ export default function CreateGroup() {
             <label htmlFor="text">{t("createGroup.name")}</label>
         </div>
         <div className="form-group">
-            <Select
-                defaultValue={null}
-                isMulti
-                name="members"
-                options={availableMembers}
-                placeholder={t('createGroup.members')}
-                className="basic-multi-select"
-                classNamePrefix="select"
-                onChange={onMembersChange}
-            />
+            <Select defaultValue={null} isMulti name="members" options={availableMembers} placeholder={t('createGroup.members')} className="basic-multi-select" classNamePrefix="select" onChange={onMembersChange} />
         </div>
         <hr className="my-3" />
         </div>
         <div className="modal-footer d-flex g-5 jce">
-            {!creationInProgess ? 
-                <button className="" onClick={handleForm}>{(t('modal.create'))}</button> :
-                <button disabled>{(t('global.saving'))}...</button>
-            }
+            <button className="" onClick={handleForm}>{(t('modal.create'))}</button>
             <button className="bg-danger" onClick={closeModal}>{(t('modal.cancel'))}</button>
         </div>
     </>

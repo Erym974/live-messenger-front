@@ -41,23 +41,30 @@ export default function Account() {
     });
   }, [user]);
 
+  // Update biography character count
   useEffect(() => {
     const length = document.getElementById("biography").value.length;
     document.querySelector(".charCount").innerHTML = `${length}/${maxDescChar}`;
+  }, [datas]);
 
+  // Add Event handlers on files input
+  useEffect(() => {
     document.getElementById("cover-picture")?.addEventListener("change", inputFileEventListener, true);
     document.getElementById("profile-picture")?.addEventListener("change", inputFileEventListener, true);
-
+    
     return () => {
       document.getElementById("cover-picture")?.removeEventListener("change", inputFileEventListener, true);
       document.getElementById("profile-picture")?.removeEventListener("change", inputFileEventListener, true);
     };
-  }, [datas]);
+  }, []);
+
 
   const inputFileEventListener = (evt) => {
     const file = evt.target.files[0];
     const type = evt.target.dataset.type;
+    evt.target.value = "";
     if (!file) return;
+    if (!file.type.includes("image")) return toast.error(t("settings.invalid_file"));
     updatePicture(file, type);
   };
 
@@ -105,12 +112,12 @@ export default function Account() {
               <div className="top">
                 <div className="background-cover" onClick={(e) => { handlePicture(e, "cover"); }} >
                   <img src={datas?.coverPicture} alt="profile picture of User" id="cover-picture-render" />
-                  <input type="file" id="cover-picture" className="d-none" data-type="cover" />
+                  <input type="file" id="cover-picture" className="d-none" data-type="cover" accept="image/gif, image/png, image/jpg, image/jpeg" />
                 </div>
                 <div className="profile-picture" onClick={(e) => { handlePicture(e, "profile"); }} >
                   <img src={datas?.profilePicture} alt="Profile picture of User" id="profile-picture-render" />
                   <FaPen />
-                  <input type="file" id="profile-picture" className="d-none" data-type="profile" />
+                  <input type="file" id="profile-picture" className="d-none" data-type="profile" accept="image/gif, image/png, image/jpg, image/jpeg" />
                 </div>
               </div>
               <div className="row">

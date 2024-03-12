@@ -19,6 +19,8 @@ export default function useTranslation() {
     }, [user])
 
     useEffect(() => {
+        if(language === local) return
+        console.log("test");
         document.documentElement.lang = language
         setLocal(language)
         i18n.changeLanguage(language)

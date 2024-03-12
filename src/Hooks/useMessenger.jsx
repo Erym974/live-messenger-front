@@ -1,21 +1,23 @@
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { removeConversation, setGroup, setGroups, setReply as setReplySlice, setEmoji as setEmojiSlice, setMessages, setMessage, newMessage, replaceMessage, setEdition as setSliceEdition, setMessageFetching, setMessageNextPage } from "../Slices/messengerSlice"
+import { removeConversation, setGroup, setGroups, setReply as setReplySlice, setEmoji as setEmojiSlice, setMessages, setMessage, newMessage, replaceMessage, setEdition as setSliceEdition, setMessageFetching, setMessageNextPage, addGroupInCache, setMessagesDatas, setGroupDatas } from "../Slices/messengerSlice"
 import axios from "../Api/axios"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { socket } from "../socket"
 import toast from "react-hot-toast"
+import useTranslation from "./useTranslation"
 
 export default function useMessenger() {
 
     const dispatch = useDispatch()
-    const { group, groups, messages, message, edition, reply, emoji, messages_showed, messagesIsFetching, messageNextPage } = useSelector(state => state.messenger)
+    const { group, groups, messages, message, edition, reply, emoji, messages_showed, messagesDatas, groupDatas } = useSelector(state => state.messenger)
     const { auth } = useSelector(state => state.auth)
+    const { t } = useTranslation()
 
     const [conversation, setConversation] = useState(null)
     const { current: messageLimit } = useRef(30)
 
-    const { isLoading: groupsIsLoading, refetch: fetchGroups } = useQuery({
+    const { isFetching: groupsIsLoading, refetch: fetchGroups } = useQuery({
         queryKey: ['groups'],
         enabled: false,
         queryFn: async () => {
@@ -30,20 +32,16 @@ export default function useMessenger() {
         }
     })
 
-    const { data: messageResponse, refetch: fetchMessages, isFetching: messagesIsFetchingQuery, fetchNextPage: messageFetchNextPage, hasNextPage: messageHasNextPage } = useInfiniteQuery({
+    const { data: messageResponse, refetch: fetchMessages, isFetching: messagesIsFetching, fetchNextPage: messageFetchNextPage, hasNextPage: messageHasNextPage } = useInfiniteQuery({
         queryKey: ['messages', conversation],
         enabled: false,
         initialPageParam: 1,
         getNextPageParam: (lastPage, allPages) => {
-            const currentPage = allPages?.length
-            const maxPages = lastPage?.pages;
-            return currentPage < maxPages ? currentPage + 1 : null;
+            if(allPages.length + 1 > lastPage?.datas?.pages) return undefined;
+            else return allPages.length + 1
         },
         queryFn: async ({ pageParam }) => {
-            if(conversation) {
-                const response = await axios.get(`/messages/${conversation}?limit=${messageLimit}&page=${pageParam}`)
-                return response.datas
-            }
+            if(conversation) return await axios.get(`/messages/${conversation}?limit=${messageLimit}&page=${pageParam}`)
         },
     })
 
@@ -54,23 +52,29 @@ export default function useMessenger() {
             if(conversation) {
                 try {
                     const response = await axios.get(`/groups/${conversation}`);
-                    if (!response.status || response.status === false) return null;
+                    if (!response.status || response.status === false) {
+                        toast.error(response.message)
+                        return null;
+                    }
                     dispatch(setGroup(response.datas))
                     return response.datas || null;
                 } catch (error) {
+                    toast.error(t('error.groupNotFind'))
                     return null;
                 }
             }
         }
     })
 
+    // Update group datas
     useEffect(() => {
-        dispatch(setMessageFetching(messagesIsFetchingQuery))
-    }, [messagesIsFetchingQuery])
+        dispatch(setGroupDatas({ data: 'isFetching', value: groupIsFetching }))
+    }, [groupIsFetching])
 
+    // Update messages datas
     useEffect(() => {
-        dispatch(setMessageNextPage(messageHasNextPage))
-    }, [messageHasNextPage])
+        dispatch(setMessagesDatas({ data: 'isFetching', value: messagesIsFetching }))
+    }, [messagesIsFetching])
 
     // Fetch group
     useEffect(() => {
@@ -82,29 +86,28 @@ export default function useMessenger() {
 
         fetchGroup()
     }, [conversation])
+    
+    // Save messages inside the redux session
+    useEffect(() => {
+        if(!messageResponse) return
+        if(messageResponse.pages[0] === undefined) return
+        dispatch(setMessagesDatas({ data: 'hasNextPage', value: messageHasNextPage }))
+        const msgs =  messageResponse.pages.sort((a, b) => b.datas.page - a.datas.page).map((page) => page.datas.messages).flat()
+        dispatch(setMessages(msgs))
+    }, [messageResponse])
 
     // Fetch messages
     useEffect(() => {
         if(!groupResponse) return
-        // fetchMessages()
+        fetchMessages()
     }, [groupResponse])
-    
-    // Parse 
-    useEffect(() => {
-        if(!messageResponse) return
-        if(messageResponse.pages[0] === undefined) return
-        const msgs =  messageResponse.pages.reverse().map((page) => page.messages).flat()
-        dispatch(setMessages(msgs))
-    }, [messageResponse])
 
     // Message edition
     useEffect(() => {
-        if(edition.active && edition.content?.trim().length === 0) {
-            setEdition({active: false, id: null, content: null})
-        }
+        if(edition.active && edition.content?.trim().length === 0) setEdition({active: false, id: null, content: null})
     }, [edition])
 
-    /** Join all sockets events when we have the new group */
+    /** Join all sockets events and cache data when we have the new group */
     useEffect(() => {
         if(!groupResponse) return
 
@@ -149,7 +152,10 @@ export default function useMessenger() {
     }
 
     /** When we receive new message */
-    const onMessageReceived = async (message) => dispatch(newMessage(message))
+    const onMessageReceived = async (message) => {
+        document.dispatchEvent(new CustomEvent('messageReceived'))
+        dispatch(newMessage(message))
+    }
 
     /** When we delete a message */
     const deleteMessage = async (id) => {
@@ -210,6 +216,6 @@ export default function useMessenger() {
         socket.emit('promote-user', {id: group.id, user: user, token: auth})
     }
 
-    return { messageNextPage, checkGroup, onKick, leaveGroup, setConversation, fetchGroups, kickUser, promoteUser, setEmoji, messagesIsFetching, groupIsFetching, emoji, messageHasNextPage, groupResponse, groups, group, messages, message, messages_showed, edition, groupsIsLoading, reply, messageFetchNextPage, setReply, onMessageReceived, setEdition, fetchGroup, sendMessage, activeMessage,  deleteMessage, editMessage, reactToMessage }
+    return { messagesDatas, groupDatas, messageFetchNextPage, checkGroup, onKick, leaveGroup, setConversation, fetchGroups, kickUser, promoteUser, setEmoji, groupIsFetching, emoji, groupResponse, groups, group, messages, message, messages_showed, edition, groupsIsLoading, reply, setReply, onMessageReceived, setEdition, fetchGroup, sendMessage, activeMessage,  deleteMessage, editMessage, reactToMessage }
 
 }

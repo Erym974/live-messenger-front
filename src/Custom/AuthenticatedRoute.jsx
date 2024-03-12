@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { useAuth, useError, useFriends, useMessenger } from '../Hooks/CustomHooks'
+import { useAuth, useError, useFriends, useMessenger, useTranslation } from '../Hooks/CustomHooks'
 import { Loader } from '../Components/Loader'
 import { socket } from './../socket'
-import { moveConversationToTop, updateConversation } from './../Slices/messengerSlice';
+import { addConversation, moveConversationToTop, updateConversation } from './../Slices/messengerSlice';
 import { useDispatch } from 'react-redux';
+import toast from 'react-hot-toast'
+import { toggleOnline } from '../Slices/friendsSlice'
 
 export default function AuthenticatedRoute() {
 
@@ -18,6 +20,7 @@ export default function AuthenticatedRoute() {
     const { newInvite } = useFriends()
     const { onKick, leaveGroup } = useMessenger()
     const navigate = useNavigate()
+    const { t } = useTranslation()
 
     /** Log user */
     useEffect(() => {
@@ -55,17 +58,31 @@ export default function AuthenticatedRoute() {
 
       socket.emit("join-conversation", {groups: groups.map(group => group.id), token: auth })
 
-      socket.on('new-group', fetchGroups)
+      socket.on('token-error', () => socket.disconnect())
+      socket.on('new-group', addGroup)
       socket.on('conversation-to-top', (params) => dispatch(moveConversationToTop({group: params.group, message: params.message})))
       socket.on('update-conversation', (params) => dispatch(updateConversation({group: params.group, message: params.message})))
+      socket.on('create-group-result', (result) => result == "created" ? toast.success(t(`createGroup.created`)) :toast.error(t(`createGroup.${result}`)))
+
+      socket.on(`is-online`, (data) => dispatch(toggleOnline(data)))
 
       return () => {
+        socket.off("token-error")
         socket.off("conversation-to-top")
         socket.off("update-conversation")
         socket.off("new-group")
+        socket.off("create-group-result")
       }
 
     }, [groups])
+
+    /**
+     * 
+     * Add new groups to the conversation list
+     * 
+     */
+    const addGroup = (group) => dispatch(addConversation(group))
+  
 
     /**
      * 

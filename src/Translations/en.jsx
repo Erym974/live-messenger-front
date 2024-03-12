@@ -24,6 +24,9 @@ export default {
         title: "Add a member",
         members: "Members"
     },
+    noGroupYet: {
+        
+    },
     error: {
         occured: "An error occurred",
         lost: "It seems you are lost",
@@ -31,7 +34,8 @@ export default {
         please_retry: "Please try again later.",
         server_connection_failed: "Failed to connect to the server",
         please_wait: "Please wait few seconds...",
-        reload: "Reload"
+        reload: "Reload",
+        groupNotFind: "This group does not exist",
     },
     global: {
         membersList: "Members list",
@@ -71,6 +75,7 @@ export default {
         no_change: "No change",
         invitation_sent: "Invitations sent",
         invitation_received: "Invitations received",
+        invalid_file: "Invalid file type",
     },
     chat: {
         online: "Online",
@@ -112,6 +117,7 @@ export default {
         save: "Save",
         close: "Close",
         add: "Add",
+        delete: "Delete",
     },
     general: {
         firstname: "Firstname",
@@ -128,6 +134,8 @@ export default {
         saved: "Saved",
         readmore: "Read more",
         back: "Back",
+        delete_account: "Delete account",
+        delete_account_confirmation: "Are you sure you want to delete your account ?",
     },
     cookie: {
         one: "By using our site, you acknowledge that you have read and understand our",
@@ -171,6 +179,8 @@ export default {
         reset_password_back: "Go back to the login form",
         terms: "I accept the terms of service and the privacy policy",
         agreeTerms: "You must accept the terms of service and the privacy policy to continue",
+        deleting: "Deleting the current account",
+        deleted: "Your account has been deleted",
     },
     account: {
         edited: "You're account was edited successfully",
@@ -210,6 +220,8 @@ export default {
         name: "Group name",
         membersLength: "2 members minimum",
         members: "Members",
+        failed: "Failed to create group",
+        created: "Group created successfully",
     },
     leaveGroup: {
         title: "Leave group"

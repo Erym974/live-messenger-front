@@ -5,7 +5,8 @@ export const friendsSlice = createSlice({
     initialState: {
         friends: [],
         invites: [],
-        listened: []
+        listened: [],
+        onlines: []
     },
     reducers: {
         setFriends: (state, action) => {
@@ -31,8 +32,15 @@ export const friendsSlice = createSlice({
         }, 
         removeFriend: (state, action) => {
             state.friends = state.friends.filter(f => f.id !== action.payload.id);
-        }
+        },
+        toggleOnline: (state, action) => {
+            const who = action.payload.id
+            const online = action.payload.status
+
+            if(online) state.onlines.push(who)
+            else state.onlines = state.onlines.filter(o => o !== who)
+        },
     }
 })
 
-export const { setFriends, setInvites, addListened, removeListened, pushNewInvite, pushNewFriend, removeInvite, removeFriend } = friendsSlice.actions;
+export const { setFriends, setInvites, addListened, removeListened, pushNewInvite, pushNewFriend, removeInvite, removeFriend, removeOnline, toggleOnline } = friendsSlice.actions;

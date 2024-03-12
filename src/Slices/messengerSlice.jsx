@@ -12,7 +12,13 @@ export const messengerSlice = createSlice({
         reply: null,
         subMenu: null,
         edition: {active: false, id: null, content: null},
-        messageNextPage: false
+        messagesDatas: {
+            isFetching: false,
+            hasNextPage: true
+        },
+        groupDatas: {
+            isFetching: false,
+        }
     },
     reducers: {
         setMessageFetching: (state, action) => {
@@ -39,7 +45,7 @@ export const messengerSlice = createSlice({
         },
         replaceMessage: (state, action) => {
             state.messages = state.messages.map(message => message.id === action.payload.id ? action.payload : message)
-            state.groups = state.groups.map(group => group.id === state.group.id ? group.lastMessage.id === action.payload.id ? {...group, lastMessage: action.payload} : group : group)
+            state.groups = state.groups.map(group => group.id === state.group?.id ? group.lastMessage?.id === action.payload?.id ? {...group, lastMessage: action.payload} : group : group)
         },
         setEdition: (state, action) => {
             state.edition = action.payload;
@@ -49,6 +55,9 @@ export const messengerSlice = createSlice({
         },
         setEmoji: (state, action) => {
             state.emoji = action.payload;
+        },
+        addConversation: (state, action) => {
+            state.groups = [action.payload, ...state.groups]
         },
         removeConversation: (state, action) => {
             state.groups = state.groups.filter(group => group.id !== action.payload)
@@ -67,10 +76,20 @@ export const messengerSlice = createSlice({
             });
             state.groups = updatedGroups;
         },
-        setMessageNextPage: (state, action) => {
-            state.messageNextPage = action.payload;
+        addGroupInCache: (state, action) => {
+            state.caches.group[action.payload.id] = action.payload;
+        },
+        setMessagesDatas: (state, action) => {
+            const data = action.payload.data
+            const value = action.payload.value
+            state.messagesDatas[data] = value
+        },
+        setGroupDatas: (state, action) => {
+            const data = action.payload.data
+            const value = action.payload.value
+            state.groupDatas[data] = value
         }
     }
 })
 
-export const { setMessageFetching,setMessageNextPage,  moveConversationToTop, updateConversation, removeConversation, setReply, setEmoji, setGroup, setGroups, setSubMenu, setMessages, setMessage, newMessage, replaceMessage, setEdition } = messengerSlice.actions;
+export const { setGroupDatas, setMessagesDatas, addConversation, addGroupInCache, setMessageFetching,setMessageNextPage,  moveConversationToTop, updateConversation, removeConversation, setReply, setEmoji, setGroup, setGroups, setSubMenu, setMessages, setMessage, newMessage, replaceMessage, setEdition } = messengerSlice.actions;
