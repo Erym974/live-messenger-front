@@ -16,3 +16,14 @@ export const convertDate = (date, language) => {
         return messageDate.toLocaleDateString(language, { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' });
     }
 }
+
+export const getTokenPayload = (token) => {
+
+    if(!token) return null
+
+    const payload = token.split('.')[1]
+    const decoded = atob(payload)
+    const parsed = JSON.parse(decoded)
+    return parsed
+
+}

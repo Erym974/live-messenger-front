@@ -40,6 +40,7 @@ section#dashboard {
                 width: 50px;
                 border-radius: 50%;
                 transition: 0.2s ease-in-out;
+                object-fit: cover !important;
             }
 
             .right {
@@ -104,6 +105,7 @@ section#dashboard {
                             width: 50px;
                             border-radius: 50%;
                             transition: all 0.2s ease-in-out;
+                            object-fit: cover !important;
                         }
 
                         .online {

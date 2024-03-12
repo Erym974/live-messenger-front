@@ -17,7 +17,7 @@ export default function Messenger() {
   const { profile, profileIsLoading } = useProfile();
   const { id } = useParams()
   const { open: openImage } = useSelector(state => state.images)
-  const { setConversation, groups, groupIsLoading, groupsIsLoading, group } = useMessenger()
+  const { setConversation, groups, groupDatas, groupsIsLoading, group } = useMessenger()
   const [hasNoGroups, setHasNoGroups] = useState(false);
   const { searchModal } = useModal();
 
@@ -42,7 +42,7 @@ export default function Messenger() {
 
       <Aside />
 
-      {(!groupIsLoading && !hasNoGroups) && <Chat conversation={group} />}
+      {(!groupDatas.groupIsLoading && !hasNoGroups) && <Chat conversation={group} />}
       {(!groupsIsLoading && hasNoGroups) && <NoGroupYet />}
 
     </section>

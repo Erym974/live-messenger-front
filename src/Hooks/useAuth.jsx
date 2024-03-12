@@ -6,7 +6,7 @@ import toast from "react-hot-toast"
 import axios from "../Api/axios"
 import { FaBullseye } from "react-icons/fa"
 import { useNavigate } from "react-router-dom"
-import { useEffect } from "react"
+import { getTokenPayload } from "../Utils/utils"
 
 export default function useAuth() {
 
@@ -18,11 +18,37 @@ export default function useAuth() {
 
     /**
      * 
+     * DELETE Account
+     * 
+     */
+    const deleteAccount = async () => {
+        Notifications.Promise(async () => {
+            const response = await axios.delete('/users/me')
+            if(!response?.status) throw new Error(response?.message || t('error.occured'))
+            dispatch(setAuth(null))
+            dispatch(setUser(null))
+            navigate('/auth/login')
+            return true
+        }, t('auth.deleting'), t('auth.deleted'), t('error.occured'))
+    }
+
+    /**
+     * 
      * Check if the user is authenticated or not
      * 
      */
     const fetchAuth = async () => {
         if(auth) {
+
+            const token = getTokenPayload(auth)
+
+            if(token.exp * 1000 < Date.now()) {
+                dispatch(setAuth(null))
+                dispatch(setUser(null))
+                dispatch(setLoading(false))
+                return navigate('/auth/login')
+            }
+
             const response = await axios.get('/users/me')
             if(!response?.status || response.hasOwnProperty('code')) {
                 switch(response?.message) {
@@ -172,13 +198,13 @@ export default function useAuth() {
             formData.append('picture', type)
     
             const response = await axios.post('/users/me', formData)
-            if(!response?.status) return false
+            if(!response?.status) throw new Error(response?.message || t('error.occured')) 
             dispatch(setUser(response.datas?.user))
             return true
         }, t('general.saving'), t('general.saved'), t('error.occured'))
 
     }
 
-    return { loading, auth, user, connectUser, registerUser, logoutUser, fetchAuth, updateUser, updatePicture, sendResetPasswordRequest, sendResetPassword,sendActiveAccountRequest, sendActiveAccount }
+    return { deleteAccount, loading, auth, user, connectUser, registerUser, logoutUser, fetchAuth, updateUser, updatePicture, sendResetPasswordRequest, sendResetPassword,sendActiveAccountRequest, sendActiveAccount }
 
 }

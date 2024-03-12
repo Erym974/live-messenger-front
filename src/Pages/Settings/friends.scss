@@ -41,6 +41,7 @@ section#friends {
                 border-radius: 50%;
                 background-color: #ccc;
                 margin-right: 10px;
+                object-fit: cover !important;
             }
 
             .friend-name {
@@ -87,13 +88,21 @@ section#friends {
         & > li {
             background-color: $color-primary;
             color: var(--color-dark);
-            padding: 10px 20px;
+            padding: 5px 10px;
             border-radius: 20px;
             cursor: pointer;
             transition: 0.4s ease-in-out;
 
             &:hover {
                 background-color: darken($color-primary, 10%);
+            }
+        }
+    }
+
+    @media screen and (min-width: 768px){
+        & > ul {
+            & > li {
+                padding: 10px 20px;
             }
         }
     }

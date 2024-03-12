@@ -24,6 +24,7 @@ import {
   useTheme,
   useSettings,
   useModal,
+  useFriends,
 } from "../../Hooks/CustomHooks";
 import { useIdle } from "@uidotdev/usehooks";
 import GifPicker from "gif-picker-react";
@@ -45,7 +46,8 @@ export default function Chat({ conversation }) {
   const [gif, toggleGif] = useState();
 
   const { user } = useAuth();
-  const { sendMessage, messages, edition, reply, setReply, setEdition, editMessage, group } = useMessenger();
+  const { sendMessage, messages, edition, reply, setReply, setEdition, editMessage, group, messagesDatas, groupDatas } = useMessenger();
+  const { onlines } = useFriends()
 
   /**
    *
@@ -293,8 +295,6 @@ export default function Chat({ conversation }) {
   const leaveGroup = () => openModal("LeaveGroup", group)
   const removeGroup = () => openModal("RemoveGroup", group)
 
-  const [isOnline, setIsOnline] = useState(false);
-
   // Get Online or Offline if the conversation is private
   useEffect(() => {
     if(!conversation) return;
@@ -303,14 +303,8 @@ export default function Chat({ conversation }) {
 
       socket.emit('join-is-online', other.id)
 
-      socket.on(`is-online`, (data) => {
-        if(data.id != other.id) return
-        setIsOnline(data.status)
-      })
-
       return () => {
-        socket.emit('leave-is-online')
-        socket.off(`is-online`)
+        socket.emit('leave-is-online', other.id)
       }
     }
   }, [conversation])
@@ -327,7 +321,7 @@ export default function Chat({ conversation }) {
               <>
                 <span className="name">{conversation?.name}</span>
                 <span className="status">
-                  {!conversation?.private ? `${conversation?.members?.length} participant${conversation?.members?.length > 1 ? "s" : ""}` : isOnline ? t("global.online") : t("global.offline")}
+                  {!conversation?.private ? `${conversation?.members?.length} participant${conversation?.members?.length > 1 ? "s" : ""}` : (conversation.private && onlines.includes(conversation.members.find(member => member.id !== user.id)?.id ?? 0)) ? t("global.online") : t("global.offline")}
                 </span>
               </>
             ) : (
@@ -408,7 +402,7 @@ export default function Chat({ conversation }) {
           )}
 
           <div className="textarea-container">
-            <textarea id="textarea-writter" placeholder="Ecrivez votre message" onChange={handleEdit} value={edition.active ? edition.content : content} onKeyDown={handleKeyDown}></textarea>
+            <textarea id="textarea-writter" placeholder="Ecrivez votre message" onChange={handleEdit} value={edition.active ? edition.content : content} onKeyDown={handleKeyDown} disabled={messagesDatas.isFetching || groupDatas.isFetching}></textarea>
             <div className="absolute">
               {limit > 200 && (
                 <span>

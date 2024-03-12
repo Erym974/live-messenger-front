@@ -5,16 +5,17 @@ import { useMessenger, useTranslation } from '../../Hooks/CustomHooks'
 import { Tooltip } from 'react-tooltip';
 
 import Message from './Message';
-import { Loader } from '../Loader';
 import { NoMessageYet } from './NoMessageYet';
-import { useDispatch } from 'react-redux';
+import { Loader } from '../Loader';
+import { useInView } from 'react-intersection-observer';
 
 export default function Messages({ conversation, messages }) {
     
-    const { messageHasNextPage, messagesIsFetching, setConversation, messageFetchNextPage } = useMessenger()
+    const { messagesDatas, setConversation, messageFetchNextPage } = useMessenger()
     const { t } = useTranslation()
     
     const [dropdown, setDropdown] = useState(null)
+    const [ref, InView] = useInView()
 
     useEffect(() => {
         if(!conversation) return
@@ -33,8 +34,8 @@ export default function Messages({ conversation, messages }) {
     }, [messages])
 
     useEffect(() => {
-        window.addEventListener("messageReceived", onMessageReceived, true)
-        return () => window.removeEventListener("messageReceived", onMessageReceived, true)
+        document.addEventListener("messageReceived", scrollToBottom, true)
+        return () => document.removeEventListener("messageReceived", scrollToBottom, true)
     }, [])
 
     useEffect(() => {
@@ -43,35 +44,31 @@ export default function Messages({ conversation, messages }) {
         return () => document.removeEventListener('click', checkDropDownClick, true)
     }, [dropdown])
 
-    const onMessageReceived = () => {
-        scrollToBottom()
-    }
-
     const scrollToBottom = () => {
         const scrollTarget = document.getElementById("scroll-target");
-        if(scrollTarget) scrollTarget.scrollIntoView({ behavior: 'auto' })
+        if(scrollTarget) scrollTarget.scrollIntoView({ behavior: 'smooth' })
     }
 
     const checkDropDownClick = (e) => {
         if(e.target.closest('.dropdown-more') === null) setDropdown(null)
     }
 
+    useEffect(() => {
+        if((InView && messagesDatas.hasNextPage) && !messagesDatas.isFetching) messageFetchNextPage()
+    }, [InView])
+
     return (
         <>
             <Tooltip id="message" place="bottom" style={{ zIndex: 9999999 }} />
             <Tooltip id="message-profile" place="bottom" style={{ zIndex: 9999999 }} />
             
-            {(!messagesIsFetching && messageHasNextPage) && 
-                <div id="load-more">
-                    <button onClick={() => { messageFetchNextPage() }}>{t('message.loadMore')}</button>
-                </div>
-            }
-            {messagesIsFetching && <Loader />}
+                <div id="load-more" ref={ref}></div>
+                {messagesDatas.isFetching && <Loader />}
             
             <div className="messages">
                 <Tooltip id="tooltip" data-tooltip-offset="55" data-tooltip-place="top" style={{ zIndex: 99999 }} />
 
-                {(!messagesIsFetching && messages?.length == 0) && <NoMessageYet />}
+                {(!messagesDatas.isFetching && messages?.length == 0) && <NoMessageYet />}
                 {messages?.map(message => <Message key={message.id} message={message} /> )}
                 <div id="scroll-target" data-init="false"></div> 
             </div>

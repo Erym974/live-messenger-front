@@ -29,9 +29,12 @@ export default function Message({ message }) {
     const [optionsFor, setOptionsFor] = useState(null)
 
     useEffect(() => {
+        // console.log("test");
+    }, [])
+
+    useEffect(() => {
         if(!message || messages?.length === 0) return
         const datas = {}
-
 
         datas.me = (message.sender.id === user.id)
         datas.position = getMessagePosition()
@@ -41,20 +44,18 @@ export default function Message({ message }) {
             setType("gif") 
             datas.type = "gif"
         }
-        if(containsFiles()) {
+        if(isFiles()) {
             setType('file')
             datas.type = "file"
         }
-        if(containsOnlyEmoji()) {
+        if(isEmojis()) {
             setType('emoji')
             datas.type = "emoji"
         }
-        if(!isGif() && !containsFiles() && !containsOnlyEmoji()) {
+        if(!isGif() && !isFiles() && !isEmojis()) {
             setType('text')
             datas.type = "text"
         }
-
-        
 
         setParsedMessage({ ...datas, ...message })
     }, [message, messages])
@@ -68,7 +69,7 @@ export default function Message({ message }) {
     }
 
     /** Detect if message is an Emoji only message */
-    const containsOnlyEmoji = () => {
+    const isEmojis = () => {
         const emojiFound = message.content?.match(/(?:<a?:[^:]+:\d{18}>|[\p{Extended_Pictographic}])/gu)
         if(!emojiFound) return false;
         let content = message.content
@@ -77,7 +78,7 @@ export default function Message({ message }) {
     }
 
     /** Detect if message is an Emoji only message */
-    const containsFiles = () => {
+    const isFiles = () => {
         return message.files.length > 0
     }
     

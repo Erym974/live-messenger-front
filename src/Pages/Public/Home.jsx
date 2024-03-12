@@ -38,7 +38,7 @@ export default function Home() {
 
   return (
     <section className="homepage public">
-      <Navbar data-aos="fade-down" />
+      <Navbar />
       <main>
         <section id="hero">
           <h1 data-aos="fade-down">Swift Chat</h1>

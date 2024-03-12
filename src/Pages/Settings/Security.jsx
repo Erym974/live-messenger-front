@@ -12,7 +12,7 @@ import { SearchModal } from "../../Components/Search/SearchModal";
 export default function Security() {
   const { t } = useTranslation();
   const { updateUser, sendActiveAccountRequest, user } = useAuth();
-  const { searchModal } = useModal();
+  const { searchModal, openModal } = useModal();
 
   const [datas, setDatas] = useState({
     password: "",
@@ -72,8 +72,15 @@ export default function Security() {
               <button onClick={handleSave}>{t("general.save")}</button>
             </div>
             <h2>{t('general.email')}</h2>
-            <p>{ t(user?.isVerified ? 'activeAccount.email_verified' : 'activeAccount.email_not_verified') }</p>
-            {!user?.isVerified && <button onClick={sendActiveAccountRequest}>{t('activeAccount.send_email')}</button>}
+            <div className="d-flex jcb aic">
+              <p className="text-dark">{ t(user?.isVerified ? 'activeAccount.email_verified' : 'activeAccount.email_not_verified') }</p>
+              {!user?.isVerified && <button onClick={sendActiveAccountRequest}>{t('activeAccount.send_email')}</button>}
+            </div>
+            <h2>{t('general.delete_account')}</h2>
+            <div className="d-flex jcb aic">
+              <p className="text-dark">{ t('general.delete_account') }</p>
+              <button onClick={() => openModal("DeleteAccount")} className="bg-danger">{t('general.delete_account')}</button>
+            </div>
           </section>
         </main>
       </section>

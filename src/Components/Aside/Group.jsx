@@ -7,21 +7,18 @@ import useMessenger from '../../Hooks/useMessenger'
 import toast from 'react-hot-toast'
 import { socket } from '../../socket'
 import useAuth from '../../Hooks/useAuth'
+import useFriends from '../../Hooks/useFriends'
 
 export const Group = ({ group }) => {
 
     const navigate = useNavigate()
     const { t } = useTranslation()
     const dispatch = useDispatch()
-    const [canMove, setCanMove] = useState(true)
-    const { groupIsFetching, messagesIsFetching } = useMessenger()
+    const { messagesDatas, groupDatas } = useMessenger()
     const { user } = useAuth()
+    const { onlines } = useFriends()
 
     const [lastMessage, setLastMessage] = useState("")
-
-    useEffect(() => {
-        setCanMove((groupIsFetching || messagesIsFetching) ? false : true);
-    }, [groupIsFetching, messagesIsFetching]);
 
     useEffect(() => {
         if(!group) return
@@ -31,12 +28,10 @@ export const Group = ({ group }) => {
     }, [group])
 
     const handleClick = async (id) => {
-        if(!canMove) return toast.error(t('error.please_wait'))
+        if(groupDatas.isFetching || messagesDatas.isFetching) return toast.error(t('error.please_wait'))
         dispatch(toggleAside(false));
         navigate(`/messenger/${id}`)
     }
-
-    const [isOnline, setIsOnline] = useState(false)
 
       // Get Online or Offline if the conversation is private
     useEffect(() => {
@@ -44,13 +39,8 @@ export const Group = ({ group }) => {
         if(group.private) {
             const other = group.members.find(member => member.id !== user.id)
             socket.emit('join-is-online', other.id)
-            socket.on(`is-online`, (data) => {
-                if(data.id != other.id) return
-                setIsOnline(data.status)
-            })
             return () => {
-                socket.emit('leave-is-online')
-                socket.off(`is-online`)
+                socket.emit('leave-is-online',  other.id)
             }
         }
     }, [group])
@@ -59,7 +49,7 @@ export const Group = ({ group }) => {
         <div className="conversation" onClick={() => { handleClick(group?.id) }} data-tooltip-id="aside" data-tooltip-content={group?.name} >
             <div className="group-picture">
                 <img src={group?.picture} alt="Picture of the group" />
-                {isOnline && <span className="online"></span>}
+                {(group.private && onlines.includes(group.members.find(member => member.id !== user.id)?.id ?? 0)) && <span className="online"></span>}
             </div>
             <div className="right">
                 <span className="name">{group?.name}</span>
