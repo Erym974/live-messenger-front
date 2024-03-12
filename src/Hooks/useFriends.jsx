@@ -4,9 +4,6 @@ import {
   addListened,
   pushNewFriend,
   pushNewInvite,
-  removeFriend,
-  removeInvite,
-  removeListened,
   setFriends,
   setInvites,
 } from "../Slices/friendsSlice";
@@ -16,11 +13,13 @@ import useAuth from "./useAuth";
 import { socket } from "../socket"
 import Notifications from "../Components/Notifications/Notifications";
 import toast from 'react-hot-toast';
+import { useTranslation } from "./CustomHooks";
 
 export default function useFriends(opts) {
   const { friends, invites: invitations, listened, onlines } = useSelector((state) => state.friends);
   const { user } = useAuth()
   const dispatch = useDispatch();
+  const { t } = useTranslation()
 
   /** Fetch friends */
   const { isFetching: friendsIsLoading, refetch: fetchFriends } = useQuery({
