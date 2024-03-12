@@ -27,20 +27,7 @@ export const InviteFriend = () => {
         toast.success(t('friends.friendCodeCopied'))
       }, [copiedText])
 
-    const handleSendInvite = async () => {
-
-        const result = await sendInvite(friendCode)
-    
-        switch(result) {
-          case "sended": 
-            toast.success(t('friends.invite_sended'))
-            break
-          default: 
-            toast.error(t(`friends.${result}`))
-            break
-        }
-    
-      }
+    const handleSendInvite = async () => sendInvite(friendCode)
 
   return (
     <div className="invite-friends-input mt-4">
